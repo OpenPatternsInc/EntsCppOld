@@ -16,29 +16,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <cstdlib>
+#ifndef HIERARCHY_H
+#define HIERARCHY_H
+
+#include <vector>
 #include "Ent.h"
-#include "Hierarchy.h"
-#include "CLI.h"
+#include "Root.h"
 
 using namespace std;
 
-int main(int argc, char** argv)
+class Hierarchy
 {
-    
-    Hierarchy arch;
-    
-    Ent animals("Animals");
-    
-    arch.addEnt(animals);
-    
-    
-    CLI cli;
-    
-    cli.setArch(&arch);
-    
-    cli.listen();
+public:
 
-    return 0;
-}
+    /**
+     * Create a new Hierarchy and add a root Ent to it.
+     */
+    Hierarchy();
+    /**
+     * What do do when the Hierarchy is removed from memory. Maybe save to file?
+     */
+    ~Hierarchy();
+    /**
+     * Adds an Ent to the Hierarchy without checking anything about it.
+     * @param ent
+     */
+    inline void addEnt(Ent ent) { m_ents.push_back(ent); }
+    
+    inline Root* getRoot() { return &m_root; }
+
+private:
+
+    vector<Ent> m_ents;
+    
+    Root m_root;
+    
+    
+
+
+
+
+};
+
+
+#endif /* HIERARCHY_H */
 

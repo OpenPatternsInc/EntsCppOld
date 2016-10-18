@@ -19,34 +19,78 @@
 #ifndef ENT_H
 #define ENT_H
 
-#include <stdio.h>
+//#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string>
 #include <iostream>
 #include <vector>
+
+using namespace std;
 
 class Ent
 {
 public:
 
+    /**
+     * Initialize an Ent with no properties yet.
+     */
     Ent();
+    /**
+     * Initialize an Ent with the given name. Doesn't check if that name is unique.
+     * @param name
+     */
+    Ent(string);
+    /**
+     * What to do when an Ent object is removed from memory. Probably nothing now.
+     */
     ~Ent();
 
-    //Prints the name of the Ent to the stdout.
-    void printName();
-    //Sets the name of the Ent without checking its uniqueness.
-    void setName(std::string);
+    /**
+     * Prints the name of the Ent to the stdout.
+     */
+    inline void printName() { cout << "Ent name: \"" << m_name << "\"\n"; }
+    /**
+     * Sets the name of the Ent without checking its uniqueness.
+     */
+    inline void setName(string name) { m_name = name; }
+    
+    inline string getName() {
+        return m_name;
+    }
+    /**
+     * Gets the Ent's unique identifier.
+     * @return 
+     */
+    inline unsigned int getUID() { return m_uid; }
+    /**
+     * Adds an Ent as a parent of this one, but doesn't check anything.
+     * @param parent
+     */
+    inline void addParent(Ent parent) { m_parents.push_back(parent.getUID()); }
+    /**
+     * Adds an Ent as a child of this one, but doesn't check anything.
+     * @param child
+     */
+    inline void addChild(Ent child) { m_children.push_back(child.getUID()); }
 
 private:
 
-    //The name of the given Ent. Should ideally be unique.
-    std::string m_name;
-    //The unique identifier of the Ent.
+    /**
+     * The name of the given Ent. Should ideally be unique.
+     */
+    string m_name;
+    /**
+     * The unique identifier of the Ent.
+     */
     unsigned int m_uid;
-    //The uids of it's parents.
-    std::vector<unsigned int> m_parents;
-    //The uids of it's children.
-    std::vector<unsigned int> m_children;
+    /**
+     * The uids of it's parents.
+     */
+    vector<unsigned int> m_parents;
+    /**
+     * The uids of it's children.
+     */
+    vector<unsigned int> m_children;
 
 };
 

@@ -16,29 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <cstdlib>
-#include "Ent.h"
 #include "Hierarchy.h"
-#include "CLI.h"
 
 using namespace std;
 
-int main(int argc, char** argv)
+Hierarchy::Hierarchy()
 {
+    m_ents.push_back(m_root);
     
-    Hierarchy arch;
-    
-    Ent animals("Animals");
-    
-    arch.addEnt(animals);
-    
-    
-    CLI cli;
-    
-    cli.setArch(&arch);
-    
-    cli.listen();
+    cout << "New Hierarchy created.\n";
+}
 
-    return 0;
+Hierarchy::~Hierarchy()
+{
+    //cout << "Hierarchy dismantled.";
 }
 

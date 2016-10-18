@@ -16,10 +16,53 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ENTLIST_H
-#define ENTLIST_H
+#ifndef CLI_H
+#define CLI_H
+
+#include <string>
+#include <iostream>
+#include "Ent.h"
+#include "Root.h"
+#include "Hierarchy.h"
+
+using namespace std;
+
+class CLI
+{
+    
+public:
+    
+    CLI();
+    ~CLI();
+    
+    void listen();
+    
+    void parse(string str);
+    
+    inline void setFocus(Ent* ent_ptr) { m_focus_ptr = ent_ptr; }
+    
+    inline void setArch(Hierarchy* new_arch_ptr)
+    {
+        m_arch_ptr = new_arch_ptr;
+        m_focus_ptr = new_arch_ptr->getRoot();
+    }
+    
+    
+private:
+    
+    bool m_exiting;
+    
+    Ent* m_focus_ptr;
+    
+    Hierarchy* m_arch_ptr;
+    
+    
+    
+    
+    
+};
 
 
 
-#endif /* ENTLIST_H */
+#endif /* CLI_H */
 

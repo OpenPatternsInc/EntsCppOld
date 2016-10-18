@@ -16,29 +16,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <cstdlib>
-#include "Ent.h"
-#include "Hierarchy.h"
 #include "CLI.h"
 
 using namespace std;
 
-int main(int argc, char** argv)
-{
-    
-    Hierarchy arch;
-    
-    Ent animals("Animals");
-    
-    arch.addEnt(animals);
-    
-    
-    CLI cli;
-    
-    cli.setArch(&arch);
-    
-    cli.listen();
-
-    return 0;
+CLI::CLI() {
 }
 
+CLI::~CLI() {
+}
+
+void CLI::listen() {
+    
+    m_exiting = false;
+    
+    string command;
+    
+    cout << endl;
+    
+    do {
+        cout << ">";
+        cin >> command;
+        parse(command);
+    } while (!m_exiting);
+    
+}
+
+void CLI::parse(string str) {
+    
+    
+    if (str == "exit") {
+        cout << "Exiting..." << endl;
+        m_exiting = true;
+    } else if (str == "e") {
+        //list the current ent of focus
+        cout << "Focus: " << m_focus_ptr->getName() << endl;
+    } else {
+        cout << "Unknown command...\n";
+    }
+    
+    
+}

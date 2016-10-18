@@ -16,29 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <cstdlib>
-#include "Ent.h"
-#include "Hierarchy.h"
-#include "CLI.h"
+#include "Root.h"
 
-using namespace std;
-
-int main(int argc, char** argv)
-{
-    
-    Hierarchy arch;
-    
-    Ent animals("Animals");
-    
-    arch.addEnt(animals);
-    
-    
-    CLI cli;
-    
-    cli.setArch(&arch);
-    
-    cli.listen();
-
-    return 0;
+Root::Root() {
+    setName("root");
 }
 
+Root::~Root() {
+    
+    
+}

@@ -20,17 +20,15 @@
 
 Ent::Ent()
 {
-    m_name = "test";
-    
+}
+
+Ent::Ent(std::string name)
+{
+    setName(name);
 }
 
 Ent::~Ent()
 {
-}
-
-void Ent::printName()
-{
-    std::cout << "Ent name: \"" << m_name << "\"\n";
 }
 
 

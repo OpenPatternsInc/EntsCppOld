@@ -16,29 +16,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <cstdlib>
+#ifndef ROOT_H
+#define ROOT_H
+
 #include "Ent.h"
-#include "Hierarchy.h"
-#include "CLI.h"
 
-using namespace std;
-
-int main(int argc, char** argv)
+/**
+ * The Root class is a special type of Ent which is at the top of the hierarchy.
+ */
+class Root : public Ent
 {
-    
-    Hierarchy arch;
-    
-    Ent animals("Animals");
-    
-    arch.addEnt(animals);
-    
-    
-    CLI cli;
-    
-    cli.setArch(&arch);
-    
-    cli.listen();
+public:
 
-    return 0;
-}
+    /**
+     * Initialize a root Ent.
+     */
+    Root();
+    
+    ~Root();
+
+private:
+    
+    /**
+     * We don't want to add any parents to root.
+     * @param parent
+     */
+    void addParent(Ent parent);
+
+};
+
+
+
+#endif /* ROOT_H */
 
