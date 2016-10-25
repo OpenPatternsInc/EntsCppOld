@@ -112,6 +112,19 @@ void CLI::parse(string str) {
                 cout << "An Ent with that name already exists.\n";
             }
 
+        } else if (isCommand("p", str, &argument)) {
+            //User wants to add the given Ent as a parent to focus.
+            //Retrieve a pointer to the given Ent.
+            Ent* entPtr = arch_ptr_->getEntPtrByName(argument);
+            if (entPtr == 0) {
+                cout << "No Ent found with that name.";
+            } else if (entPtr == focus_ptr_) {
+                cout << "Can't add the focus Ent as its own parent.";
+            } else {
+                //OK, so the Ent exists and it isn't the focus. We need to test
+                //if adding it as a parent to focus is a legal operation.
+                
+            }
         } else {
             cout << "Unknown command.\n";
         }
