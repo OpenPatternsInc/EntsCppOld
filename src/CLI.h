@@ -60,7 +60,7 @@ class CLI {
         if (text.find((command + " ")) == 0) {
             //The text started with the command and then a space.
             //Extract the argument and set the string given.
-            *argument = text.substr(command.size() + 2);
+            *argument = text.substr(command.size() + 1);
             return true;
         } else {
             //The text did not start with the given command, so, return false.
