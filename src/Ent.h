@@ -19,78 +19,134 @@
 #ifndef ENT_H
 #define ENT_H
 
-//#include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <iostream>
 #include <vector>
+#include <assert.h>
 
 using namespace std;
 
-class Ent
-{
+/**
+ * An Ent object instance represents and Ent node within a Hierarchy.
+ * Each Ent has a unique name within its hierarchy, and two vector lists
+ * which hold pointers to its parents and children.
+ * An Ent represents, in an abstract sense, a group of things, or a single thing.
+ * Parents are more general, and children are more specific.
+ * The Root class extends the Ent class and is used to represent "everything"
+ * in the most general sense. The logic of the Ents Hierarchy makes this possible,
+ * and demands that there be only one root per Hierarchy.
+ * Each Ent will eventually have a unique identifier (UID) which will be used when
+ * writing a Hierarchy to file, allowing each Ent to reference its direct relatives
+ * unambiguously.
+ */
+class Ent {
+    /**
+     * The name of the given Ent. Should ideally be unique.
+     */
+    string name_;
+    /**
+     * The unique identifier of the Ent. UIDs not implemented yet.
+     * Will be useful when writing Hierarchies to file, but not as useful
+     * when all Ents are just stored in heap memory like as of now.
+     */
+    unsigned int uid_;
+    /**
+     * Pointer to a vector of pointers to the Ent's parents.
+     */
+    vector<Ent*>* parents_;
+    /**
+     * Pointer to a vector of pointers to the Ent's children.
+     */
+    vector<Ent*>* children_;
+
 public:
 
     /**
      * Initialize an Ent with no properties yet.
+     * Probably no need to call this as of now.
      */
     Ent();
     /**
-     * Initialize an Ent with the given name. Doesn't check if that name is unique.
-     * @param name
+     * Initialize a new Ent object.
+     * @param name  The name of this new Ent. We don't check if it is unique here.
+     * @param arch  The Hierarchy object to add this Ent to.
      */
-    Ent(string);
+    Ent(string name);
     /**
-     * What to do when an Ent object is removed from memory. Probably nothing now.
+     * Delete the vectors holding pointers to parents and children.
+     * No need to delete those Ent object instances here, that's handled
+     * in the Hierarchy class.
      */
     ~Ent();
 
     /**
+     * Connect two Ents, one as the parent and one as the child. Does not check
+     * for logical consistency yet. For instance, if we have two Ents which are
+     * parent and child, we can't make the child as a new parent for the parent.
+     * @param parent    Pointer to parent.
+     * @param child     Pointer to child.
+     * @return          Soon the return variable will indicate success or failure.
+     */
+    static int connect(Ent* parent, Ent* child) {
+        //Add references to the vectors holding the lists.
+        parent->addChild(child);
+        child->addParent(parent);
+
+        return 0;
+    }
+
+    /**
      * Prints the name of the Ent to the stdout.
      */
-    inline void printName() { cout << "Ent name: \"" << m_name << "\"\n"; }
-    /**
-     * Sets the name of the Ent without checking its uniqueness.
-     */
-    inline void setName(string name) { m_name = name; }
-    
-    inline string getName() {
-        return m_name;
+    void printName() {
+        cout << "Ent name: \"" << name_ << "\"\n";
     }
+
     /**
-     * Gets the Ent's unique identifier.
+     * Sets the name of the Ent, without checking its uniqueness.
+     */
+    void setName(const string name) {
+        name_ = name;
+    }
+
+    string getName() {
+        return name_;
+    }
+
+    /**
+     * Gets the Ent's unique identifier. UIDs not implemented yet.
      * @return 
      */
-    inline unsigned int getUID() { return m_uid; }
+    unsigned int getUID() {
+        return uid_;
+    }
+
     /**
      * Adds an Ent as a parent of this one, but doesn't check anything.
      * @param parent
      */
-    inline void addParent(Ent parent) { m_parents.push_back(parent.getUID()); }
+    void addParent(Ent* parent_ptr) {
+        assert(parent_ptr != 0);
+        parents_->push_back(parent_ptr);
+    }
+
+    vector<Ent*>* getParents() {
+        return parents_;
+    }
+
     /**
      * Adds an Ent as a child of this one, but doesn't check anything.
      * @param child
      */
-    inline void addChild(Ent child) { m_children.push_back(child.getUID()); }
+    void addChild(Ent* child_ptr) {
+        children_->push_back(child_ptr);
+    }
 
-private:
+    vector<Ent*>* getChildren() {
+        return children_;
+    }
 
-    /**
-     * The name of the given Ent. Should ideally be unique.
-     */
-    string m_name;
-    /**
-     * The unique identifier of the Ent.
-     */
-    unsigned int m_uid;
-    /**
-     * The uids of it's parents.
-     */
-    vector<unsigned int> m_parents;
-    /**
-     * The uids of it's children.
-     */
-    vector<unsigned int> m_children;
 
 };
 

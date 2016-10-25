@@ -20,24 +20,22 @@
 #include "Ent.h"
 #include "Hierarchy.h"
 #include "CLI.h"
+#include "Root.h"
 
 using namespace std;
 
-int main(int argc, char** argv)
-{
-    
-    Hierarchy arch;
-    
-    Ent animals("Animals");
-    
-    arch.addEnt(animals);
-    
-    
-    CLI cli;
-    
-    cli.setArch(&arch);
-    
+int main(int argc, char** argv) {
+
+    //Create a new Ent Hierarchy. Starts off with just a root Ent.
+    Hierarchy* arch = new Hierarchy();
+    //Create a new Ent named "Animals" and make it root's child.
+    arch->tryToCreateNewEnt("Animals");
+    //Make a new CLI instance and have it explore the hierarchy.
+    CLI cli(arch);
+    //Tell the CLI to listen for commands in the console.
     cli.listen();
+    //Make sure we free up the Hierarchy. Destructor frees up all Ents contained within.
+    delete arch;
 
     return 0;
 }

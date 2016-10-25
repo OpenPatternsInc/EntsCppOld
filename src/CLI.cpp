@@ -18,42 +18,142 @@
 
 #include "CLI.h"
 
+//TODO Implement singleton stuff. Only need one of these running at a time.
+
 using namespace std;
 
-CLI::CLI() {
+CLI::CLI(Hierarchy* arch_ptr) {
+    setArch(arch_ptr);
 }
 
 CLI::~CLI() {
 }
 
 void CLI::listen() {
-    
-    m_exiting = false;
-    
+    //Initiate the listening sequence with no intention to exit yet.
+    exiting_ = false;
+    //Declare string to hold future commands here. Maybe just redeclare each time instead?
     string command;
-    
-    cout << endl;
-    
+    //Let the user know what Ent will start out as the focus.
+    cout << "Focus: " << focus_ptr_->getName() << endl;
+    //Loop to repeatedly input commands.
     do {
+        //Use the standard > to indicate we're listening for commands.
         cout << ">";
-        cin >> command;
+        //Read from console.
+        getline(cin, command);
         parse(command);
-    } while (!m_exiting);
-    
+    } while (!exiting_);
+    //Keep going till we're told to exit with "e" or "exit".
+
 }
+
 
 void CLI::parse(string str) {
     
-    
-    if (str == "exit") {
-        cout << "Exiting..." << endl;
-        m_exiting = true;
-    } else if (str == "e") {
-        //list the current ent of focus
-        cout << "Focus: " << m_focus_ptr->getName() << endl;
+    //string to hold the arguments substring if necessary.
+    string argument;
+
+    //first handle the 1 character commands
+    if (str.size() == 1) {
+        if (str == "f") {
+            //list the current ent of focus
+            cout << "Focus: " << focus_ptr_->getName() << endl;
+        } else if (str == "e") {
+            cout << "Exiting..." << endl;
+            exiting_ = true;
+        } else if (str == "c") {
+            listChildren(focus_ptr_);
+        } else if (str == "p") {
+            listParents(focus_ptr_);
+        } else if (str == "b") {
+            //Do a break point. perhaps useful in debugging.
+            //TODO implement as optional via preprocessor hiding to disable in production.
+            cout << "breakpoint\n";
+        } else {
+            //The single character command was not recognized.
+            cout << "Unknown single-character command.\n";
+        }
     } else {
-        cout << "Unknown command...\n";
+        //Command has multiple characters.
+        //Use isCommand to check for commands and if found set argument substring.
+        
+        //User just wants to exit. No arguments needed.
+        if (str == "exit") {
+            cout << "Exiting..." << endl;
+            exiting_ = true;
+        } else if (isCommand("f", str, &argument)) {
+            //User wants to change focus. Argument should be the Ent's name to be made focus.
+            Ent * const new_focus_ptr = arch_ptr_->getEntPtrByName(argument);
+            //did we find one with that name? If so, the pointer should be nonzero.
+            if (new_focus_ptr == 0) {
+                cout << "No ent found with that name.\n";
+            } else {
+                if (focus_ptr_ == new_focus_ptr) {
+                    cout << "That ent is already the focus.\n";
+                } else {
+                    setFocus(new_focus_ptr);
+                    cout << "Focus: " << focus_ptr_->getName() << endl;
+                }
+            }
+        } else if (isCommand("n", str, &argument)) {
+            //User wants to create a new ent. Add it under root.
+            if (arch_ptr_->getEntPtrByName(argument) == 0) {
+                //No ent with that name yet, so make a new one.
+                //TODO Check for correct Ent name format (not too long, etc.)
+                //Create new Ent with the given name and allocate mem on the heap.
+                Ent* newEntPtr = new Ent(argument);
+                arch_ptr_->addEntToNameMap(newEntPtr);
+            } else {
+                cout << "An Ent with that name already exists.\n";
+            }
+
+        } else {
+            cout << "Unknown command.\n";
+        }
     }
-    
-    
+
+
+}
+
+
+void CLI::listChildren(Ent* ent_ptr) {
+    //Get the Ent's children.
+    vector<Ent*>* children = ent_ptr->getChildren();
+    //If it has no children, say so, don't just give a blank list.
+    if (children->size() == 0) {
+        cout << "\"" << ent_ptr->getName() << "\" has no children.\n";
+    } else {
+        //List each child on its own line, indent with a tab.
+        //TODO Would indenting with spaces help with portability?
+        cout << "Children of \"" << ent_ptr->getName() << "\":\n";
+        for (Ent* child_ptr : *children) {
+            cout << "\t" << child_ptr->getName() << "\n";
+        }
+    }
+}
+
+
+void CLI::listParents(Ent* ent_ptr) {
+    //Get the Ent's parents.
+    vector<Ent*>* parents = ent_ptr->getParents();
+    //Is the Ent a parent-less node?
+    if (parents->size() == 0) {
+        //the only Ent with no parents should be root...
+        if (ent_ptr == arch_ptr_->getRoot()) {
+            //Use this opportunity to educate the user about the Hierarchy protocol.
+            cout << "By definition, root can not have any parents!\n";
+        } else {
+            //If the parent-less Ent isn't root, then there is a big problem.
+            //This is an invalid state and shouldn't be reachable.
+            cout << "ERROR: INVALID STATE: \"" << ent_ptr->getName() << "\" does not have any "
+            << "parents, this shouldn't have happened...\n";
+        }
+    } else {
+        //List each parent on its own line, indented with a tab.
+        cout << "Parents of \"" << ent_ptr->getName() << "\":\n";
+        for (Ent* parent_ptr : *parents) {
+            cout << "\t" << parent_ptr->getName() << "\n";
+        }
+    }
 }

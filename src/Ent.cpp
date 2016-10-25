@@ -17,19 +17,33 @@
  */
 
 #include "Ent.h"
+#include <string>
 
-Ent::Ent()
-{
+using namespace std;
+
+Ent::Ent() {
+    //Initialize vector lists.
+    parents_ = new vector<Ent*>();
+    children_ = new vector<Ent*>();
 }
 
-Ent::Ent(std::string name)
-{
-    setName(name);
+Ent::Ent(string name) : name_(name) {
+    //Initialize vector lists.
+    parents_ = new vector<Ent*>();
+    children_ = new vector<Ent*>();
+    //Useful in debugging.
+    cout << "An Ent has been created with the name \"" << name << "\"\n";
 }
 
-Ent::~Ent()
-{
+Ent::~Ent() {
+    //Deallocate the vectors. No need to deallocate what they point to.
+    delete parents_;
+    delete children_;
+    //Useful for debugging.
+    cout << "Ent \"" << getName() << "\" has been destroyed.\n";
 }
+
+
 
 
 

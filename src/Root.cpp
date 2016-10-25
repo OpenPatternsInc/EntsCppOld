@@ -18,11 +18,13 @@
 
 #include "Root.h"
 
-Root::Root() {
-    setName("root");
+//Call the inherited constructor, setting this root instance's name to "root"
+//and initializing the children vector.
+Root::Root(void) : Ent("root") {
 }
 
 Root::~Root() {
-    
-    
+    //Just let the inherited Ent destructor tell the user for now.
+    //cout << "Root has been destroyed.\n";
+
 }

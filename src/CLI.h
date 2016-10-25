@@ -27,39 +27,91 @@
 
 using namespace std;
 
-class CLI
-{
-    
-public:
-    
-    CLI();
-    ~CLI();
-    
-    void listen();
-    
-    void parse(string str);
-    
-    inline void setFocus(Ent* ent_ptr) { m_focus_ptr = ent_ptr; }
-    
-    inline void setArch(Hierarchy* new_arch_ptr)
-    {
-        m_arch_ptr = new_arch_ptr;
-        m_focus_ptr = new_arch_ptr->getRoot();
+class CLI {
+    /** If set to true, the after the next command is parsed, stop listening
+     * and return control to the calling function. */
+    bool exiting_;
+    /** Points to the current Ent of focus. */
+    Ent* focus_ptr_;
+    /** Points to the Hierarchy Currently being explored.*/
+    Hierarchy* arch_ptr_;
+    /**
+    * List the given Ent's children.
+    * Do not alter the Ent!
+    * @param ent_ptr
+    */
+    void listChildren(Ent* ent_ptr);
+    /**
+    * Lists the given Ent's parents.
+    * Do not alter the Ent!
+    * @param ent_ptr
+    */
+    void listParents(Ent* ent_ptr);
+    /**
+     * Sees if the given text is a command, and if so, sets the given argument
+     * string to the substring after the command.
+     * @param command       The command identifier used first.
+     * @param text          The full input text.
+     * @param argument      Pointer to the string holding the argument.
+     * @return 
+     */
+    const bool isCommand(const string command, const string text, string* argument) {
+        
+        if (text.find((command + " ")) == 0) {
+            //The text started with the command and then a space.
+            //Extract the argument and set the string given.
+            *argument = text.substr(command.size() + 2);
+            return true;
+        } else {
+            //The text did not start with the given command, so, return false.
+            return false;
+        }
     }
-    
-    
-private:
-    
-    bool m_exiting;
-    
-    Ent* m_focus_ptr;
-    
-    Hierarchy* m_arch_ptr;
-    
-    
-    
-    
-    
+
+public:
+
+    /**
+     * Construct a CLI object with the given Hierarchy. We don't give a no-arg
+     * constructor because we just want to always initialize a CLI with a
+     * Hierarchy anyways.
+     * @param arch_ptr
+     */
+    CLI(Hierarchy* arch_ptr);
+    /**
+     * Do not deallocate the Hierarchy or the Ent of focus.
+     * The user may want to instead open up a GUI or something else.
+     * There is no other way to browse Hierarchies yet though.
+     */
+    ~CLI();
+    /**
+     * Starts listening for commands in the console. Commands are used to explore
+     * and edit the Hierarchy.
+     */
+    void listen();
+    /**
+    * Parse the given command and carry out the actions it represents.
+    * @param str   Raw string of the command. Doesn't include the "<".
+    */
+    void parse(string str);
+    /**
+     * Set the focus of the CLI listener to the given Ent.
+     * @param ent_ptr   Points to the new focus.
+     */
+    void setFocus(Ent* ent_ptr) {
+        focus_ptr_ = ent_ptr;
+    }
+    /**
+     * Sets the Hierarchy to explore.
+     */
+    void setArch(Hierarchy* new_arch_ptr) {
+        arch_ptr_ = new_arch_ptr;
+        focus_ptr_ = new_arch_ptr->getRoot();
+        //TODO Tell the user which Hierarchy is now being explored.
+    }
+
+
+
+
 };
 
 

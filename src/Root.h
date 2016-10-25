@@ -23,25 +23,22 @@
 
 /**
  * The Root class is a special type of Ent which is at the top of the hierarchy.
+ * It abstractly represents the set of "everything", and by definition should
+ * have no parents, only children. Each Hierarchy has only one root.
  */
-class Root : public Ent
-{
+class Root : public Ent {
 public:
 
     /**
-     * Initialize a root Ent.
+     * Initialize a root Ent. Sets its name to "root" automatically.
+     * children vector is initialized via the inherited Ent(string name)
+     * constructor.
      */
-    Root();
-    
-    ~Root();
-
-private:
-    
+    Root(void);
     /**
-     * We don't want to add any parents to root.
-     * @param parent
+     * Destruction of Root is handled by the inherited Ent destructor.
      */
-    void addParent(Ent parent);
+    ~Root(void);
 
 };
 

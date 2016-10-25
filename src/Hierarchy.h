@@ -20,43 +20,93 @@
 #define HIERARCHY_H
 
 #include <vector>
+#include <unordered_map>
+#include <iterator>
 #include "Ent.h"
 #include "Root.h"
 
 using namespace std;
+/**
+ * EntNameMap is an unordered_map which retrieves pointers to Ent instances
+ * given the input of their names. Alias is made to make it pretty.
+ */
+typedef std::unordered_map<string, Ent*> EntNameMap;
 
-class Hierarchy
-{
+/** Used to represent the success of adding a new Ent
+ * to the Hierarchy by name.*/
+typedef enum {
+    UNDEFINED_ERROR,
+    SUCCESS,
+    NAME_TAKEN
+} NewEntStatus;
+
+/**
+ * Class holding a hierarchy of Ent objects. Uses an unorganized hashmap to organize
+ * all the Ents via their names for easy lookup. Each Ent holds vector lists pointing
+ * to their parents or children.
+ * Each Hierarchy contains on Root Ent, pointed to by root_.
+ * Logical organization is not yet implemented, for instance the preventing of
+ * illegal operations which would create an invalid state.
+ */
+class Hierarchy {
+    //TODO Add a data member to let the user name the Hierarchy.
+    
+    /**
+     * Ents are allocated on heap memory and deallocated later as needed.
+     * References to them are held for now within an unordered_map with the
+     * keys being the Ent names and the values being pointers to the Ents.
+     */
+    EntNameMap* entNameMap_;
+    /**
+     * Pointer to the root of the hierarchy. No need to make a setter method
+     * because the root never needs to change.
+     */
+    Root* root_;
+
 public:
 
     /**
-     * Create a new Hierarchy and add a root Ent to it.
+     * Create a new Hierarchy and add a root Ent to it. Also initialize the NameMap.
      */
     Hierarchy();
     /**
      * What do do when the Hierarchy is removed from memory. Maybe save to file?
+     * For now we delete entNameMap and all the Ents it points to.
      */
     ~Hierarchy();
+
     /**
-     * Adds an Ent to the Hierarchy without checking anything about it.
-     * @param ent
+    * Adds an Ent to entNameMap_ and sets its only parent as parentPtr.
+    * If we add an Ent to the Hierarchy, it will always need a parent,
+    * unless it's root.
+    * Root is added manually.
+    * @param entPtr    Pointer to the Ent being added.
+    * @param parentPtr Pointer to the parent of the Ent being added.
+    */
+    void addEntToNameMap(Ent* entPtr, Ent* parentPtr = 0);
+    /**
+     * If the name is not already taken, create a new one and add it to the map.
+     * Set the new Ent as root's child for now.
+     * @param name  Desired name.
+     * @return      Returns and enum value: UNDEFINED_ERROR, SUCCESS, NAME_TAKEN
      */
-    inline void addEnt(Ent ent) { m_ents.push_back(ent); }
+    NewEntStatus tryToCreateNewEnt(string name);
     
-    inline Root* getRoot() { return &m_root; }
+    Root* getRoot() {
+        return root_;
+    }
+    /**
+     * Retrieves a pointer to an Ent of the given name, if one exists.
+     * @param name  Name being searched for.
+     * @return      Returns pointer to Ent if found, 0 if not.
+     */
+    Ent* getEntPtrByName(const string name);
 
-private:
+    EntNameMap* getNameMap() {
+        return entNameMap_;
+    }
 
-    vector<Ent> m_ents;
-    
-    Root m_root;
-    
-    
-
-
-
-
-};
+}; //end class Hierarchy
 
 
 #endif /* HIERARCHY_H */
