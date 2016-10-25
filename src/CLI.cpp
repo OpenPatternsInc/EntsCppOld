@@ -91,10 +91,10 @@ void CLI::parse(string str) {
             Ent * const new_focus_ptr = arch_ptr_->getEntPtrByName(argument);
             //did we find one with that name? If so, the pointer should be nonzero.
             if (new_focus_ptr == 0) {
-                cout << "No ent found with that name.\n";
+                cout << "No Ent found with that name.\n";
             } else {
                 if (focus_ptr_ == new_focus_ptr) {
-                    cout << "That ent is already the focus.\n";
+                    cout << "That Ent is already the focus.\n";
                 } else {
                     setFocus(new_focus_ptr);
                     cout << "Focus: " << focus_ptr_->getName() << endl;
