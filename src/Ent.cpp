@@ -32,7 +32,7 @@ Ent::Ent(string name) : name_(name) {
     parents_ = new vector<Ent*>();
     children_ = new vector<Ent*>();
     //Useful in debugging.
-    cout << "An Ent has been created with the name \"" << name << "\"\n";
+    cout << "An Ent has been created with the name \"" << name << "\".\n";
 }
 
 Ent::~Ent() {
