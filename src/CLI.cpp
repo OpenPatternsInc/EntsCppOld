@@ -70,6 +70,8 @@ void CLI::parse(string str) {
             //Do a break point. perhaps useful in debugging.
             //TODO implement as optional via preprocessor hiding to disable in production.
             cout << "breakpoint\n";
+        } else if (str == "h") {
+            printHelp();
         } else {
             //The single character command was not recognized.
             cout << "Unknown single-character command.\n";
@@ -82,6 +84,8 @@ void CLI::parse(string str) {
         if (str == "exit") {
             cout << "Exiting..." << endl;
             exiting_ = true;
+        } else if (str == "help") {
+            printHelp();
         } else if (isCommand("f", str, &argument)) {
             //User wants to change focus. Argument should be the Ent's name to be made focus.
             Ent * const new_focus_ptr = arch_ptr_->getEntPtrByName(argument);

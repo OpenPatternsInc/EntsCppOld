@@ -108,6 +108,23 @@ public:
         focus_ptr_ = new_arch_ptr->getRoot();
         //TODO Tell the user which Hierarchy is now being explored.
     }
+    /**
+     * Prints the help section to console.
+     */
+    void printHelp() {
+        cout << "Commands with no argument:\n"
+                << "\t>f\t\tPrints out current Ent of focus.\n"
+                << "\t>p\t\tLists the focus' parents.\n"
+                << "\t>c\t\tLists the focus' children.\n"
+                << "\t>e or >exit\tExits command interface.\n"
+                << "\t>h\t\tPrints this help section.\n"
+                << "\t>b\t\tUsed to bring up an optional breakpoint if desired.\n"
+                << "Commands with one argument:\n"
+                << "\t>f [Ent name]\tChanges focus to the Ent with the given name.\n"
+                << "\t>n [Ent name]\tCreates a new Ent with the given name, if available,\n"
+                << "\t\t\tand sets its only parent as root.\n";
+        
+    }
 
 
 
