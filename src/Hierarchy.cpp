@@ -19,15 +19,12 @@
 #include "Hierarchy.h"
 
 using namespace std;
-//using namespace Hierarchy;
 
 Hierarchy::Hierarchy() {
-    //Initialize root. Allocate on heap, released in destructor.
+    //Initialize root. Allocate on heap, released in destructor with all other Ents.
     root_ = new Root();
-    //Initialize unordered_map for names to Ents. Release in destructor.
-    entNameMap_ = new EntNameMap();
     //Add root to the map.
-    entNameMap_->insert({root_->getName(), root_});
+    entNameMap_.insert({root_->getName(), root_});
     //Useful for debugging to tell the user now when construction is done.
     cout << "New Hierarchy created.\n";
 }
@@ -37,11 +34,9 @@ Hierarchy::~Hierarchy(void) {
     //in the following loop.
 
     //Deallocate each Ent in the nameMap.
-    for (pair<string, Ent*> i : *entNameMap_) {
+    for (pair<string, Ent*> i : entNameMap_) {
         delete i.second;
     }
-    //Now deallocate the nameMap itself.
-    delete entNameMap_;
     //Useful for debugging.
     cout << "Hierarchy destructor completed.\n";
 }
@@ -50,7 +45,7 @@ Hierarchy::~Hierarchy(void) {
 void Hierarchy::addEntToNameMap(Ent* entPtr, Ent* parentPtr) {
     //If no parent is given, make its parent root to preven orphan Ents.
     if (parentPtr == 0) parentPtr = root_;
-    entNameMap_->insert({entPtr->getName(), entPtr});
+    entNameMap_.insert({entPtr->getName(), entPtr});
     //Connect the new ent and its new parent. Adds references for each other.
     Ent::connect(parentPtr, entPtr);
 }
@@ -77,9 +72,9 @@ NewEntStatus Hierarchy::tryToCreateNewEnt(string name) {
 Ent* Hierarchy::getEntPtrByName(const string name) {
     //Get an iterator wrapping the pair which holds the desired Ent, or the end
     //of the map if not found. Since each pair is unique, it should hold at most one pair.
-    EntNameMap::iterator it = getNameMap()->find(name);
+    EntNameMap::iterator it = entNameMap_.find(name);
     
-    if (it != entNameMap_->end()) {
+    if (it != entNameMap_.end()) {
         //Iterator wasn't the "end" of the map iterator, so, we found something.
         return it->second;
     } else {

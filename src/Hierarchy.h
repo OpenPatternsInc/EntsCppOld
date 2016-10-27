@@ -24,6 +24,7 @@
 #include <iterator>
 #include "Ent.h"
 #include "Root.h"
+#include "Util/Prime.h"
 
 using namespace std;
 /**
@@ -56,12 +57,16 @@ class Hierarchy {
      * References to them are held for now within an unordered_map with the
      * keys being the Ent names and the values being pointers to the Ents.
      */
-    EntNameMap* entNameMap_;
+    EntNameMap entNameMap_;
     /**
      * Pointer to the root of the hierarchy. No need to make a setter method
      * because the root never needs to change.
      */
     Root* root_;
+    /**
+     * Handles the generation and distribution of prime numbers used with UIDs.
+     */
+    Prime prime_;
 
 public:
 
@@ -103,7 +108,7 @@ public:
     Ent* getEntPtrByName(const string name);
 
     EntNameMap* getNameMap() {
-        return entNameMap_;
+        return &entNameMap_;
     }
 
 }; //end class Hierarchy
