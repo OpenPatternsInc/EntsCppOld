@@ -21,11 +21,13 @@
 #include "Hierarchy.h"
 #include "CLI.h"
 #include "Root.h"
+#include "Util/Prime.h"
 
 using namespace std;
 
 int main(int argc, char** argv) {
 
+    //**
     //Create a new Ent Hierarchy. Starts off with just a root Ent.
     Hierarchy* arch = new Hierarchy();
     //Make a new CLI instance and have it explore the hierarchy.
@@ -34,6 +36,11 @@ int main(int argc, char** argv) {
     cli.listen();
     //Make sure we free up the Hierarchy. Destructor frees up all Ents contained within.
     delete arch;
+     //*/
+    
+    //Prime prime;
+    //prime.generateMorePrimes(1000);
+    
 
     return 0;
 }
