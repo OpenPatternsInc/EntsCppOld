@@ -16,30 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <cstdlib>
 #include "Ent.h"
 #include "Hierarchy.h"
 #include "CLI.h"
-#include "Root.h"
-#include "Util/Prime.h"
+//#include "Util/Prime.h"
 
 using namespace std;
 
 int main(int argc, char** argv) {
 
-    //**
+    
     //Create a new Ent Hierarchy. Starts off with just a root Ent.
-    Hierarchy* arch = new Hierarchy();
+    Hierarchy arch;
     //Make a new CLI instance and have it explore the hierarchy.
-    CLI cli(arch);
+    CLI cli(&arch);
     //Tell the CLI to listen for commands in the console.
     cli.listen();
-    //Make sure we free up the Hierarchy. Destructor frees up all Ents contained within.
-    delete arch;
-     //*/
-    
-    //Prime prime;
-    //prime.generateMorePrimes(1000);
     
 
     return 0;
