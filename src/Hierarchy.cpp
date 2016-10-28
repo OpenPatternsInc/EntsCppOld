@@ -23,7 +23,7 @@ using namespace std;
 Hierarchy::Hierarchy() {
     //Initialize root. Allocate on heap, released in destructor with all other Ents.
     root_ = new Root();
-    //Add root to the map.
+    //Add root to the nameMap.
     entNameMap_.insert({root_->getName(), root_});
     //Useful for debugging to tell the user now when construction is done.
     cout << "New Hierarchy created.\n";
@@ -55,9 +55,9 @@ NewEntStatus Hierarchy::tryToCreateNewEnt(string name) {
     Ent* existingEntPtr;
     
     if ((existingEntPtr = getEntPtrByName(name)) == 0) {
-        //name is free, create the new Ent as a dynamic variable.
-        //TODO remember to delete this variable from memory when appropriate.
+        //Name is free, create the new Ent as a dynamic variable.
         Ent* newEnt = new Ent(name);
+        //Add it to the nameMap.
         addEntToNameMap(newEnt);
         return SUCCESS;
     } else {

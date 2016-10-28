@@ -20,9 +20,9 @@
 
 using namespace std;
 
-Prime::Prime() {
+Prime::Prime(): nextPrimeIndex(0), batchNum(10) {
     
-    primes.push_back(1);
+    //primes.push_back(1);
     primes.push_back(2);
     primes.push_back(3);
     
@@ -59,9 +59,17 @@ void Prime::generateMorePrimes(int n) {
     
 }
 
+/**
+ * Returns the next prime number in the list. Starts by returning 2, 1 is always
+ * for root.
+ * @return      The next prime that hasn't been returned.
+ */
 unsigned int Prime::getNextPrime() {
     
-    
-    
+    //Are there still primes left in the list which haven't been returned?
+    if (primes.size() < nextPrimeIndex + 1)
+        generateMorePrimes(batchNum);
+    //Return the next one, and then increment the index.
+    return primes[nextPrimeIndex++];
     
 }
