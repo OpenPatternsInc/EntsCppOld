@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Ent.o \
 	${OBJECTDIR}/src/Hierarchy.o \
 	${OBJECTDIR}/src/Root.o \
+	${OBJECTDIR}/src/Util/Prime.o \
 	${OBJECTDIR}/src/main.o
 
 
@@ -85,6 +86,11 @@ ${OBJECTDIR}/src/Root.o: src/Root.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Root.o src/Root.cpp
+
+${OBJECTDIR}/src/Util/Prime.o: src/Util/Prime.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/Util
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Util/Prime.o src/Util/Prime.cpp
 
 ${OBJECTDIR}/src/main.o: src/main.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
