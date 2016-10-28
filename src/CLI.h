@@ -24,6 +24,7 @@
 #include "Ent.h"
 #include "Root.h"
 #include "Hierarchy.h"
+#include "Analyzer.h"
 
 using namespace std;
 
@@ -32,9 +33,9 @@ class CLI {
      * and return control to the calling function. */
     bool exiting_;
     /** Points to the current Ent of focus. */
-    Ent* focus_ptr_;
+    Ent* focusPtr;
     /** Points to the Hierarchy Currently being explored.*/
-    Hierarchy* arch_ptr_;
+    Hierarchy* archPtr;
     /**
     * List the given Ent's children.
     * Do not alter the Ent!
@@ -67,6 +68,9 @@ class CLI {
             return false;
         }
     }
+    
+    void handleEstrangedPairs(vector<EstrangedPair*>* pairs);
+    
 
 public:
 
@@ -98,14 +102,14 @@ public:
      * @param ent_ptr   Points to the new focus.
      */
     void setFocus(Ent* ent_ptr) {
-        focus_ptr_ = ent_ptr;
+        focusPtr = ent_ptr;
     }
     /**
      * Sets the Hierarchy to explore.
      */
     void setArch(Hierarchy* new_arch_ptr) {
-        arch_ptr_ = new_arch_ptr;
-        focus_ptr_ = new_arch_ptr->getRoot();
+        archPtr = new_arch_ptr;
+        focusPtr = new_arch_ptr->getRoot();
         //TODO Tell the user which Hierarchy is now being explored.
     }
     /**
@@ -116,6 +120,7 @@ public:
                 << "\t>f\t\tPrints out current Ent of focus.\n"
                 << "\t>p\t\tLists the focus' parents.\n"
                 << "\t>c\t\tLists the focus' children.\n"
+                << "\t>s\t\tLists the siblings of focus.\n"
                 << "\t>e or >exit\tExits command interface.\n"
                 << "\t>h\t\tPrints this help section.\n"
                 << "\t>b\t\tUsed to bring up an optional breakpoint if desired.\n"

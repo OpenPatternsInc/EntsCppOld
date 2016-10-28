@@ -35,7 +35,7 @@ void CLI::listen() {
     //Declare string to hold future commands here. Maybe just redeclare each time instead?
     string command;
     //Let the user know what Ent will start out as the focus.
-    cout << "Focus: " << focus_ptr_->getName() << endl;
+    cout << "Focus: " << focusPtr->getName() << endl;
     //Loop to repeatedly input commands.
     do {
         //Use the standard > to indicate we're listening for commands.
@@ -58,21 +58,54 @@ void CLI::parse(string str) {
     if (str.size() == 1) {
         if (str == "f") {
             //list the current ent of focus
-            cout << "Focus: " << focus_ptr_->getName() << endl;
+            cout << "Focus: " << focusPtr->getName() << endl;
         } else if (str == "e") {
             cout << "Exiting..." << endl;
             exiting_ = true;
         } else if (str == "c") {
-            listChildren(focus_ptr_);
+            listChildren(focusPtr);
         } else if (str == "p") {
-            listParents(focus_ptr_);
+            listParents(focusPtr);
         } else if (str == "b") {
             //Do a break point. perhaps useful in debugging.
             //TODO implement as optional via preprocessor hiding to disable in production.
             cout << "breakpoint\n";
         } else if (str == "h") {
             printHelp();
-        } else {
+        } else if (str == "a") {
+            //Get a pointer to a vector containing any estranged pairs of siblings under focus.
+            vector<EstrangedPair*>* pairs = Analyzer::analyzeForEstrangedPairs(focusPtr);
+            //Were there any estranged pairs? If so, handle it!
+            if (pairs->size() == 0) {
+                cout << focusPtr->getName() << " has no estranged children.\n";
+                //clean up memory
+                delete pairs;
+                return;
+            } else {
+                handleEstrangedPairs(pairs);
+            }
+        } //end "a"
+        else if (str == "s") {
+            //Display siblings of focus
+            //If it's root, educate the user a bit
+            if (focusPtr == archPtr->getRoot()) {
+                cout << "By definition, root can not have any siblings.\n";
+                return;
+            }
+            vector<Ent*>* parents = focusPtr->getParents();
+            for (Ent* parent : *parents) {
+                cout << "Siblings under " << parent->getName() << ":\n";
+                vector<Ent*>* children = parent->getChildren();
+                if (children->size() > 1) {
+                    for (int a = 0; a < children->size(); a++)
+                        if (children->at(a) != focusPtr)
+                            cout << "\t" << children->at(a)->getName() << endl;
+                } else {
+                    cout << "\t None" << endl;
+                }
+            }
+        } //end "s"
+        else {
             //The single character command was not recognized.
             cout << "Unknown single-character command.\n";
         }
@@ -88,44 +121,60 @@ void CLI::parse(string str) {
             printHelp();
         } else if (isCommand("f", str, &argument)) {
             //User wants to change focus. Argument should be the Ent's name to be made focus.
-            Ent * const new_focus_ptr = arch_ptr_->getEntPtrByName(argument);
+            Ent * const new_focus_ptr = archPtr->getEntPtrByName(argument);
             //did we find one with that name? If so, the pointer should be nonzero.
             if (new_focus_ptr == 0) {
                 cout << "No Ent found with that name.\n";
             } else {
-                if (focus_ptr_ == new_focus_ptr) {
+                if (focusPtr == new_focus_ptr) {
                     cout << "That Ent is already the focus.\n";
                 } else {
                     setFocus(new_focus_ptr);
-                    cout << "Focus: " << focus_ptr_->getName() << endl;
+                    cout << "Focus: " << focusPtr->getName() << endl;
                 }
             }
-        } else if (isCommand("n", str, &argument)) {
+        } //end "f"
+        else if (isCommand("n", str, &argument)) {
             //User wants to create a new ent. Add it under root.
-            if (arch_ptr_->getEntPtrByName(argument) == 0) {
+            if (archPtr->getEntPtrByName(argument) == 0) {
                 //No ent with that name yet, so make a new one.
                 //TODO Check for correct Ent name format (not too long, etc.)
                 //Create new Ent with the given name and allocate mem on the heap.
                 Ent* newEntPtr = new Ent(argument);
-                arch_ptr_->addEntToNameMap(newEntPtr);
+                archPtr->addEntToNameMap(newEntPtr);
+                //Now we should ask the user to classify the new Ent within the
+                //existing hierarchy!
+                //Since the new Ent was added as a child of root, analyze root
+                //for any estranged children.
+                vector<EstrangedPair*>* pairs = Analyzer::analyzeForEstrangedPairs(archPtr->getRoot());
+                //If there are any, then handle them.
+                if (pairs->size() == 0) {
+                    //Nothing to do here except cleanup memory.
+                    delete pairs;
+                } else {
+                    handleEstrangedPairs(pairs);
+                }
+                
             } else {
                 cout << "An Ent with that name already exists.\n";
             }
 
-        } else if (isCommand("p", str, &argument)) {
+        } //end "n"
+        else if (isCommand("p", str, &argument)) {
             //User wants to add the given Ent as a parent to focus.
             //Retrieve a pointer to the given Ent.
-            Ent* entPtr = arch_ptr_->getEntPtrByName(argument);
+            Ent* entPtr = archPtr->getEntPtrByName(argument);
             if (entPtr == 0) {
                 cout << "No Ent found with that name.";
-            } else if (entPtr == focus_ptr_) {
+            } else if (entPtr == focusPtr) {
                 cout << "Can't add the focus Ent as its own parent.";
             } else {
                 //OK, so the Ent exists and it isn't the focus. We need to test
                 //if adding it as a parent to focus is a legal operation.
                 
             }
-        } else {
+        } //end "p"
+        else {
             cout << "Unknown command.\n";
         }
     }
@@ -157,7 +206,7 @@ void CLI::listParents(Ent* ent_ptr) {
     //Is the Ent a parent-less node?
     if (parents->size() == 0) {
         //the only Ent with no parents should be root...
-        if (ent_ptr == arch_ptr_->getRoot()) {
+        if (ent_ptr == archPtr->getRoot()) {
             //Use this opportunity to educate the user about the Hierarchy protocol.
             cout << "By definition, root can not have any parents!\n";
         } else {
@@ -173,4 +222,48 @@ void CLI::listParents(Ent* ent_ptr) {
             cout << "\t" << parent_ptr->getName() << "\n";
         }
     }
+}
+
+
+void CLI::handleEstrangedPairs(vector<EstrangedPair*>* pairs) {
+    
+    //ok, so we found some pairs
+    cout << focusPtr->getName() << " has " << pairs->size() << " estranged pairs of children.\n";
+    
+    //Go through each pair and decide what to do.
+    //TODO Should we re-analyze the situation after each change made within the loop?
+    for (EstrangedPair* pair : *pairs) {
+        
+        Ent* a = pair->getA();
+        Ent* b = pair->getB();
+        //Store responses in this string.
+        string response;
+        //Exclusive?
+        cout << "Are " + a->getName() << " and " << b->getName()
+                << " exclusive to each other?\ny/n: ";
+        getline(cin, response);
+        if (response == "y") {
+            Ent::setExclusive(a, b);
+            cout << "OK, they are exclusive now.\n";
+            continue;
+        }
+        //Overlap?
+        cout << "Do " + a->getName() << " and " << b->getName() << " overlap?\ny/n: ";
+        getline(cin, response);
+        if (response == "y") {
+            Ent::setOverlap(a, b);
+            cout << "OK, they overlap now.\n";
+            continue;
+        }
+        //If it gets here, it must be neither...
+        cout << "So, it's neither then... lets play hardball!\n";
+        
+        //TODO Implement the asking of the user if a is a parent of b, or vice versa.
+        
+    }
+    
+    //memory cleanup
+    for (EstrangedPair* pair : *pairs)
+        delete pair;
+    delete pairs;
 }
