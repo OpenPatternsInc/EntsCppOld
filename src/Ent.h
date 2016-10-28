@@ -44,21 +44,30 @@ class Ent {
     /**
      * The name of the given Ent. Should ideally be unique.
      */
-    string name_;
+    string name;
     /**
      * The unique identifier of the Ent. UIDs not implemented yet.
      * Will be useful when writing Hierarchies to file, but not as useful
      * when all Ents are just stored in heap memory like as of now.
      */
-    unsigned int uid_;
+    unsigned int uid;
     /**
-     * Pointer to a vector of pointers to the Ent's parents.
+     * Vector of pointers to the Ent's parents.
      */
-    vector<Ent*>* parents_;
+    vector<Ent*> parents;
     /**
-     * Pointer to a vector of pointers to the Ent's children.
+     * Vector of pointers to the Ent's children.
      */
-    vector<Ent*>* children_;
+    vector<Ent*> children;
+    /**
+     * Vector of pointers to the Ents which are directly exclusive to this one.
+     */
+    vector<Ent*> exclusives;
+    /**
+     * Vector of pointers to the Ents which overlap with this one.
+     */
+    vector<Ent*> overlaps;
+    
 
 public:
 
@@ -95,23 +104,43 @@ public:
 
         return 0;
     }
+    
+    /**
+     * TODO Test for consistency somewhere.
+     * @param a
+     * @param b
+     * @return 
+     */
+    static int setOverlap(Ent* a, Ent* b) {
+        a->addOverlaps(b);
+        b->addOverlaps(a);
+        
+        return 0;
+    }
+    
+    static int setExclusive(Ent* a, Ent* b) {
+        a->addExclusive(b);
+        b->addExclusive(a);
+        
+        return 0;
+    }
 
     /**
      * Prints the name of the Ent to the stdout.
      */
     void printName() {
-        cout << "Ent name: \"" << name_ << "\"\n";
+        cout << "Ent name: \"" << name << "\"\n";
     }
 
     /**
      * Sets the name of the Ent, without checking its uniqueness.
      */
-    void setName(const string name) {
-        name_ = name;
+    void setName(const string newName) {
+        name = newName;
     }
 
     string getName() {
-        return name_;
+        return name;
     }
 
     /**
@@ -119,32 +148,56 @@ public:
      * @return 
      */
     unsigned int getUID() {
-        return uid_;
+        return uid;
     }
 
     /**
      * Adds an Ent as a parent of this one, but doesn't check anything.
-     * @param parent
+     * @param parentPtr
      */
-    void addParent(Ent* parent_ptr) {
-        assert(parent_ptr != 0);
-        parents_->push_back(parent_ptr);
+    void addParent(Ent* parentPtr) {
+        assert(parentPtr != 0);
+        parents.push_back(parentPtr);
     }
 
     vector<Ent*>* getParents() {
-        return parents_;
+        return &parents;
     }
 
     /**
      * Adds an Ent as a child of this one, but doesn't check anything.
-     * @param child
+     * @param childPtr
      */
-    void addChild(Ent* child_ptr) {
-        children_->push_back(child_ptr);
+    void addChild(Ent* childPtr) {
+        children.push_back(childPtr);
     }
 
     vector<Ent*>* getChildren() {
-        return children_;
+        return &children;
+    }
+    
+    /**
+     * Add an Ent to the vector of exclusives to this Ent.
+     * @param exPtr
+     */
+    void addExclusive(Ent* exPtr) {
+        exclusives.push_back(exPtr);
+    }
+    
+    vector<Ent*>* getExclusives() {
+        return &exclusives;
+    }
+    
+    /**
+     * Overlaps
+     * @param ovPtr
+     */
+    void addOverlaps(Ent* ovPtr) {
+        overlaps.push_back(ovPtr);
+    }
+    
+    vector<Ent*>* getOverlaps() {
+        return &overlaps;
     }
 
 
