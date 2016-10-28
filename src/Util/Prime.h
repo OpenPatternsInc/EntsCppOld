@@ -28,6 +28,12 @@ using namespace std;
 /**
  * This file contains programs to generate prime numbers. These prime numbers will
  * be used to represent the hierarchal location of Ents via factorization.
+ * 
+ * Still deciding what the best course of action is. Hopefully the prime approach
+ * will limit recursive searching and provide O(1) speed for certain actions,
+ * with calculations done up-front like testing "are humans fish?" without needing
+ * to iterate through the hierarchy which can be relatively "unordered" compared
+ * to traditional trees.
  */
 class Prime {
     
@@ -39,7 +45,11 @@ class Prime {
     /**
      * Keeps track of which primes have already been given.
      */
-    unsigned int currentPrimeIndex;
+    unsigned int nextPrimeIndex;
+    /**
+     * How many new primes to generate at a time.
+     */
+    int batchNum;
     
 public:
     /**
