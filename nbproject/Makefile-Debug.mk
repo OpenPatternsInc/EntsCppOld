@@ -37,8 +37,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/src/CLI.o \
 	${OBJECTDIR}/src/Ent.o \
-	${OBJECTDIR}/src/Hierarchy.o \
 	${OBJECTDIR}/src/Root.o \
+	${OBJECTDIR}/src/Tree.o \
+	${OBJECTDIR}/src/TreeAnalyzer.o \
 	${OBJECTDIR}/src/Util/Prime.o \
 	${OBJECTDIR}/src/main.o
 
@@ -77,15 +78,20 @@ ${OBJECTDIR}/src/Ent.o: src/Ent.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Ent.o src/Ent.cpp
 
-${OBJECTDIR}/src/Hierarchy.o: src/Hierarchy.cpp
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Hierarchy.o src/Hierarchy.cpp
-
 ${OBJECTDIR}/src/Root.o: src/Root.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Root.o src/Root.cpp
+
+${OBJECTDIR}/src/Tree.o: src/Tree.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Tree.o src/Tree.cpp
+
+${OBJECTDIR}/src/TreeAnalyzer.o: src/TreeAnalyzer.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TreeAnalyzer.o src/TreeAnalyzer.cpp
 
 ${OBJECTDIR}/src/Util/Prime.o: src/Util/Prime.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/Util

@@ -7,9 +7,10 @@
       <itemPath>src/Analyzer.h</itemPath>
       <itemPath>src/CLI.h</itemPath>
       <itemPath>src/Ent.h</itemPath>
-      <itemPath>src/Hierarchy.h</itemPath>
+      <itemPath>src/Util/IO.h</itemPath>
       <itemPath>src/Util/Prime.h</itemPath>
       <itemPath>src/Root.h</itemPath>
+      <itemPath>src/Tree.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -20,9 +21,10 @@
                    projectFiles="true">
       <itemPath>src/CLI.cpp</itemPath>
       <itemPath>src/Ent.cpp</itemPath>
-      <itemPath>src/Hierarchy.cpp</itemPath>
       <itemPath>src/Util/Prime.cpp</itemPath>
       <itemPath>src/Root.cpp</itemPath>
+      <itemPath>src/Tree.cpp</itemPath>
+      <itemPath>src/TreeAnalyzer.cpp</itemPath>
       <itemPath>src/main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -66,13 +68,17 @@
       </item>
       <item path="src/Ent.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/Hierarchy.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/Hierarchy.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/Root.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Root.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Tree.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Tree.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/TreeAnalyzer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Util/IO.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Util/Prime.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -114,13 +120,17 @@
       </item>
       <item path="src/Ent.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/Hierarchy.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/Hierarchy.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/Root.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Root.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Tree.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Tree.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/TreeAnalyzer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Util/IO.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Util/Prime.cpp" ex="false" tool="1" flavor2="0">
       </item>
