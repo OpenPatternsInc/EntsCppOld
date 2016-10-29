@@ -16,33 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ROOT_H
-#define ROOT_H
+#ifndef TREEANALYZER_H
+#define TREEANALYZER_H
 
 #include "Ent.h"
+#include "TreeAnalysis/EstrangedPair.h"
 
-/**
- * The Root class is a special type of Ent which is at the top of the hierarchy.
- * It abstractly represents the set of "everything", and by definition should
- * have no parents, only children. Each Tree has only one root.
- */
-class Root : public Ent {
+
+
+class TreeAnalyzer {
+    
 public:
-
-    /**
-     * Initialize a root Ent. Sets its name to "root" automatically.
-     * children vector is initialized via the inherited Ent(string name)
-     * constructor.
-     */
-    Root(void);
-    /**
-     * Destruction of Root is handled by the inherited Ent destructor.
-     */
-    ~Root(void);
-
+    
+    static EstrangedPair* analyzeForEstrangedChildren(Ent *parent);
+    
+    
 };
 
 
 
-#endif /* ROOT_H */
+#endif /* TREEANALYZER_H */
 

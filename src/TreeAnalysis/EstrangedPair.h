@@ -16,33 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ROOT_H
-#define ROOT_H
+#ifndef ESTRANGEDPAIR_H
+#define ESTRANGEDPAIR_H
 
-#include "Ent.h"
+#include "../Ent.h"
 
-/**
- * The Root class is a special type of Ent which is at the top of the hierarchy.
- * It abstractly represents the set of "everything", and by definition should
- * have no parents, only children. Each Tree has only one root.
- */
-class Root : public Ent {
+class EstrangedPair {
+    
+protected:
+    Ent *entA, *entB;
 public:
-
-    /**
-     * Initialize a root Ent. Sets its name to "root" automatically.
-     * children vector is initialized via the inherited Ent(string name)
-     * constructor.
-     */
-    Root(void);
-    /**
-     * Destruction of Root is handled by the inherited Ent destructor.
-     */
-    ~Root(void);
-
+    EstrangedPair(Ent* entX, Ent* entY) : entA(entX), entB(entY) {}
+    
+    Ent* getA() { return entA; }
+    Ent* getB() { return entB; }
+    
 };
 
 
-
-#endif /* ROOT_H */
+#endif /* ESTRANGEDPAIR_H */
 

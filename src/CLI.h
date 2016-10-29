@@ -25,9 +25,16 @@
 #include "Ent.h"
 #include "Root.h"
 #include "Tree.h"
-#include "Analyzer.h"
+#include "TreeAnalyzer.h"
 
 using namespace std;
+    
+typedef enum {
+    NO_PAIRS_FOUND,
+    PAIR_RESOLVED,
+    PAIR_UNRESOLVED,
+    RESOLUTION_ERROR
+} EstrangedChildrenResolution;
 
 class CLI {
     /** If set to true, the after the next command is parsed, stop listening
@@ -37,110 +44,47 @@ class CLI {
     Ent* focusPtr;
     /** Points to the Tree Currently being explored.*/
     Tree* treePtr;
-    /**
-    * List the given Ent's children.
-    * Do not alter the Ent!
-    * @param ent_ptr
-    */
+
     void listChildren(Ent* entPtr);
-    /**
-    * Lists the given Ent's parents.
-    * Do not alter the Ent!
-    * @param ent_ptr
-    */
+    
     void listParents(Ent* entPtr);
     
     void listAncestors(Ent* entPtr);
     
     void listDescendents(Ent* entPtr);
     
+    const bool isCommand(const string command, const string text, string *argument);
     
-    /**
-     * Sees if the given text is a command, and if so, sets the given argument
-     * string to the substring after the command.
-     * @param command       The command identifier used first.
-     * @param text          The full input text.
-     * @param argument      Pointer to the string holding the argument.
-     * @return 
-     */
-    const bool isCommand(const string command, const string text, string *argument) {
-        
-        if (text.find((command + " ")) == 0) {
-            //The text started with the command and then a space.
-            //Extract the argument and set the string given.
-            *argument = text.substr(command.size() + 1);
-            return true;
-        } else {
-            //The text did not start with the given command, so, return false.
-            return false;
-        }
-    }
+    EstrangedChildrenResolution checkForEstrangedChildren(Ent *parent);
+
+    void parseCommand(string str);
     
-    void analyzeForEstrangedChildren(Ent* entPtr);
-    
-    void handleEstrangedPairs(vector<EstrangedPair*> *pairs, Ent *parent);
+    void printHelp();
     
 
 public:
 
-    /**
-     * Construct a CLI object with the given Tree. We don't give a no-arg
-     * constructor because we just want to always initialize a CLI with a
-     * Tree anyways.
-     * @param arch_ptr
-     */
+
     CLI(Tree* treePtr_);
-    /**
-     * Do not deallocate the Tree or the Ent of focus.
-     * The user may want to instead open up a GUI or something else.
-     * There is no other way to browse Hierarchies yet though.
-     */
+
     ~CLI();
-    /**
-     * Starts listening for commands in the console. Commands are used to explore
-     * and edit the Tree.
-     */
+
     void listen();
-    /**
-    * Parse the given command and carry out the actions it represents.
-    * @param str   Raw string of the command. Doesn't include the "<".
-    */
-    void parseCommand(string str);
     /**
      * Set the focus of the CLI listener to the given Ent.
      * @param ent_ptr   Points to the new focus.
      */
-    void setFocus(Ent* entPtr_) {
+    inline void setFocus(Ent* entPtr_) {
         focusPtr = entPtr_;
     }
     /**
      * Sets the Tree to explore.
      */
-    void setArch(Tree* newTreePtr) {
+    inline void setTree(Tree* newTreePtr) {
         treePtr = newTreePtr;
         focusPtr = newTreePtr->getRoot();
         //TODO Tell the user which Tree is now being explored.
     }
-    /**
-     * Prints the help section to console.
-     */
-    void printHelp() {
-        cout << "Commands with no argument:\n"
-                << "\t>f\t\tPrints out current Ent of focus.\n"
-                << "\t>p\t\tLists the focus' parents.\n"
-                << "\t>c\t\tLists the focus' children.\n"
-                << "\t>s\t\tLists the siblings of focus.\n"
-                << "\t>e or >exit\tExits command interface.\n"
-                << "\t>h\t\tPrints this help section.\n"
-                << "\t>b\t\tUsed to bring up an optional breakpoint if desired.\n"
-                << "Commands with one argument:\n"
-                << "\t>f [Ent name]\tChanges focus to the Ent with the given name.\n"
-                << "\t>n [Ent name]\tCreates a new Ent with the given name, if available,\n"
-                << "\t\t\tand sets its only parent as root.\n";
-        
-    }
-
-
 
 
 };
