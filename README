@@ -5,4 +5,4 @@ See openpatterns.net/#ents for intended functionality.
 
 Basic functionality of CLI explorer/editor has been added.
 
-Use commands "f" to display the current Ent of focus, "c" to display its children, and "exit" to exit.
+Use command "h" to display a list of commands, and "exit" to exit.
