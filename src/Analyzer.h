@@ -38,6 +38,8 @@ public:
 
 class Analyzer {
     
+    //TODO Move some analysis algorithms over to this file to make other files cleaner.
+    
 public:
     
     /**

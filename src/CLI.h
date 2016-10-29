@@ -63,7 +63,7 @@ class CLI {
      * @param argument      Pointer to the string holding the argument.
      * @return 
      */
-    const bool isCommand(const string command, const string text, string* argument) {
+    const bool isCommand(const string command, const string text, string *argument) {
         
         if (text.find((command + " ")) == 0) {
             //The text started with the command and then a space.
@@ -76,7 +76,9 @@ class CLI {
         }
     }
     
-    void handleEstrangedPairs(vector<EstrangedPair*>* pairs);
+    void analyzeForEstrangedChildren(Ent* entPtr);
+    
+    void handleEstrangedPairs(vector<EstrangedPair*> *pairs, Ent *parent);
     
 
 public:

@@ -82,7 +82,7 @@ void CLI::parseCommand(string str) {
                 delete pairs;
                 return;
             } else {
-                handleEstrangedPairs(pairs);
+                handleEstrangedPairs(pairs, archPtr->getRoot());
             }
         } //end "a"
         else if (str == "s") {
@@ -146,14 +146,7 @@ void CLI::parseCommand(string str) {
                 //existing hierarchy!
                 //Since the new Ent was added as a child of root, analyze root
                 //for any estranged children.
-                vector<EstrangedPair*>* pairs = Analyzer::analyzeForEstrangedPairs(archPtr->getRoot());
-                //If there are any, then handle them.
-                if (pairs->size() == 0) {
-                    //Nothing to do here except cleanup memory.
-                    delete pairs;
-                } else {
-                    handleEstrangedPairs(pairs);
-                }
+                analyzeForEstrangedChildren(archPtr->getRoot());
                 
             } else {
                 cout << "An Ent with that name already exists.\n";
@@ -271,10 +264,28 @@ void CLI::listDescendents(Ent* entPtr) {
 }
 
 
-void CLI::handleEstrangedPairs(vector<EstrangedPair*>* pairs) {
+void CLI::analyzeForEstrangedChildren(Ent *entPtr) {
+    
+    vector<EstrangedPair*>* pairs = Analyzer::analyzeForEstrangedPairs(entPtr);
+    //If there are any, then handle them.
+    if (pairs->size() == 0) {
+        //Nothing to do here except cleanup memory.
+        delete pairs;
+    } else {
+        //This function will free pairs when needed, so don't do it here.
+        handleEstrangedPairs(pairs, entPtr);
+    }
+}
+
+
+void CLI::handleEstrangedPairs(vector<EstrangedPair*> *pairs, Ent *parent) {
+    
+    //If the state is changed in this function, we should not loop through pairs,
+    //but rather reiterate starting with analyzeForEstrangedChildren.
+    bool additionalIterationNeeded = false;
     
     //ok, so we found some pairs
-    cout << focusPtr->getName() << " has " << pairs->size() << " estranged pairs of children.\n";
+    cout << parent->getName() << " has " << pairs->size() << " estranged pairs of children.\n";
     
     //Go through each pair and decide what to do.
     //TODO Should we re-analyze the situation after each change made within the loop?
@@ -294,22 +305,111 @@ void CLI::handleEstrangedPairs(vector<EstrangedPair*>* pairs) {
             continue;
         }
         //Overlap?
-        cout << "Do " + a->getName() << " and " << b->getName() << " overlap?\ny/n: ";
+        cout << "Do " << a->getName() << " and " << b->getName() << " overlap?\ny/n: ";
         getline(cin, response);
         if (response == "y") {
             Ent::setOverlap(a, b);
             cout << "OK, they overlap now.\n";
             continue;
         }
-        //If it gets here, it must be neither...
-        cout << "So, it's neither then... lets play hardball!\n";
         
-        //TODO Implement the asking of the user if a is a parent of b, or vice versa.
+        //If it gets here, the one of these must be the parent of the other.
+        //Those are the only other 2 logical options.
+        //Lets see if they are even logically consistent themselves.
+        //A can only be B's parent if the set of A's ancestors don't overlap with
+        //the set of B's descendents.
         
+        //Can A be B's parent? Get any Ents which prevent this.
+        unordered_set<Ent*>* aOverlap = a->canBeParentOf(b);
+        //If this set is empty, A can be B's parent with no logical problems.
+        bool aCanBeParent = aOverlap->size() == 0;
+        //What about B?
+        unordered_set<Ent*>* bOverlap = b->canBeParentOf(a);
+        //Can B be A's parent?
+        bool bCanBeParent = bOverlap->size() == 0;
+        //Results of user input.
+        bool aIsParent, neitherIsParent = false, overlapIssue = false;
+        //Go through the combination of possibilities.
+        if (aCanBeParent) {
+            if (bCanBeParent) {
+                //Either could be the parent...
+                cout << "Is " << a->getName() << " the parent or child of "
+                        << b->getName() << ", or neither?\np/c/n: ";
+                getline(cin, response);
+                if (response == "p")
+                    aIsParent = true;
+                else if (response == "c")
+                    aIsParent = false;
+                else
+                    neitherIsParent = true;
+            } else {
+                //B can be the parent, but A can't.
+                cout << "So, " << a->getName() << " must be the parent of "
+                        << b->getName() << ". Correct?\ny/n: ";
+                getline(cin, response);
+                //If response is "y", then A is parent.
+                if (response == "y") {
+                    aIsParent = true;
+                } else {
+                    neitherIsParent = true;
+                    overlapIssue = true;
+                }
+            }
+        } else {
+            //A can't be the parent.
+            if (bCanBeParent) {
+                //A can't but B can.
+                cout << "So, " << b->getName() << " must be the parent of "
+                        << a->getName() << ". Correct?\ny/n: ";
+                getline(cin, response);
+                //If response is "y", then B is parent.
+                if (response == "y") {
+                    aIsParent = false;
+                } else {
+                    neitherIsParent = true;
+                    overlapIssue = true;
+                }
+            } else {
+                //So, neither can be the parent, according to the logical analysis...
+                neitherIsParent = true;
+                overlapIssue = true;
+            }
+        } //end of user input
+        
+        if (neitherIsParent) {
+            //Neither has been chosen to the be parent. If there is an overlap
+            //issue, then tell the user.
+            if (overlapIssue) {
+                //TODO make this more detailed and inform user of what Ents
+                //are to blame.
+                cout << "Error: Action would cause invalid state. Action is denied.\n";
+            } else {
+                cout << "Error: If these two Ents aren't exclusive and don't overlap, "
+                        << "then one must be a parent of the other. Invalid state.\n";
+            }
+        } else {
+            //OK, good, one of them has been deemed parent.
+            if (aIsParent) {
+                Ent::connectUncheckedAndPrune(a, b);
+                //Now we need to analyze the children of A.
+                analyzeForEstrangedChildren(a);
+            } else {
+                Ent::connectUncheckedAndPrune(b, a);
+                //Now we need to analyze the children of B.
+                analyzeForEstrangedChildren(b);
+            }
+        }
+        
+        //Release the unordered_sets.
+        delete aOverlap;
+        delete bOverlap;
+        //TODO We should probably change these to smart pointers...
     }
     
     //memory cleanup
     for (EstrangedPair* pair : *pairs)
         delete pair;
     delete pairs;
+    
+    //TODO Implement boolean additionalIterationsNeeded to keep house-keeping.
 }

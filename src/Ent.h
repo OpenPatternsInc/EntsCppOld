@@ -52,6 +52,9 @@ class Ent {
      * when all Ents are just stored in heap memory like as of now.
      */
     unsigned int uid;
+    
+    //TODO Change the following 4 containers to unordered_sets for efficiency.
+    
     /**
      * Vector of pointers to the Ent's parents.
      */
@@ -98,12 +101,81 @@ public:
      * @param child     Pointer to child.
      * @return          Soon the return variable will indicate success or failure.
      */
-    static int connect(Ent* parent, Ent* child) {
+    static int connectUnchecked(Ent* parent, Ent* child) {
         //Add references to the vectors holding the lists.
-        parent->addChild(child);
-        child->addParent(parent);
+        parent->addChildUnchecked(child);
+        child->addParentUnchecked(parent);
+        
+        cout << parent->getName() << " is now a parent of " << child->getName()
+                << ".\n";
 
         return 0;
+    }
+    
+    /**
+     * Connects the two given Ents as parent and child, but doesn't check that it
+     * is a legal operation. This function does however do some tree pruning.
+     * If the new parent is the descendent of one of the existing parents of the
+     * new child, then that existing connection must be removed because it has
+     * become redundant.
+     * TODO There may be an analogue to this on the child side, but it is late
+     * and I am having a hard time proving or disproving it.
+     * @param parent
+     * @param child
+     * @return 
+     */
+    static int connectUncheckedAndPrune(Ent* parent, Ent* child) {
+        
+        //Get the new parent's ancestors.
+        unordered_set<Ent*>* pAncestors = parent->getAncestors();
+        //Get a pointer to the child's parents.
+        vector<Ent*>* existingParents = child->getParents();
+        //Check if any of child's direct parents are in this set already.
+        for (Ent* existingParent : *existingParents) {
+            //Insert it into the set. second indicates if it was added or not.
+            if (!pAncestors->insert(existingParent).second) {
+                //It wasn't added, so it must have already been there.
+                disconnectUnchecked(existingParent, child);
+                //TODO Should we break here?
+            }
+        }
+        //Free the set!
+        delete pAncestors;
+        
+        //Now actually connect them up!
+        connectUnchecked(parent, child);
+        
+        //TODO Implement an analogous pruning algorithm for the child's descendents?
+        
+        return 0;
+    }
+    
+    /**
+     * Disconnects a parent and child from each other, but doesn't do anything
+     * else like check for if that's a good idea...
+     */
+    static int disconnectUnchecked(Ent* parent, Ent* child) {
+        //Get the parent's children.
+        vector<Ent*>* children = parent->getChildren();
+        //Find child in the vector and remove it.
+        for (vector<Ent*>::iterator it = children->begin(); it != children->end(); it++) {
+            if (*it == child) {
+                children->erase(it);
+                //There should be only one, so break early.
+                break;
+            }
+        }
+        //Now get the child's parents.
+        vector<Ent*>* parents = child->getParents();
+        //Find parent in the vector and remove it.
+        for (vector<Ent*>::iterator it = parents->begin(); it != parents->end(); it++) {
+            if (*it == parent) {
+                parents->erase(it);
+                //There should be only one, so break early.
+                break;
+            }
+        }
+        //No need to free the vectors, they are owned by the Ents themselves.
     }
     
     /**
@@ -124,6 +196,48 @@ public:
         b->addExclusive(a);
         
         return 0;
+    }
+    
+    /**
+     * The set of this Ent's ancestors can't overlap at all with the set of the
+     * given Ent's descendents.
+     * @return  Returns any Ents which actually do overlap, because something
+     *          must be done about them. Empty set if there are no problems.
+     */
+    unordered_set<Ent*>* canBeParentOf(Ent* entPtr) {
+        //Create an empty unordered_set. Add any overlaps to it as we go.
+        unordered_set<Ent*>* overlap = new unordered_set<Ent*>;
+        //Make sure they aren't the same Ent. Do so by comparing unique names for now.
+        if (name == entPtr->getName()) {
+            //This shouldn't happen... well... return a set with just this Ent...
+            overlap->insert(this);
+            return overlap;
+        }
+        //Get this Ent's ancestors.
+        unordered_set<Ent*>* setA = getAncestors();
+        //Add this Ent to the list, it counts.
+        setA->insert(this);
+        //Get the given Ent's descendents.
+        unordered_set<Ent*>* setB = entPtr->getDescendents();
+        //Add the supplied Ent to the list as well.
+        setB->insert(entPtr);
+        //Find the smaller of the two sets. Ancestors should be smaller on average?
+        if (setA->size() > setB->size()) {
+            //temp will free itself automatically at the end of the if statement.
+            unordered_set<Ent*>* temp = setA;
+            setA = setB;
+            setB = temp;
+        }
+        //Now setA is smaller, or they are equal, so, insert it into setB.
+        //If the size of setB doesn't change after an Ent pointer is added,
+        //then that Ent pointer was already there, and so is a overlap.
+        for (Ent* ent : *setA) {
+            //Try to insert this ent into setB. If it doesn't work, we found overlap.
+            if (!setB->insert(ent).second)
+                overlap->insert(ent);
+        }
+        //Return what we've found. If the set is empty, then it can be the parent. 
+        return overlap;
     }
     
     /**
@@ -208,7 +322,7 @@ public:
      * Adds an Ent as a parent of this one, but doesn't check anything.
      * @param parentPtr
      */
-    void addParent(Ent* parentPtr) {
+    void addParentUnchecked(Ent* parentPtr) {
         assert(parentPtr != 0);
         parents.push_back(parentPtr);
     }
@@ -221,7 +335,7 @@ public:
      * Adds an Ent as a child of this one, but doesn't check anything.
      * @param childPtr
      */
-    void addChild(Ent* childPtr) {
+    void addChildUnchecked(Ent* childPtr) {
         children.push_back(childPtr);
     }
 

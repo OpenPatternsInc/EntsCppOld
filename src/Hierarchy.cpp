@@ -47,7 +47,7 @@ void Hierarchy::addEntToNameMap(Ent* entPtr, Ent* parentPtr) {
     if (parentPtr == 0) parentPtr = root_;
     entNameMap_.insert({entPtr->getName(), entPtr});
     //Connect the new ent and its new parent. Adds references for each other.
-    Ent::connect(parentPtr, entPtr);
+    Ent::connectUnchecked(parentPtr, entPtr);
 }
 
 NewEntStatus Hierarchy::tryToCreateNewEnt(string name) {
