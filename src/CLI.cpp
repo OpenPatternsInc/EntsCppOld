@@ -22,8 +22,8 @@
 
 using namespace std;
 
-CLI::CLI(Hierarchy* arch_ptr) {
-    setArch(arch_ptr);
+CLI::CLI(Tree* treePtr_) {
+    setArch(treePtr_);
 }
 
 CLI::~CLI() {
@@ -82,13 +82,13 @@ void CLI::parseCommand(string str) {
                 delete pairs;
                 return;
             } else {
-                handleEstrangedPairs(pairs, archPtr->getRoot());
+                handleEstrangedPairs(pairs, treePtr->getRoot());
             }
         } //end "a"
         else if (str == "s") {
             //Display siblings of focus
             //If it's root, educate the user a bit
-            if (focusPtr == archPtr->getRoot()) {
+            if (focusPtr == treePtr->getRoot()) {
                 cout << "By definition, root can not have any siblings.\n";
                 return;
             }
@@ -121,7 +121,7 @@ void CLI::parseCommand(string str) {
             printHelp();
         } else if (isCommand("f", str, &argument)) {
             //User wants to change focus. Argument should be the Ent's name to be made focus.
-            Ent * const new_focus_ptr = archPtr->getEntPtrByName(argument);
+            Ent * const new_focus_ptr = treePtr->getEntPtrByName(argument);
             //did we find one with that name? If so, the pointer should be nonzero.
             if (new_focus_ptr == nullptr) {
                 cout << "No Ent found with that name.\n";
@@ -136,17 +136,17 @@ void CLI::parseCommand(string str) {
         } //end "f"
         else if (isCommand("n", str, &argument)) {
             //User wants to create a new ent. Add it under root.
-            if (archPtr->getEntPtrByName(argument) == nullptr) {
+            if (treePtr->getEntPtrByName(argument) == nullptr) {
                 //No ent with that name yet, so make a new one.
                 //TODO Check for correct Ent name format (not too long, etc.)
                 //Create new Ent with the given name and allocate mem on the heap.
                 Ent* newEntPtr = new Ent(argument);
-                archPtr->addEntToNameMap(newEntPtr);
+                treePtr->addEntToNameMap(newEntPtr);
                 //Now we should ask the user to classify the new Ent within the
                 //existing hierarchy!
                 //Since the new Ent was added as a child of root, analyze root
                 //for any estranged children.
-                analyzeForEstrangedChildren(archPtr->getRoot());
+                analyzeForEstrangedChildren(treePtr->getRoot());
                 
             } else {
                 cout << "An Ent with that name already exists.\n";
@@ -156,7 +156,7 @@ void CLI::parseCommand(string str) {
         else if (isCommand("p", str, &argument)) {
             //User wants to add the given Ent as a parent to focus.
             //Retrieve a pointer to the given Ent.
-            Ent* entPtr = archPtr->getEntPtrByName(argument);
+            Ent* entPtr = treePtr->getEntPtrByName(argument);
             if (entPtr == nullptr) {
                 cout << "No Ent found with that name.";
             } else if (entPtr == focusPtr) {
@@ -182,16 +182,16 @@ void CLI::parseCommand(string str) {
 }
 
 
-void CLI::listChildren(Ent* ent_ptr) {
+void CLI::listChildren(Ent* entPtr) {
     //Get the Ent's children.
-    vector<Ent*>* children = ent_ptr->getChildren();
+    vector<Ent*>* children = entPtr->getChildren();
     //If it has no children, say so, don't just give a blank list.
     if (children->size() == 0) {
-        cout << "\"" << ent_ptr->getName() << "\" has no children.\n";
+        cout << "\"" << entPtr->getName() << "\" has no children.\n";
     } else {
         //List each child on its own line, indent with a tab.
         //TODO Would indenting with spaces help with portability?
-        cout << "Children of \"" << ent_ptr->getName() << "\":\n";
+        cout << "Children of \"" << entPtr->getName() << "\":\n";
         for (Ent* child_ptr : *children) {
             cout << "\t" << child_ptr->getName() << "\n";
         }
@@ -199,24 +199,24 @@ void CLI::listChildren(Ent* ent_ptr) {
 }
 
 
-void CLI::listParents(Ent* ent_ptr) {
+void CLI::listParents(Ent* entPtr) {
     //Get the Ent's parents.
-    vector<Ent*>* parents = ent_ptr->getParents();
+    vector<Ent*>* parents = entPtr->getParents();
     //Is the Ent a parent-less node?
     if (parents->size() == 0) {
         //the only Ent with no parents should be root...
-        if (ent_ptr == archPtr->getRoot()) {
+        if (entPtr == treePtr->getRoot()) {
             //Use this opportunity to educate the user about the Hierarchy protocol.
             cout << "By definition, root can not have any parents!\n";
         } else {
             //If the parent-less Ent isn't root, then there is a big problem.
             //This is an invalid state and shouldn't be reachable.
-            cout << "ERROR: INVALID STATE: \"" << ent_ptr->getName() << "\" does not have any "
+            cout << "ERROR: INVALID STATE: \"" << entPtr->getName() << "\" does not have any "
             << "parents, this shouldn't have happened...\n";
         }
     } else {
         //List each parent on its own line, indented with a tab.
-        cout << "Parents of \"" << ent_ptr->getName() << "\":\n";
+        cout << "Parents of \"" << entPtr->getName() << "\":\n";
         for (Ent* parent_ptr : *parents) {
             cout << "\t" << parent_ptr->getName() << "\n";
         }
@@ -229,7 +229,7 @@ void CLI::listAncestors(Ent* entPtr) {
     //
     if (ancestors->size() == 0) {
         //Is it root?
-        if (entPtr == archPtr->getRoot()) {
+        if (entPtr == treePtr->getRoot()) {
             cout << "By definition, root will not have any ancestors.\n";
         } else {
             //So, it's not root...... that's a problem...

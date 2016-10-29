@@ -29,16 +29,16 @@
 using namespace std;
 
 /**
- * An Ent object instance represents and Ent node within a Hierarchy.
+ * An Ent object instance represents and Ent node within a Tree.
  * Each Ent has a unique name within its hierarchy, and two vector lists
  * which hold pointers to its parents and children.
  * An Ent represents, in an abstract sense, a group of things, or a single thing.
  * Parents are more general, and children are more specific.
  * The Root class extends the Ent class and is used to represent "everything"
  * in the most general sense. The logic of the Ents Hierarchy makes this possible,
- * and demands that there be only one root per Hierarchy.
+ * and demands that there be only one root per Tree.
  * Each Ent will eventually have a unique identifier (UID) which will be used when
- * writing a Hierarchy to file, allowing each Ent to reference its direct relatives
+ * writing a Tree to file, allowing each Ent to reference its direct relatives
  * unambiguously.
  */
 class Ent {
@@ -83,13 +83,12 @@ public:
     /**
      * Initialize a new Ent object.
      * @param name  The name of this new Ent. We don't check if it is unique here.
-     * @param arch  The Hierarchy object to add this Ent to.
      */
     Ent(string name);
     /**
      * Delete the vectors holding pointers to parents and children.
      * No need to delete those Ent object instances here, that's handled
-     * in the Hierarchy class.
+     * in the Tree class.
      */
     ~Ent();
 

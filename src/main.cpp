@@ -17,8 +17,9 @@
  */
 
 #include "Ent.h"
-#include "Hierarchy.h"
+#include "Tree.h"
 #include "CLI.h"
+#include "Util/IO.h"
 //#include "Util/Prime.h"
 
 using namespace std;
@@ -27,7 +28,7 @@ int main(int argc, char** argv) {
 
     
     //Create a new Ent Hierarchy. Starts off with just a root Ent.
-    Hierarchy arch;
+    Tree arch;
     //Make a new CLI instance and have it explore the hierarchy.
     CLI cli(&arch);
     //Tell the CLI to listen for commands in the console.

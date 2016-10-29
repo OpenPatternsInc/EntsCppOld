@@ -24,7 +24,7 @@
 #include <unordered_set>
 #include "Ent.h"
 #include "Root.h"
-#include "Hierarchy.h"
+#include "Tree.h"
 #include "Analyzer.h"
 
 using namespace std;
@@ -35,20 +35,20 @@ class CLI {
     bool exiting_;
     /** Points to the current Ent of focus. */
     Ent* focusPtr;
-    /** Points to the Hierarchy Currently being explored.*/
-    Hierarchy* archPtr;
+    /** Points to the Tree Currently being explored.*/
+    Tree* treePtr;
     /**
     * List the given Ent's children.
     * Do not alter the Ent!
     * @param ent_ptr
     */
-    void listChildren(Ent* ent_ptr);
+    void listChildren(Ent* entPtr);
     /**
     * Lists the given Ent's parents.
     * Do not alter the Ent!
     * @param ent_ptr
     */
-    void listParents(Ent* ent_ptr);
+    void listParents(Ent* entPtr);
     
     void listAncestors(Ent* entPtr);
     
@@ -84,21 +84,21 @@ class CLI {
 public:
 
     /**
-     * Construct a CLI object with the given Hierarchy. We don't give a no-arg
+     * Construct a CLI object with the given Tree. We don't give a no-arg
      * constructor because we just want to always initialize a CLI with a
-     * Hierarchy anyways.
+     * Tree anyways.
      * @param arch_ptr
      */
-    CLI(Hierarchy* arch_ptr);
+    CLI(Tree* treePtr_);
     /**
-     * Do not deallocate the Hierarchy or the Ent of focus.
+     * Do not deallocate the Tree or the Ent of focus.
      * The user may want to instead open up a GUI or something else.
      * There is no other way to browse Hierarchies yet though.
      */
     ~CLI();
     /**
      * Starts listening for commands in the console. Commands are used to explore
-     * and edit the Hierarchy.
+     * and edit the Tree.
      */
     void listen();
     /**
@@ -110,16 +110,16 @@ public:
      * Set the focus of the CLI listener to the given Ent.
      * @param ent_ptr   Points to the new focus.
      */
-    void setFocus(Ent* ent_ptr) {
-        focusPtr = ent_ptr;
+    void setFocus(Ent* entPtr_) {
+        focusPtr = entPtr_;
     }
     /**
-     * Sets the Hierarchy to explore.
+     * Sets the Tree to explore.
      */
-    void setArch(Hierarchy* new_arch_ptr) {
-        archPtr = new_arch_ptr;
-        focusPtr = new_arch_ptr->getRoot();
-        //TODO Tell the user which Hierarchy is now being explored.
+    void setArch(Tree* newTreePtr) {
+        treePtr = newTreePtr;
+        focusPtr = newTreePtr->getRoot();
+        //TODO Tell the user which Tree is now being explored.
     }
     /**
      * Prints the help section to console.
