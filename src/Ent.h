@@ -24,6 +24,7 @@
 #include <iostream>
 #include <vector>
 #include <assert.h>
+#include <unordered_set>
 
 using namespace std;
 
@@ -123,6 +124,58 @@ public:
         b->addExclusive(a);
         
         return 0;
+    }
+    
+    /**
+     * Generate a set of all this Ent's ancestors recursively and return that set.
+     * TODO Optimize this so it's not so bad lol.
+     * @param depth     Make sure we don't get caught in a loop and crash the system.
+     * @return 
+     */
+    unordered_set<Ent*>* getAncestors(unsigned short depth = 0) {
+        //List for this iteration of the recursion.
+        unordered_set<Ent*>* localList = new unordered_set<Ent*>;
+        //Have to draw the line somewhere. If we're too far down, return and empty set.
+        if (depth > 50) return localList;
+        //If there are no parents, the recursion will just stop.
+        for (Ent* parent : parents) {
+            localList->insert(parent);
+            //get the parents of the parent
+            unordered_set<Ent*> *grandparents = parent->getAncestors(depth + 1);
+            //add them to this list
+            for (auto g : *grandparents)
+                localList->insert(g);
+            //Now release the memory.
+            delete grandparents;
+        }
+        //now return the localList for this iteration of the recursion.
+        return localList;
+    }
+    
+    /**
+     * Generate a set of all this Ent's descendents recursively and return that set.
+     * TODO Optimize this so it's not so crude lol.
+     * @param depth     Make sure we don't get caught in a loop and crash the system.
+     * @return 
+     */
+    unordered_set<Ent*>* getDescendents(unsigned short depth = 0) {
+        //List for this iteration of the recursion.
+        unordered_set<Ent*>* localList = new unordered_set<Ent*>;
+        //Make sure we don't blow up the universe. If we're too far in, just stop.
+        if (depth > 50) return localList;
+        //If there are no parents, the recursion will just stop.
+        for (Ent* child : children) {
+            localList->insert(child);
+            //get the parents of the parent
+            unordered_set<Ent*> *grandparents = child->getDescendents(depth + 1);
+            //add them to this list
+            for (auto g : *grandparents)
+                localList->insert(g);
+            //Now release the memory.
+            delete grandparents;
+        }
+        //now return the localList for this iteration of the recursion.
+        return localList;
     }
 
     /**

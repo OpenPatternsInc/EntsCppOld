@@ -21,6 +21,7 @@
 
 #include <string>
 #include <iostream>
+#include <unordered_set>
 #include "Ent.h"
 #include "Root.h"
 #include "Hierarchy.h"
@@ -48,6 +49,12 @@ class CLI {
     * @param ent_ptr
     */
     void listParents(Ent* ent_ptr);
+    
+    void listAncestors(Ent* entPtr);
+    
+    void listDescendents(Ent* entPtr);
+    
+    
     /**
      * Sees if the given text is a command, and if so, sets the given argument
      * string to the substring after the command.
@@ -96,7 +103,7 @@ public:
     * Parse the given command and carry out the actions it represents.
     * @param str   Raw string of the command. Doesn't include the "<".
     */
-    void parse(string str);
+    void parseCommand(string str);
     /**
      * Set the focus of the CLI listener to the given Ent.
      * @param ent_ptr   Points to the new focus.

@@ -42,14 +42,14 @@ void CLI::listen() {
         cout << ">";
         //Read from console.
         getline(cin, command);
-        parse(command);
+        parseCommand(command);
     } while (!exiting_);
     //Keep going till we're told to exit with "e" or "exit".
 
 }
 
 
-void CLI::parse(string str) {
+void CLI::parseCommand(string str) {
     
     //string to hold the arguments substring if necessary.
     string argument;
@@ -94,7 +94,7 @@ void CLI::parse(string str) {
             }
             vector<Ent*>* parents = focusPtr->getParents();
             for (Ent* parent : *parents) {
-                cout << "Siblings under " << parent->getName() << ":\n";
+                cout << "Siblings of " << focusPtr->getName() << " under " << parent->getName() << ":\n";
                 vector<Ent*>* children = parent->getChildren();
                 if (children->size() > 1) {
                     for (int a = 0; a < children->size(); a++)
@@ -123,7 +123,7 @@ void CLI::parse(string str) {
             //User wants to change focus. Argument should be the Ent's name to be made focus.
             Ent * const new_focus_ptr = archPtr->getEntPtrByName(argument);
             //did we find one with that name? If so, the pointer should be nonzero.
-            if (new_focus_ptr == 0) {
+            if (new_focus_ptr == nullptr) {
                 cout << "No Ent found with that name.\n";
             } else {
                 if (focusPtr == new_focus_ptr) {
@@ -136,7 +136,7 @@ void CLI::parse(string str) {
         } //end "f"
         else if (isCommand("n", str, &argument)) {
             //User wants to create a new ent. Add it under root.
-            if (archPtr->getEntPtrByName(argument) == 0) {
+            if (archPtr->getEntPtrByName(argument) == nullptr) {
                 //No ent with that name yet, so make a new one.
                 //TODO Check for correct Ent name format (not too long, etc.)
                 //Create new Ent with the given name and allocate mem on the heap.
@@ -164,7 +164,7 @@ void CLI::parse(string str) {
             //User wants to add the given Ent as a parent to focus.
             //Retrieve a pointer to the given Ent.
             Ent* entPtr = archPtr->getEntPtrByName(argument);
-            if (entPtr == 0) {
+            if (entPtr == nullptr) {
                 cout << "No Ent found with that name.";
             } else if (entPtr == focusPtr) {
                 cout << "Can't add the focus Ent as its own parent.";
@@ -174,6 +174,12 @@ void CLI::parse(string str) {
                 
             }
         } //end "p"
+        else if (str == "desc") {
+            listDescendents(focusPtr);
+        }
+        else if (str == "anc") {
+            listAncestors(focusPtr);
+        }
         else {
             cout << "Unknown command.\n";
         }
@@ -222,6 +228,46 @@ void CLI::listParents(Ent* ent_ptr) {
             cout << "\t" << parent_ptr->getName() << "\n";
         }
     }
+}
+
+void CLI::listAncestors(Ent* entPtr) {
+    //
+    unordered_set<Ent*>* ancestors = entPtr->getAncestors();
+    //
+    if (ancestors->size() == 0) {
+        //Is it root?
+        if (entPtr == archPtr->getRoot()) {
+            cout << "By definition, root will not have any ancestors.\n";
+        } else {
+            //So, it's not root...... that's a problem...
+            cout << "FATAL ERROR: " << entPtr->getName() << " should have at least one parent...";
+            //TODO No need to throw anything for now.
+        }
+    } else {
+        //OK, we have some ancestors to list.
+        cout << "Ancestors of " << entPtr->getName() << ":\n";
+        for (const auto anc : *ancestors) {
+            cout << "\t" << anc->getName() << endl;
+        }
+    }
+    delete ancestors;
+}
+
+void CLI::listDescendents(Ent* entPtr) {
+    //
+    unordered_set<Ent*>* descendents = entPtr->getDescendents();
+    //
+    if (descendents->size() == 0) {
+        //No descendents.
+        cout << entPtr->getName() << " doesn't have any descendents.\n";
+    } else {
+        //OK, we have some descendents to list.
+        cout << "Descendents of " << entPtr->getName() << ":\n";
+        for (const auto desc : *descendents) {
+            cout << "\t" << desc->getName() << endl;
+        }
+    }
+    delete descendents;
 }
 
 
