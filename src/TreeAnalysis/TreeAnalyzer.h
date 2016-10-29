@@ -19,8 +19,8 @@
 #ifndef TREEANALYZER_H
 #define TREEANALYZER_H
 
-#include "Ent.h"
-#include "TreeAnalysis/EstrangedPair.h"
+#include "../Ent.h"
+#include "EstrangedPair.h"
 
 
 

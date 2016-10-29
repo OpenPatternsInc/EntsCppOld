@@ -25,7 +25,7 @@
 #include "Ent.h"
 #include "Root.h"
 #include "Tree.h"
-#include "TreeAnalyzer.h"
+#include "TreeAnalysis/TreeAnalyzer.h"
 
 using namespace std;
     

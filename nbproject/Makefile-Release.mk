@@ -39,7 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Ent.o \
 	${OBJECTDIR}/src/Root.o \
 	${OBJECTDIR}/src/Tree.o \
-	${OBJECTDIR}/src/TreeAnalyzer.o \
+	${OBJECTDIR}/src/TreeAnalysis/TreeAnalyzer.o \
 	${OBJECTDIR}/src/Util/Prime.o \
 	${OBJECTDIR}/src/main.o
 
@@ -88,10 +88,10 @@ ${OBJECTDIR}/src/Tree.o: src/Tree.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Tree.o src/Tree.cpp
 
-${OBJECTDIR}/src/TreeAnalyzer.o: src/TreeAnalyzer.cpp
-	${MKDIR} -p ${OBJECTDIR}/src
+${OBJECTDIR}/src/TreeAnalysis/TreeAnalyzer.o: src/TreeAnalysis/TreeAnalyzer.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/TreeAnalysis
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TreeAnalyzer.o src/TreeAnalyzer.cpp
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TreeAnalysis/TreeAnalyzer.o src/TreeAnalysis/TreeAnalyzer.cpp
 
 ${OBJECTDIR}/src/Util/Prime.o: src/Util/Prime.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/Util
