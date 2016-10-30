@@ -6,6 +6,7 @@
                    projectFiles="true">
       <itemPath>src/CLI.h</itemPath>
       <itemPath>src/Ent.h</itemPath>
+      <itemPath>src/Util/EntsFile.h</itemPath>
       <itemPath>src/TreeAnalysis/EstrangedPair.h</itemPath>
       <itemPath>src/Util/IO.h</itemPath>
       <itemPath>src/Util/Prime.h</itemPath>
@@ -22,6 +23,8 @@
                    projectFiles="true">
       <itemPath>src/CLI.cpp</itemPath>
       <itemPath>src/Ent.cpp</itemPath>
+      <itemPath>src/Util/EntsFile.cpp</itemPath>
+      <itemPath>src/Util/IO.cpp</itemPath>
       <itemPath>src/Util/Prime.cpp</itemPath>
       <itemPath>src/Root.cpp</itemPath>
       <itemPath>src/Tree.cpp</itemPath>
@@ -81,6 +84,12 @@
       </item>
       <item path="src/TreeAnalysis/TreeAnalyzer.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/Util/EntsFile.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Util/EntsFile.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Util/IO.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/Util/IO.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Util/Prime.cpp" ex="false" tool="1" flavor2="0">
@@ -134,6 +143,12 @@
       <item path="src/TreeAnalysis/TreeAnalyzer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/TreeAnalysis/TreeAnalyzer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Util/EntsFile.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Util/EntsFile.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Util/IO.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Util/IO.h" ex="false" tool="3" flavor2="0">
       </item>

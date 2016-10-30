@@ -26,6 +26,7 @@
 #include "Root.h"
 #include "Tree.h"
 #include "TreeAnalysis/TreeAnalyzer.h"
+#include "Util/EntsFile.h"
 
 using namespace std;
     
@@ -44,6 +45,8 @@ class CLI {
     Ent* focusPtr;
     /** Points to the Tree Currently being explored.*/
     Tree* treePtr;
+    /** The EntsFile corresponding to the currently explored tree.*/
+    EntsFile* entsFile;
 
     void listChildren(Ent* entPtr);
     
@@ -65,7 +68,7 @@ class CLI {
 public:
 
 
-    CLI(Tree* treePtr_);
+    CLI(EntsFile* entsFile);
 
     ~CLI();
 
@@ -80,12 +83,18 @@ public:
     /**
      * Sets the Tree to explore.
      */
-    inline void setTree(Tree* newTreePtr) {
-        treePtr = newTreePtr;
-        focusPtr = newTreePtr->getRoot();
+    inline void setEntsFile(EntsFile* newEntsFile) {
+        entsFile = newEntsFile;
+        treePtr = newEntsFile->getTree();
+        focusPtr = treePtr->getRoot();
         //TODO Tell the user which Tree is now being explored.
     }
-
+    
+    bool saveTree();
+    
+    bool queryTreeName(EntsFile* entsFile);
+    
+    bool queryFileName();
 
 };
 

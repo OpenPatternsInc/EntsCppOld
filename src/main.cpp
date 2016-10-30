@@ -20,20 +20,23 @@
 #include "Tree.h"
 #include "CLI.h"
 #include "Util/IO.h"
+#include "Util/EntsFile.h"
 //#include "Util/Prime.h"
 
 using namespace std;
 
 int main(int argc, char** argv) {
-
     
+    //**
     //Create a new Ent Hierarchy. Starts off with just a root Ent.
-    Tree arch;
+    Tree tree;
+    //Make a new EntsFile to handle the tree.
+    EntsFile entsFile(&tree);
     //Make a new CLI instance and have it explore the hierarchy.
-    CLI cli(&arch);
+    CLI cli(&entsFile);
     //Tell the CLI to listen for commands in the console.
     cli.listen();
-    
+    //*/
 
     return 0;
 }

@@ -28,8 +28,8 @@ using namespace std;
  * Tree anyways.
  * @param arch_ptr
  */
-CLI::CLI(Tree* treePtr_) {
-    setTree(treePtr_);
+CLI::CLI(EntsFile* entsFile) {
+    setEntsFile(entsFile);
 }
 
 /**
@@ -186,6 +186,9 @@ void CLI::parseCommand(string str) {
         }
         else if (str == "anc") {
             listAncestors(focusPtr);
+        }
+        else if (str == "save") {
+            saveTree();
         }
         else {
             cout << "Unknown command.\n";
@@ -478,3 +481,77 @@ void CLI::printHelp() {
             << "\t>n [Ent name]\tCreates a new Ent with the given name, if available,\n"
             << "\t\t\tand sets its only parent as root.\n";
 } //end of printHelp()
+
+
+bool CLI::saveTree() {
+    
+    //Does the EntsFile have a file name?
+    if (entsFile->getFileName() != "") {
+        //We have a filename already.
+    } else {
+        bool hasName = false;
+        //Give the user 3 chances to input a valid name.
+        for (int count = 0; count < 3; count++) {
+            if (queryFileName()) {
+                hasName = true;
+                break;
+            }
+        }
+        if (!hasName) {
+            cout << "File was not saved.\n";
+            return false;
+        }
+        //OK, so we got a file name!
+        entsFile->save();
+        
+        
+        
+        
+        return true;
+    }
+    
+    
+    return false;
+}
+
+/**
+* Asks the user what they want to name the tree.
+* @return 
+*/
+bool CLI::queryTreeName(EntsFile* entsFile) {
+    bool success = false;
+    cout << "What would you like to name this tree: ";
+    string response;
+    getline(cin, response);
+    //TODO Check for valid characters and stuff like that.
+    if (response.size() > 2) {
+        entsFile->getTree()->setName(response);
+        cout << "OK, the tree has been named \"" << response << "\".\n";
+        success = true;
+    } else {
+        cout << "Please, use at least 3 characters.\n";
+        success = false;
+    }
+    return success;
+} //end of queryTreeName()
+
+/**
+* Ask the user to input a filename they want to use to save the tree.
+* @return 
+*/
+bool CLI::queryFileName() {
+    bool success = false;
+
+    cout << "What is the name of the .ents file you wish to save the tree as?\n>";
+    string response;
+    getline(cin, response);
+    if (response.size() > 2) {
+        entsFile->setFileName(response);
+        success = true;
+        cout << "File will be saved as \"" << response << "." << EntsFile::getPostfix() << "\".\n";
+    } else {
+        cout << "Please use a file name with at least 2 characters.\n";
+        success = false;
+    }
+    return success;
+} //end of queryFileName()

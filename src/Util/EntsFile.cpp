@@ -16,43 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IO_H
-#define IO_H
-
-#include <string>
-#include <fstream>
-#include <iostream>
-#include <stdexcept>
-#include "../Tree.h"
+#include "EntsFile.h"
+#include "IO.h"
 
 
-    
-    
-/**
- * IO contains various tools for reading and writing files.
- */
-class IO {
-    
-    /**
-     * The directory the user is currently using to load and save files.
-     */
-    string fileDirectory;
-    
-    
-public:
-    
-    static void saveFile(string fileName, string data);
-    
-    
-    
-    
-    
-    
-};
+const string EntsFile::FILE_POSTFIX = "ents";
 
+EntsFile::EntsFile(Tree *tr) {
+    tree = tr;
+}
 
-
-
-
-#endif /* IO_H */
-
+void EntsFile::save() {
+    
+    IO::saveFile(fileName + "." + FILE_POSTFIX, "tree data");
+    
+}

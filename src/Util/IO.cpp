@@ -16,43 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IO_H
-#define IO_H
+#include "IO.h"
 
-#include <string>
-#include <fstream>
-#include <iostream>
-#include <stdexcept>
-#include "../Tree.h"
+using namespace std;
 
-
+void IO::saveFile(string fileName, string data) {
     
+    ofstream file(fileName);
+    if (!file.is_open()) {
+        cout << "Could not open file: \"" << fileName << "\".\n";
+        throw std::runtime_error("Could not open file.");
+    }
+    file << data;
+    cout << "File \"" << fileName << "\" has been saved.\n";
     
-/**
- * IO contains various tools for reading and writing files.
- */
-class IO {
-    
-    /**
-     * The directory the user is currently using to load and save files.
-     */
-    string fileDirectory;
-    
-    
-public:
-    
-    static void saveFile(string fileName, string data);
-    
-    
-    
-    
-    
-    
-};
-
-
-
-
-
-#endif /* IO_H */
-
+}

@@ -16,43 +16,62 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IO_H
-#define IO_H
+#ifndef ENTSFILE_H
+#define ENTSFILE_H
 
 #include <string>
-#include <fstream>
-#include <iostream>
-#include <stdexcept>
 #include "../Tree.h"
-
-
-    
-    
+ 
 /**
- * IO contains various tools for reading and writing files.
+ * Holds all we need for an Ents file, including the file name, the
+ * Tree instance it represents, and other various options.
  */
-class IO {
+class EntsFile {
     
     /**
-     * The directory the user is currently using to load and save files.
+     * The directory where this hierarchy is located.
      */
-    string fileDirectory;
+    string directory;
+    /**
+     * The name of this hierarchy's file.
+     */
+    string fileName;
+    /**
+     * The tree which is being saved and loaded.
+     */
+    Tree *tree;
+    /**
+     * Files will be .ents files.
+     */
+    const static string FILE_POSTFIX;
     
     
 public:
     
-    static void saveFile(string fileName, string data);
+    EntsFile(Tree *tr);
+    
+    void save();
+    
+    void setFileName(string newName) {
+        fileName = newName;
+    }
+    
+    const string getFileName() {
+        return fileName;
+    }
+    
+    Tree* getTree() {
+        return tree;
+    } 
+    
+    static const string getPostfix() {
+        return FILE_POSTFIX;
+    }
     
     
-    
-    
-    
-    
+
+
 };
 
-
-
-
-
-#endif /* IO_H */
+#endif /* ENTSFILE_H */
 

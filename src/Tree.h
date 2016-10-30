@@ -51,8 +51,11 @@ typedef enum {
  * illegal operations which would create an invalid state.
  */
 class Tree {
-    //TODO Add a data member to let the user name the Tree.
     
+    /**
+     * The name of the Tree.
+     */
+    string name;
     /**
      * Ents are allocated on heap memory and deallocated later as needed.
      * References to them are held for now within an unordered_map with the
@@ -110,6 +113,14 @@ public:
 
     EntNameMap* getNameMap() {
         return &entNameMap_;
+    }
+    
+    void setName(string newName) {
+        name = newName;
+    }
+    
+    const string getName() {
+        return name;
     }
 
 }; //end class Tree
