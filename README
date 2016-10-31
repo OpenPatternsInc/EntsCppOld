@@ -1,8 +1,17 @@
 # EntsCpp
 C++ implementation of Ents Hierarchy Database.
 
-See openpatterns.net/#ents for intended functionality.
+-- USE CAUTION: UNTESTED EXPERIMENTAL PROGRAM COULD CORRUPT DRIVE --
+
+See openpatterns.net/#ents for description of intended functionality.
 
 Basic functionality of CLI explorer/editor has been added.
 
 Use command "h" to display a list of commands, and "exit" to exit.
+
+It is suggested to write database files to a devoted external drive for now,
+in case a bug corrupts the file system. A random USB drive can be repartitioned
+easily.
+
+Change directory the program writes to by changing the string "fileDirectory" in
+src/Util/IO.cpp
