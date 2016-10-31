@@ -31,8 +31,6 @@ public:
 
     /**
      * Initialize a root Ent. Sets its name to "root" automatically.
-     * children vector is initialized via the inherited Ent(string name)
-     * constructor.
      */
     Root(void);
     /**

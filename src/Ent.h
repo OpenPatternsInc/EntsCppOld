@@ -30,16 +30,18 @@ using namespace std;
 
 /**
  * An Ent object instance represents and Ent node within a Tree.
- * Each Ent has a unique name within its hierarchy, and two vector lists
- * which hold pointers to its parents and children.
+ * Each Ent has a unique name within its hierarchy-Tree, and containers which
+ * hold pointers to Ents directly related to it in some way.
  * An Ent represents, in an abstract sense, a group of things, or a single thing.
- * Parents are more general, and children are more specific.
+ * Parents are more general groups, and children are more specific groups which
+ * are subsets of their parents.
  * The Root class extends the Ent class and is used to represent "everything"
  * in the most general sense. The logic of the Ents Hierarchy makes this possible,
  * and demands that there be only one root per Tree.
  * Each Ent will eventually have a unique identifier (UID) which will be used when
  * writing a Tree to file, allowing each Ent to reference its direct relatives
- * unambiguously.
+ * unambiguously. UIDs will also allow the Ents within two separate Trees to
+ * represent the same abstract concept and allow for the merging of trees.
  */
 class Ent {
     /**
