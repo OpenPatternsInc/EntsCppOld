@@ -55,7 +55,7 @@ class Tree {
     /**
      * The name of the Tree.
      */
-    string name;
+    string name_;
     /**
      * Ents are allocated on heap memory and deallocated later as needed.
      * References to them are held for now within an unordered_map with the
@@ -77,7 +77,7 @@ public:
     /**
      * Create a new Tree and add a root Ent to it. Also initialize the NameMap.
      */
-    Tree();
+    Tree(string name);
     /**
      * What do do when the Tree is removed from memory. Maybe save to file?
      * For now we delete entNameMap and all the Ents it points to.
@@ -116,11 +116,11 @@ public:
     }
     
     void setName(string newName) {
-        name = newName;
+        name_ = newName;
     }
     
     const string getName() {
-        return name;
+        return name_;
     }
 
 }; //end class Tree

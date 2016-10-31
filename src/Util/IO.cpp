@@ -22,12 +22,24 @@ using namespace std;
 
 void IO::saveFile(string fileName, string data) {
     
-    ofstream file(fileName);
-    if (!file.is_open()) {
-        cout << "Could not open file: \"" << fileName << "\".\n";
-        throw std::runtime_error("Could not open file.");
-    }
-    file << data;
-    cout << "File \"" << fileName << "\" has been saved.\n";
+    //Put this stuff in a try/catch so we can use RAII.
+    try {
     
+        //For now, writing files to an external USB drive. In case things go wrong.
+        const string fileDirectory = "/home/jstockwell/DatabaseTestDrive/";
+
+        ofstream file(fileDirectory + fileName);
+        if (!file.is_open()) {
+            //cout << "Could not open file: \"" << fileName << "\".\n";
+            throw std::runtime_error("Could not open file.");
+        }
+        file << data;
+        //Done saving here.
+        cout << "File \"" << fileName << "\" has been saved.\n";
+
+        file.close();
+    
+    } catch (std::runtime_error error) {
+        cout << error.what() << endl;
+    }
 }

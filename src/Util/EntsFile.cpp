@@ -28,6 +28,8 @@ EntsFile::EntsFile(Tree *tr) {
 
 void EntsFile::save() {
     
-    IO::saveFile(fileName + "." + FILE_POSTFIX, "tree data");
+    string data = tree->getName();
+    
+    IO::saveFile(fileName + "." + FILE_POSTFIX, data);
     
 }

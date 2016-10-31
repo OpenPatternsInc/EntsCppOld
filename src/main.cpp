@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     
     //**
     //Create a new Ent Hierarchy. Starts off with just a root Ent.
-    Tree tree;
+    Tree tree("Test Tree");
     //Make a new EntsFile to handle the tree.
     EntsFile entsFile(&tree);
     //Make a new CLI instance and have it explore the hierarchy.

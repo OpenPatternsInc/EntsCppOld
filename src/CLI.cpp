@@ -47,7 +47,8 @@ CLI::~CLI() {
 void CLI::listen() {
     //Initiate the listening sequence with no intention to exit yet.
     exiting_ = false;
-    //Declare string to hold future commands here. Maybe just redeclare each time instead?
+    //Declare string to hold future commands here.
+    //Maybe just redeclare each time instead?
     string command;
     //Let the user know what Ent will start out as the focus.
     cout << "Focus: " << focusPtr->getName() << endl;
@@ -85,12 +86,12 @@ void CLI::parseCommand(string str) {
             listParents(focusPtr);
         } else if (str == "b") {
             //Do a break point. perhaps useful in debugging.
-            //TODO implement as optional via preprocessor hiding to disable in production.
+            //TODO implement as optional via preprocessor.
             cout << "breakpoint\n";
         } else if (str == "h") {
             printHelp();
         } else if (str == "a") {
-            //Get a pointer to a vector containing any estranged pairs of siblings under focus.
+            //Get a pointer to a vector containing any estranged pairs
             EstrangedChildrenResolution result = checkForEstrangedChildren(focusPtr);
             //If the result was NO_PAIRS or ERROR, inform the user.
             if (result == NO_PAIRS_FOUND) {
@@ -108,7 +109,8 @@ void CLI::parseCommand(string str) {
             }
             vector<Ent*>* parents = focusPtr->getParents();
             for (Ent* parent : *parents) {
-                cout << "Siblings of " << focusPtr->getName() << " under " << parent->getName() << ":\n";
+                cout << "Siblings of " << focusPtr->getName()
+                        << " under " << parent->getName() << ":\n";
                 vector<Ent*>* children = parent->getChildren();
                 if (children->size() > 1) {
                     for (int a = 0; a < children->size(); a++)
@@ -134,7 +136,8 @@ void CLI::parseCommand(string str) {
         } else if (str == "help") {
             printHelp();
         } else if (isCommand("f", str, &argument)) {
-            //User wants to change focus. Argument should be the Ent's name to be made focus.
+            //User wants to change focus.
+            //Argument should be the Ent's name to be made focus.
             Ent * const new_focus_ptr = treePtr->getEntPtrByName(argument);
             //did we find one with that name? If so, the pointer should be nonzero.
             if (new_focus_ptr == nullptr) {

@@ -20,13 +20,13 @@
 
 using namespace std;
 
-Tree::Tree() {
+Tree::Tree(string name): name_(name) {
     //Initialize root. Allocate on heap, released in destructor with all other Ents.
     root_ = new Root();
     //Add root to the nameMap.
     entNameMap_.insert({root_->getName(), root_});
     //Useful for debugging to tell the user now when construction is done.
-    cout << "New Tree created.\n";
+    cout << "New Tree created named \"" << name_ << "\".\n";
 }
 
 Tree::~Tree(void) {
