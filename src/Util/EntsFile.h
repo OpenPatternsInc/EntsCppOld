@@ -45,6 +45,8 @@ class EntsFile {
      */
     const static string FILE_POSTFIX;
     
+    const string* generateSaveData();
+    
     
 public:
     

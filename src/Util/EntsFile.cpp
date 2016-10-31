@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <sstream>
 #include "EntsFile.h"
 #include "IO.h"
 
@@ -28,8 +29,36 @@ EntsFile::EntsFile(Tree *tr) {
 
 void EntsFile::save() {
     
-    string data = tree->getName();
+    const string *dataStringPtr = generateSaveData();
     
-    IO::saveFile(fileName + "." + FILE_POSTFIX, data);
+    IO::saveFile(fileName + "." + FILE_POSTFIX, dataStringPtr);
+    
+}
+
+
+const string* EntsFile::generateSaveData() {
+    
+    ostringstream stream;
+    
+    stream << tree->getName() << endl;
+    
+    EntNameMap *nameMap = tree->getNameMap();
+    
+    const unsigned int size = nameMap->size();
+    
+    //Append the number of Ents that will follow.
+    stream << size << endl;
+    
+    for (pair<string, Ent*> p : *nameMap) {
+        
+        stream << p.first << endl;
+        
+    }
+    
+    string *outString = new string();
+    
+    *outString = stream.str();
+    
+    return outString;
     
 }

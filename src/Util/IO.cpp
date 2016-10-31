@@ -20,20 +20,25 @@
 
 using namespace std;
 
-void IO::saveFile(string fileName, string data) {
-    
-    //Put this stuff in a try/catch so we can use RAII.
-    try {
-    
+void IO::saveFile(string fileName, const string *dataStringPtr) {
+        
+        if (!dataStringPtr)
+            cout << "ERROR: No data to be written.\n";
+        
         //For now, writing files to an external USB drive. In case things go wrong.
         const string fileDirectory = "/home/jstockwell/DatabaseTestDrive/";
 
+    //Put this stuff in a try/catch so we can use RAII.
+    try {
+        
         ofstream file(fileDirectory + fileName);
         if (!file.is_open()) {
             //cout << "Could not open file: \"" << fileName << "\".\n";
             throw std::runtime_error("Could not open file.");
         }
-        file << data;
+        file << *dataStringPtr;
+        //Delete the string now.
+        delete dataStringPtr;
         //Done saving here.
         cout << "File \"" << fileName << "\" has been saved.\n";
 
@@ -41,5 +46,7 @@ void IO::saveFile(string fileName, string data) {
     
     } catch (std::runtime_error error) {
         cout << error.what() << endl;
+        //If we're here, we probably didn't write the string to file, or delete it.
+        delete dataStringPtr;
     }
 }

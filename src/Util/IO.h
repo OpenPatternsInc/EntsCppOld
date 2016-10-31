@@ -23,6 +23,7 @@
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
+#include <sstream>
 #include "../Tree.h"
 
 
@@ -36,16 +37,12 @@ class IO {
     /**
      * The directory the user is currently using to load and save files.
      */
-    string fileDirectory;
+    const string fileDirectory;
     
     
 public:
     
-    static void saveFile(string fileName, string data);
-    
-    
-    
-    
+    static void saveFile(string fileName, const string *dataStringPtr);
     
     
 };

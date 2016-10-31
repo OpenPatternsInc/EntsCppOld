@@ -491,6 +491,8 @@ bool CLI::saveTree() {
     //Does the EntsFile have a file name?
     if (entsFile->getFileName() != "") {
         //We have a filename already.
+        entsFile->save();
+        return true;
     } else {
         bool hasName = false;
         //Give the user 3 chances to input a valid name.
