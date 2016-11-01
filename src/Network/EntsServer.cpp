@@ -24,7 +24,7 @@ using boost::asio::ip::tcp;
 
 EntsServer::EntsServer() {
     
-    int tcpPort = 13;
+    int tcpPort = 1037;
     
     
     try {
@@ -41,13 +41,13 @@ EntsServer::EntsServer() {
             
             acceptor.accept(socket);
             
-            std::cout << "Server socket initiated!\n";
+            std::cout << "Client connected.\n";
             
         }
         
-    }catch (std::exception& e) {
+    } catch (std::exception& e) {
         
-        std::cerr << e.what() << std::endl;
+        std::cerr << "EntsServer ERROR: " << e.what() << std::endl;
         
     }
     
