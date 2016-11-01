@@ -22,11 +22,11 @@
 #include <string>
 #include <iostream>
 #include <unordered_set>
-#include "Ent.h"
-#include "Root.h"
-#include "Tree.h"
-#include "TreeAnalysis/TreeAnalyzer.h"
-#include "Util/EntsFile.h"
+#include "../Core/Ent.h"
+#include "../Core/Root.h"
+#include "../Core/Tree.h"
+#include "../TreeAnalysis/TreeAnalyzer.h"
+#include "../Util/EntsFile.h"
 
 using namespace std;
     

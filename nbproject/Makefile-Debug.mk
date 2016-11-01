@@ -35,10 +35,11 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/src/CLI.o \
-	${OBJECTDIR}/src/Ent.o \
-	${OBJECTDIR}/src/Root.o \
-	${OBJECTDIR}/src/Tree.o \
+	${OBJECTDIR}/src/CLI/CLI.o \
+	${OBJECTDIR}/src/Core/Ent.o \
+	${OBJECTDIR}/src/Core/Root.o \
+	${OBJECTDIR}/src/Core/Tree.o \
+	${OBJECTDIR}/src/Network/EntsServer.o \
 	${OBJECTDIR}/src/TreeAnalysis/TreeAnalyzer.o \
 	${OBJECTDIR}/src/Util/EntsFile.o \
 	${OBJECTDIR}/src/Util/IO.o \
@@ -60,35 +61,42 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=
+LDLIBSOPTIONS=/usr/lib64/libboost_system.so.1.60.0
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ents
 
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ents: /usr/lib64/libboost_system.so.1.60.0
+
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ents: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	g++ -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ents ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/src/CLI.o: src/CLI.cpp
-	${MKDIR} -p ${OBJECTDIR}/src
+${OBJECTDIR}/src/CLI/CLI.o: src/CLI/CLI.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/CLI
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/CLI.o src/CLI.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/CLI/CLI.o src/CLI/CLI.cpp
 
-${OBJECTDIR}/src/Ent.o: src/Ent.cpp
-	${MKDIR} -p ${OBJECTDIR}/src
+${OBJECTDIR}/src/Core/Ent.o: src/Core/Ent.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/Core
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Ent.o src/Ent.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Core/Ent.o src/Core/Ent.cpp
 
-${OBJECTDIR}/src/Root.o: src/Root.cpp
-	${MKDIR} -p ${OBJECTDIR}/src
+${OBJECTDIR}/src/Core/Root.o: src/Core/Root.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/Core
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Root.o src/Root.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Core/Root.o src/Core/Root.cpp
 
-${OBJECTDIR}/src/Tree.o: src/Tree.cpp
-	${MKDIR} -p ${OBJECTDIR}/src
+${OBJECTDIR}/src/Core/Tree.o: src/Core/Tree.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/Core
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Tree.o src/Tree.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Core/Tree.o src/Core/Tree.cpp
+
+${OBJECTDIR}/src/Network/EntsServer.o: src/Network/EntsServer.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/Network
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Network/EntsServer.o src/Network/EntsServer.cpp
 
 ${OBJECTDIR}/src/TreeAnalysis/TreeAnalyzer.o: src/TreeAnalysis/TreeAnalyzer.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/TreeAnalysis
@@ -121,6 +129,8 @@ ${OBJECTDIR}/src/main.o: src/main.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
+	${RM} -r ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libboost_system.so.1.60.0
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ents
 
 # Subprojects
 .clean-subprojects:

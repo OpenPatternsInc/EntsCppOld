@@ -19,7 +19,7 @@
 #ifndef ESTRANGEDPAIR_H
 #define ESTRANGEDPAIR_H
 
-#include "../Ent.h"
+#include "../Core/Ent.h"
 
 class EstrangedPair {
     

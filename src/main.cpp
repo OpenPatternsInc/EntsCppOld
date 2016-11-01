@@ -16,11 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Ent.h"
-#include "Tree.h"
-#include "CLI.h"
+#include "Core/Ent.h"
+#include "Core/Tree.h"
+#include "CLI/CLI.h"
 #include "Util/IO.h"
 #include "Util/EntsFile.h"
+//#include "Network/EntsServer.h"
 //#include "Util/Prime.h"
 
 using namespace std;
@@ -37,7 +38,11 @@ int main(int argc, char** argv) {
     //Tell the CLI to listen for commands in the console.
     cli.listen();
     //*/
-
+    
+    /**
+    EntsServer server;
+    //*/
+    
     return 0;
 }
 

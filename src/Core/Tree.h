@@ -25,7 +25,7 @@
 #include <string>
 #include "Ent.h"
 #include "Root.h"
-#include "Util/Prime.h"
+#include "../Util/Prime.h"
 
 using namespace std;
 /**

@@ -24,7 +24,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <sstream>
-#include "../Tree.h"
+#include "../Core/Tree.h"
 
 
     

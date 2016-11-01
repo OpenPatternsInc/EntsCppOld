@@ -20,7 +20,7 @@
 #define ENTSFILE_H
 
 #include <string>
-#include "../Tree.h"
+#include "../Core/Tree.h"
  
 /**
  * Holds all we need for an Ents file, including the file name, the
