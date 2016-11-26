@@ -39,6 +39,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Core/Ent.o \
 	${OBJECTDIR}/src/Core/Root.o \
 	${OBJECTDIR}/src/Core/Tree.o \
+	${OBJECTDIR}/src/Interface/EntsInterface.o \
+	${OBJECTDIR}/src/Network/EntsClient.o \
 	${OBJECTDIR}/src/Network/EntsServer.o \
 	${OBJECTDIR}/src/TreeAnalysis/TreeAnalyzer.o \
 	${OBJECTDIR}/src/Util/EntsFile.o \
@@ -90,6 +92,16 @@ ${OBJECTDIR}/src/Core/Tree.o: src/Core/Tree.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/Core
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Core/Tree.o src/Core/Tree.cpp
+
+${OBJECTDIR}/src/Interface/EntsInterface.o: src/Interface/EntsInterface.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/Interface
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Interface/EntsInterface.o src/Interface/EntsInterface.cpp
+
+${OBJECTDIR}/src/Network/EntsClient.o: src/Network/EntsClient.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/Network
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Network/EntsClient.o src/Network/EntsClient.cpp
 
 ${OBJECTDIR}/src/Network/EntsServer.o: src/Network/EntsServer.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/Network

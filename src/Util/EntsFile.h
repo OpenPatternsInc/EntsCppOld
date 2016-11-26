@@ -21,6 +21,11 @@
 
 #include <string>
 #include "../Core/Tree.h"
+
+/**
+ * Declare this
+ */
+class Tree;
  
 /**
  * Holds all we need for an Ents file, including the file name, the

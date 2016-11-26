@@ -32,11 +32,11 @@ public:
     /**
      * Initialize a root Ent. Sets its name to "root" automatically.
      */
-    Root(void);
+    Root();
     /**
      * Destruction of Root is handled by the inherited Ent destructor.
      */
-    ~Root(void);
+    ~Root();
 
 };
 

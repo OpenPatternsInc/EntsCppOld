@@ -16,41 +16,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//**
-#include "Core/Ent.h"
-#include "Core/Tree.h"
-#include "Interface/EntsInterface.h"
-#include "CLI/CLI.h"
-#include "Util/IO.h"
-#include "Util/EntsFile.h"
-#include "Network/EntsServer.h"
- //*/
-/*
-#include "Network/EntsClient.h"
-#include "Network/SocketClient.h"
-//#include "Util/Prime.h"
- //*/
 
-using namespace std;
+#ifndef SOCKETCLIENT_H
+#define SOCKETCLIENT_H
 
-int main() {
-    
-    //**
-    //Create a new Ent Hierarchy. Starts off with just a root Ent.
-    //Tree tree("Test Tree");
-    //Make a new CLI instance and have it explore the hierarchy.
-    CLI cli;
-    //Tell the CLI to listen for commands in the console.
-    cli.listen();
-    //*/
-    
-    /**
-    EntsClient client;
-    client.connect();
-    //*/
-    
-    cout << "\nExiting program...\n";
-    
-    return 0;
+#include <string>
+#include <boost/asio.hpp>
+#include <boost/array.hpp>
+#include <iostream>
+
+
+
+void send_something(std::string host, int port, std::string message)
+{
+	boost::asio::io_service ios;
+			
+        boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(host), port);
+
+        boost::asio::ip::tcp::socket socket(ios);
+
+	socket.connect(endpoint);
+
+	boost::array<char, 128> buf;
+        std::copy(message.begin(),message.end(),buf.begin());
+	boost::system::error_code error;
+	socket.write_some(boost::asio::buffer(buf, message.size()), error);
+        socket.close();
 }
+
+
+
+
+#endif /* SOCKETCLIENT_H */
 

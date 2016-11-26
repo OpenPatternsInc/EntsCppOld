@@ -16,41 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//**
-#include "Core/Ent.h"
-#include "Core/Tree.h"
-#include "Interface/EntsInterface.h"
-#include "CLI/CLI.h"
-#include "Util/IO.h"
-#include "Util/EntsFile.h"
-#include "Network/EntsServer.h"
- //*/
-/*
-#include "Network/EntsClient.h"
-#include "Network/SocketClient.h"
-//#include "Util/Prime.h"
- //*/
+#include "EntsClient.h"
+
+using boost::asio::ip::tcp;
 
 using namespace std;
 
-int main() {
-    
-    //**
-    //Create a new Ent Hierarchy. Starts off with just a root Ent.
-    //Tree tree("Test Tree");
-    //Make a new CLI instance and have it explore the hierarchy.
-    CLI cli;
-    //Tell the CLI to listen for commands in the console.
-    cli.listen();
-    //*/
-    
-    /**
-    EntsClient client;
-    client.connect();
-    //*/
-    
-    cout << "\nExiting program...\n";
-    
+int EntsClient::connect() {
+
+    try {
+
+        tcp::iostream s("35.160.222.230:1307", "tcp");
+        if (!s) {
+            cout << "Unable to connect: " << s.error().message() << endl;
+            return 1;
+        }
+
+        string line;
+        getline(s, line);
+        cout << line << endl;
+
+    } catch (exception& e) {
+        cout << "Exception: " << e.what() << endl;
+    }
+
     return 0;
 }
-

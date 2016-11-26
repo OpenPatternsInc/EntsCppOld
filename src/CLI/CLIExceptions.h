@@ -16,29 +16,60 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Ent.h"
+#ifndef CLIEXCEPTIONS_H
+#define CLIEXCEPTIONS_H
+
 #include <string>
 
 using namespace std;
 
-Ent::Ent() {
-    cout << "Ent created with no-arg constructor.\n";
-}
+/**
+ * The base type of Exception for the Ents CLI. Perhaps unnecessary, but
+ * aesthetically pleasing.
+ */
+class CLIException {
+    
+    friend class CLI;
+    
+protected:
+    
+    CLIException() {}
+    
+};
 
-Ent::Ent(string name) : name(name) {
-    //Useful in debugging, and generally good info for the CLI user.
-    cout << "An Ent has been created with the name \"" << name << "\".\n";
-}
+/**
+ * A type of exception which holds a message.
+ */
+class CLIMessageException: public CLIException {
+    
+    friend class CLI;
+    
+    string message;
+    
+    CLIMessageException(string m): message(m) {}
+    
+    
+    
+    
+    
+};
 
-Ent::~Ent() {
-    //Deallocate the vectors. No need to deallocate what they point to.
-    //delete parents_;
-    //delete children_;
-    //Useful for debugging.
-    cout << "Ent \"" << getName() << "\" has been destroyed.\n";
-}
+/**
+ * Exception called for when an input is empty. Should be from when the user
+ * simply presses enter/return without typing anything.
+ */
+class NoInputException: public CLIException {
+    
+    friend class CLI;
+    
+public:
+    
+    NoInputException() {}
+    
+    
+};
 
 
 
-
+#endif /* CLIEXCEPTIONS_H */
 

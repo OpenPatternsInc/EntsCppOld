@@ -21,7 +21,8 @@
 using namespace std;
 
 Tree::Tree(string name): name_(name) {
-    //Initialize root. Allocate on heap, released in destructor with all other Ents.
+    entsFile = new EntsFile(this);
+    //Initialize root. Allocated on heap, released in destructor with all other Ents.
     root_ = new Root();
     //Add root to the nameMap.
     entNameMap_.insert({root_->getName(), root_});
@@ -43,7 +44,7 @@ Tree::~Tree(void) {
 
 
 void Tree::addEntToNameMap(Ent* entPtr, Ent* parentPtr) {
-    //If no parent is given, make its parent root to preven orphan Ents.
+    //If no parent is given, make its parent root to prevent orphan Ents.
     if (parentPtr == 0) parentPtr = root_;
     entNameMap_.insert({entPtr->getName(), entPtr});
     //Connect the new ent and its new parent. Adds references for each other.
@@ -81,5 +82,35 @@ Ent* Tree::getEntPtrByName(const string name) {
         //Nothing found, return 0 pointer.
         return 0;
     }
+}
+
+
+bool Tree::save() {
+    
+    //Does the EntsFile have a file name?
+    if (entsFile->getFileName() != "") {
+        //We have a filename already.
+        entsFile->save();
+        return true;
+    } else {
+        bool hasName = false;
+        //Give the user 3 chances to input a valid name.
+        for (int count = 0; count < 3; count++) {
+            if (getInterface()->queryFileName()) {
+                hasName = true;
+                break;
+            }
+        }
+        if (!hasName) {
+            cout << "File was not saved.\n";
+            return false;
+        }
+        //OK, so we got a file name!
+        entsFile->save();
+        return true;
+    }
+    return false;
+    
+    
 }
 

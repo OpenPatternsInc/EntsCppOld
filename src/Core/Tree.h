@@ -26,6 +26,8 @@
 #include "Ent.h"
 #include "Root.h"
 #include "../Util/Prime.h"
+#include "../Util/EntsFile.h"
+#include "../Interface/EntsInterface.h"
 
 using namespace std;
 /**
@@ -43,6 +45,12 @@ typedef enum {
 } NewEntStatus;
 
 /**
+ * Must declare EntsInterface class so the pointers know that it's a tye.
+ */
+class EntsInterface;
+class EntsFile;
+
+/**
  * Class holding a hierarchy of Ent objects. Uses an unorganized hashmap to organize
  * all the Ents via their names for easy lookup. Each Ent holds vector lists pointing
  * to their parents or children.
@@ -52,6 +60,18 @@ typedef enum {
  */
 class Tree {
     
+    friend class EntsInterface;
+    
+    friend class CLI;
+    
+    /**
+     * The EntsFile which is used to save the Tree to a file.
+     */
+    EntsFile *entsFile;
+    /**
+     * The EntsInterface which is being used to explore this tree.
+     */
+    EntsInterface *interface;
     /**
      * The name of the Tree.
      */
@@ -72,17 +92,17 @@ class Tree {
      */
     Prime prime_;
 
-public:
-
     /**
      * Create a new Tree and add a root Ent to it. Also initialize the NameMap.
+     * Because of this explicit 1 arg constructor, there is not a no-arg
+     * constructor to use, so we can't make arrays of Trees. May need to change
+     * later.
      */
     Tree(string name);
-    /**
-     * What do do when the Tree is removed from memory. Maybe save to file?
-     * For now we delete entNameMap and all the Ents it points to.
-     */
-    ~Tree();
+    
+    EntsFile* getEntsFile() {
+        return entsFile;
+    }
 
     /**
     * Adds an Ent to entNameMap_ and sets its only parent as parentPtr.
@@ -100,28 +120,47 @@ public:
      * @return      Returns and enum value: UNDEFINED_ERROR, SUCCESS, NAME_TAKEN
      */
     NewEntStatus tryToCreateNewEnt(string name);
-    
-    Root* getRoot() {
-        return root_;
-    }
     /**
      * Retrieves a pointer to an Ent of the given name, if one exists.
      * @param name  Name being searched for.
      * @return      Returns pointer to Ent if found, 0 if not.
      */
     Ent* getEntPtrByName(const string name);
-
-    EntNameMap* getNameMap() {
-        return &entNameMap_;
-    }
     
     void setName(string newName) {
         name_ = newName;
     }
     
+    bool save();
+    
+    void setInterface(EntsInterface *ui) {
+        interface = ui;
+    }
+    
+    EntsInterface* getInterface() {
+        return interface;
+    }
+    
+public:
+
+    EntNameMap* getNameMap() {
+        return &entNameMap_;
+    }
+    
     const string getName() {
         return name_;
     }
+    /**
+     * What do do when the Tree is removed from memory. Maybe save to file?
+     * For now we delete entNameMap and all the Ents it points to.
+     */
+    ~Tree();
+    
+    Root* getRoot() {
+        return root_;
+    }
+    
+    
 
 }; //end class Tree
 

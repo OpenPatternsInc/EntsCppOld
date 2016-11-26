@@ -39,6 +39,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Core/Ent.o \
 	${OBJECTDIR}/src/Core/Root.o \
 	${OBJECTDIR}/src/Core/Tree.o \
+	${OBJECTDIR}/src/Interface/EntsInterface.o \
+	${OBJECTDIR}/src/Network/EntsClient.o \
 	${OBJECTDIR}/src/Network/EntsServer.o \
 	${OBJECTDIR}/src/TreeAnalysis/TreeAnalyzer.o \
 	${OBJECTDIR}/src/Util/EntsFile.o \
@@ -61,13 +63,15 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=/usr/lib64/libboost_system.so.1.60.0
+LDLIBSOPTIONS=/usr/lib64/libboost_system.so.1.60.0 /usr/lib64/libpthread.so.0
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ents
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ents: /usr/lib64/libboost_system.so.1.60.0
+
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ents: /usr/lib64/libpthread.so.0
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ents: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
@@ -92,6 +96,16 @@ ${OBJECTDIR}/src/Core/Tree.o: src/Core/Tree.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/Core
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Core/Tree.o src/Core/Tree.cpp
+
+${OBJECTDIR}/src/Interface/EntsInterface.o: src/Interface/EntsInterface.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/Interface
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Interface/EntsInterface.o src/Interface/EntsInterface.cpp
+
+${OBJECTDIR}/src/Network/EntsClient.o: src/Network/EntsClient.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/Network
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Network/EntsClient.o src/Network/EntsClient.cpp
 
 ${OBJECTDIR}/src/Network/EntsServer.o: src/Network/EntsServer.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/Network
@@ -129,7 +143,7 @@ ${OBJECTDIR}/src/main.o: src/main.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} -r ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libboost_system.so.1.60.0
+	${RM} -r ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libpthread.so.0 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libboost_system.so.1.60.0
 	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ents
 
 # Subprojects

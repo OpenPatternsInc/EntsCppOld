@@ -22,11 +22,14 @@
 #include <string>
 #include <iostream>
 #include <unordered_set>
+#include "../Interface/EntsInterface.h"
 #include "../Core/Ent.h"
 #include "../Core/Root.h"
 #include "../Core/Tree.h"
 #include "../TreeAnalysis/TreeAnalyzer.h"
 #include "../Util/EntsFile.h"
+#include "CLIExceptions.h"
+#include "../Interface/InterfaceExceptions.h"
 
 using namespace std;
     
@@ -37,16 +40,18 @@ typedef enum {
     RESOLUTION_ERROR
 } EstrangedChildrenResolution;
 
-class CLI {
-    /** If set to true, the after the next command is parsed, stop listening
-     * and return control to the calling function. */
-    bool exiting_;
+class CLI : public EntsInterface {
+    
+    /**
+     * The Tree being explored currently by the CLI.
+     */
+    Tree* tree = nullptr;
     /** Points to the current Ent of focus. */
     Ent* focusPtr;
     /** Points to the Tree Currently being explored.*/
-    Tree* treePtr;
+    //Tree* treePtr;
     /** The EntsFile corresponding to the currently explored tree.*/
-    EntsFile* entsFile;
+    //EntsFile* entsFile;
 
     void listChildren(Ent* entPtr);
     
@@ -60,41 +65,41 @@ class CLI {
     
     EstrangedChildrenResolution checkForEstrangedChildren(Ent *parent);
 
-    void parseCommand(string str);
+    void parseCommand(string str, bool * exiting);
     
     void printHelp();
+    
+    string queryPlainText(string instructions = "");
+
+    CLI(Tree *tree);
+    /**
+     * Set the focus of the CLI listener to the given Ent.
+     * @param entPtr_   Points to the new focus.
+     */
+    void setFocus(Ent* entPtr_) {
+        focusPtr = entPtr_;
+    }
     
 
 public:
 
-
-    CLI(EntsFile* entsFile);
+    CLI();
 
     ~CLI();
 
     void listen();
-    /**
-     * Set the focus of the CLI listener to the given Ent.
-     * @param ent_ptr   Points to the new focus.
-     */
-    inline void setFocus(Ent* entPtr_) {
-        focusPtr = entPtr_;
-    }
-    /**
-     * Sets the Tree to explore.
-     */
-    inline void setEntsFile(EntsFile* newEntsFile) {
-        entsFile = newEntsFile;
-        treePtr = newEntsFile->getTree();
-        focusPtr = treePtr->getRoot();
-        //TODO Tell the user which Tree is now being explored.
+    
+    void setTree(Tree* tr) {
+        tree = tr;
     }
     
-    bool saveTree();
-    
-    bool queryTreeName(EntsFile* entsFile);
+    /********************************************************************
+     * Virtual function implementations
+     ********************************************************************/
     
     bool queryFileName();
+    
+    Tree* createNewTree();
 
 };
 

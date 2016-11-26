@@ -20,7 +20,9 @@
 
 //Call the inherited constructor, setting this root instance's name to "root"
 //and initializing the children vector.
-Root::Root(void) : Ent("root") {
+Root::Root() {
+    setName("root");
+    setUID(1);
 }
 
 Root::~Root() {

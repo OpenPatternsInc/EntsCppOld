@@ -318,6 +318,10 @@ public:
     unsigned int getUID() {
         return uid;
     }
+    
+    void setUID(unsigned int n) {
+        uid = n;
+    }
 
     /**
      * Adds an Ent as a parent of this one, but doesn't check anything.
