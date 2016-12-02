@@ -69,6 +69,13 @@ class CLI : public EntsInterface {
     
     void printHelp();
     
+    void printFocus() {
+        if (focusPtr)
+            cout << "Focus: " << focusPtr->getName() << endl;
+        else
+            cout << "No Ent is currently the focus.\n";
+    }
+    
     string queryPlainText(string instructions = "");
 
     CLI(Tree *tree);
@@ -97,7 +104,7 @@ public:
      * Virtual function implementations
      ********************************************************************/
     
-    bool queryFileName();
+    bool queryUserForFileName();
     
     Tree* createNewTree();
 

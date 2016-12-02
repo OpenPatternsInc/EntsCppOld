@@ -16,42 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//**
-#include "Core/Ent.h"
-#include "Core/Tree.h"
-#include "Interface/EntsInterface.h"
-#include "CLI/CLI.h"
-#include "Util/IO.h"
-#include "Util/EntsFile.h"
-#include "Network/EntsServer.h"
- //*/
-/*
-#include "Network/EntsClient.h"
-#include "Network/SocketClient.h"
-//#include "Util/Prime.h"
- //*/
+#include "TreeInstance.h"
+#include "../Core/Tree.h"
 
-using namespace std;
-
-int main() {
+TreeInstance::TreeInstance() {
     
-    //**
-    //Create a new Ent Hierarchy. Starts off with just a root Ent.
-    //Tree tree("Test Tree");
-    //Make a new CLI instance and have it explore the hierarchy.
-    CLI cli;
-    //Tell the CLI to listen for commands in the console.
-    cli.listen();
-    //*/
     
-    /**
-    EntsClient client;
-    client.connect();
-    //*/
     
-    //May as well...
-    cout << "\nExiting program...\n";
     
-    return 0;
 }
 
+
+TreeInstance::~TreeInstance() {
+    
+    
+    
+    
+    
+    
+}

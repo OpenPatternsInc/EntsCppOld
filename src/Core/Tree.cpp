@@ -42,7 +42,7 @@ Tree::~Tree(void) {
     cout << "Tree destructor completed.\n";
 }
 
-
+//TODO implement call here to UI to handle new estranged pairs.
 void Tree::addEntToNameMap(Ent* entPtr, Ent* parentPtr) {
     //If no parent is given, make its parent root to prevent orphan Ents.
     if (parentPtr == 0) parentPtr = root_;
@@ -96,7 +96,7 @@ bool Tree::save() {
         bool hasName = false;
         //Give the user 3 chances to input a valid name.
         for (int count = 0; count < 3; count++) {
-            if (getInterface()->queryFileName()) {
+            if (getInterface()->queryUserForFileName()) {
                 hasName = true;
                 break;
             }

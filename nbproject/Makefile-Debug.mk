@@ -40,6 +40,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Core/Root.o \
 	${OBJECTDIR}/src/Core/Tree.o \
 	${OBJECTDIR}/src/Interface/EntsInterface.o \
+	${OBJECTDIR}/src/Interface/TreeInstance.o \
 	${OBJECTDIR}/src/Network/EntsClient.o \
 	${OBJECTDIR}/src/Network/EntsServer.o \
 	${OBJECTDIR}/src/TreeAnalysis/TreeAnalyzer.o \
@@ -101,6 +102,11 @@ ${OBJECTDIR}/src/Interface/EntsInterface.o: src/Interface/EntsInterface.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/Interface
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Interface/EntsInterface.o src/Interface/EntsInterface.cpp
+
+${OBJECTDIR}/src/Interface/TreeInstance.o: src/Interface/TreeInstance.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/Interface
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Interface/TreeInstance.o src/Interface/TreeInstance.cpp
 
 ${OBJECTDIR}/src/Network/EntsClient.o: src/Network/EntsClient.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/Network

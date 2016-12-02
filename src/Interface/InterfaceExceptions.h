@@ -29,7 +29,8 @@
 using namespace std;
 
 /**
- * The base exception in Ents.
+ * The base exception in Ents. Does not extend the C++ exception,
+ * for now.
  */
 class EntsInterfaceException {
     

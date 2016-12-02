@@ -71,7 +71,7 @@ string CLI::queryPlainText(string instructions) {
  */
 Tree* CLI::createNewTree() {
     
-    string instructions = "Please enter the name of the new Tree you'd like to create";
+    string instructions = "Please enter the name of the new Tree you'd like to create.";
     
     //The user has 3 chances to get the name right.
     for (int n = 0; n < 3; n++) {
@@ -112,7 +112,7 @@ void CLI::listen() {
             return;
         } else {
             //A Tree was created. Set the focusPtr to root.
-            focusPtr = tree->getRoot();
+            setFocus(tree->getRoot());
         }
     }
         
@@ -122,7 +122,7 @@ void CLI::listen() {
     //Maybe just redeclare each time instead?
     string command;
     //Let the user know what Ent will start out as the focus.
-    cout << "Focus: " << focusPtr->getName() << endl;
+    printFocus();
     //Loop to repeatedly input commands.
     do {
         //Use the standard > to indicate we're listening for commands.
@@ -149,8 +149,7 @@ void CLI::parseCommand(string str, bool * exiting) {
             //list the current ent of focus
             cout << "Focus: " << focusPtr->getName() << endl;
         } else if (str == "e") {
-            cout << "Exiting..." << endl;
-            *exiting = true;
+            cout << "Command not in use yet..." << endl;
         } else if (str == "c") {
             listChildren(focusPtr);
         } else if (str == "p") {
@@ -209,7 +208,7 @@ void CLI::parseCommand(string str, bool * exiting) {
         } else if (isCommand("f", str, &argument)) {
             //User wants to change focus.
             //Argument should be the Ent's name to be made focus.
-            Ent * const new_focus_ptr = nullptr;// tree->getEntPtrByName(argument);
+            Ent * const new_focus_ptr = tree->getEntPtrByName(argument);
             //did we find one with that name? If so, the pointer should be nonzero.
             if (new_focus_ptr == nullptr) {
                 cout << "No Ent found with that name.\n";
@@ -218,19 +217,19 @@ void CLI::parseCommand(string str, bool * exiting) {
                     cout << "That Ent is already the focus.\n";
                 } else {
                     setFocus(new_focus_ptr);
-                    cout << "Focus: " << focusPtr->getName() << endl;
+                    printFocus();
                 }
             }
         } //end "f"
         else if (isCommand("n", str, &argument)) {
             //User wants to create a new ent. Add it under root.
-            if (true){//tree->getEntPtrByName(argument) == nullptr) {
+            if (tree->getEntPtrByName(argument) == nullptr) {
                 //No ent with that name yet, so make a new one.
                 //TODO Check for correct Ent name format (not too long, etc.)
                 //Create new Ent with the given name and allocate mem on the heap.
                 Ent* newEntPtr = new Ent(argument);
                 
-                //tree->addEntToNameMap(newEntPtr);
+                tree->addEntToNameMap(newEntPtr);
                 
                 //Now we should ask the user to classify the new Ent within the
                 //existing hierarchy!
@@ -549,20 +548,20 @@ void CLI::printHelp() {
             << "\t>p\t\tLists the focus' parents.\n"
             << "\t>c\t\tLists the focus' children.\n"
             << "\t>s\t\tLists the siblings of focus.\n"
-            << "\t>e or >exit\tExits command interface.\n"
             << "\t>h\t\tPrints this help section.\n"
             << "\t>b\t\tUsed to bring up an optional breakpoint if desired.\n"
             << "Commands with one argument:\n"
             << "\t>f [Ent name]\tChanges focus to the Ent with the given name.\n"
             << "\t>n [Ent name]\tCreates a new Ent with the given name, if available,\n"
-            << "\t\t\tand sets its only parent as root.\n";
+            << "\t\t\tand sets its only parent as root.\n"
+            << "\texit\tExits command interface.\n";
 } //end of printHelp()
 
 /**
 * Ask the user to input a filename they want to use to save the tree.
 * @return 
 */
-bool CLI::queryFileName() {
+bool CLI::queryUserForFileName() {
     bool success = false;
 
     cout << "What is the name of the .ents file you wish to save the tree as?\n>";

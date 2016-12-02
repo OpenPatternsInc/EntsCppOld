@@ -20,6 +20,7 @@
       <itemPath>src/Network/SocketClient.h</itemPath>
       <itemPath>src/Core/Tree.h</itemPath>
       <itemPath>src/TreeAnalysis/TreeAnalyzer.h</itemPath>
+      <itemPath>src/Interface/TreeInstance.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -39,6 +40,7 @@
       <itemPath>src/Core/Root.cpp</itemPath>
       <itemPath>src/Core/Tree.cpp</itemPath>
       <itemPath>src/TreeAnalysis/TreeAnalyzer.cpp</itemPath>
+      <itemPath>src/Interface/TreeInstance.cpp</itemPath>
       <itemPath>src/main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -102,6 +104,10 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="src/Interface/TreeInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Interface/TreeInstance.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Network/EntsClient.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -185,6 +191,10 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="src/Interface/TreeInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Interface/TreeInstance.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Network/EntsClient.cpp" ex="false" tool="1" flavor2="0">
       </item>

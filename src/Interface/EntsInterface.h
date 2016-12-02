@@ -20,9 +20,9 @@
 #define ENTSINTERFACE_H
 
 #include "InterfaceExceptions.h"
-//TODO: Probably don't need these includes?
 #include "../Core/Tree.h"
 #include "../Util/EntsFile.h"
+#include "TreeInstance.h"
 
 class Tree;
 class EntsFile;
@@ -39,6 +39,8 @@ class EntsInterface {
     
     friend class Tree;
     
+    class TreeInstance;
+    
     /*********************************************************************
      * Private data members.
      *********************************************************************/
@@ -46,7 +48,7 @@ class EntsInterface {
     /**
      * The trees available to explore and edit.
      */
-    vector<Tree*> trees;
+    vector<TreeInstance*> trees;
     
     
     /*********************************************************************
@@ -83,7 +85,10 @@ protected:
      * Virtual functions the derived interface must implement.
      *********************************************************************/
     
-    virtual bool queryFileName() = 0;
+    /*
+     * We need to be able to 
+     */
+    virtual bool queryUserForFileName() = 0;
     
     //virtual bool queryTreeName(string **response) = 0;
     
