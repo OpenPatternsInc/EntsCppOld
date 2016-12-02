@@ -23,8 +23,8 @@
  * Created on December 2, 2016, 2:59 PM
  */
 
-#ifndef TREEWRAPPER_H
-#define TREEWRAPPER_H
+#ifndef TREEINSTANCE_H
+#define TREEINSTANCE_H
 
 #include "../Core/Tree.h"
 #include "EntsInterface.h"
@@ -58,5 +58,5 @@ private:
 
 
 
-#endif /* TREEWRAPPER_H */
+#endif /* TREEINSTANCE_H */
 
