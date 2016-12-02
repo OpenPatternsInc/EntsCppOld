@@ -30,7 +30,7 @@ Tree::Tree(string name): name_(name) {
     cout << "New Tree created named \"" << name_ << "\".\n";
 }
 
-Tree::~Tree(void) {
+Tree::~Tree() {
     //We don't need to delete root_ separately because it will be handled
     //in the following loop.
 
