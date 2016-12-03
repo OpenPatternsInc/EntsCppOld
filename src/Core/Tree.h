@@ -62,8 +62,6 @@ class Tree {
     
     friend class EntsInterface;
     
-    friend class CLI;
-    
     /**
      * The EntsFile which is used to save the Tree to a file.
      */
