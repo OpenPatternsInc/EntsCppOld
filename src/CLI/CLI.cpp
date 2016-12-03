@@ -43,6 +43,10 @@ void CLI::queryUserForText(string* text, string message) {
     
 } //end of queryUserForText
 
+void CLI::displayMessageToUser(string text) {
+    cout << text << endl;
+}
+
 /******************************************************************************
  * Public functions, as well as constructors and destructors.
  ******************************************************************************/
@@ -137,42 +141,9 @@ void CLI::parseCommand(string str, bool * exiting) {
             //Do a break point. perhaps useful in debugging.
             //TODO implement as optional via preprocessor.
             cout << "breakpoint\n";
-        } else if (str == "h") {
-            printHelp();
-        } else if (str == "a") {
-            /*
-            //Get a pointer to a vector containing any estranged pairs
-            EstrangedChildrenResolution result = checkForEstrangedChildren(focusPtr);
-            //If the result was NO_PAIRS or ERROR, inform the user.
-            if (result == NO_PAIRS_FOUND) {
-                cout << "No estranged children found.\n";
-            } else if (result == RESOLUTION_ERROR) {
-                cout << "ERROR: Problem resolving estranged children.";
-            }
-             */
-        } //end "a"
+        }
         else if (str == "s") {
-            /*
-            //Display siblings of focus
-            //If it's root, educate the user a bit
-            if (focusPtr == tree->getRoot()) {
-                cout << "By definition, root can not have any siblings.\n";
-                return;
-            }
-            vector<Ent*>* parents = focusPtr->getParents();
-            for (Ent* parent : *parents) {
-                cout << "Siblings of " << focusPtr->getName()
-                        << " under " << parent->getName() << ":\n";
-                vector<Ent*>* children = parent->getChildren();
-                if (children->size() > 1) {
-                    for (int a = 0; a < children->size(); a++)
-                        if (children->at(a) != focusPtr)
-                            cout << "\t" << children->at(a)->getName() << endl;
-                } else {
-                    cout << "\t None" << endl;
-                }
-            }
-             */
+            
         } //end "s"
         else {
             //The single character command was not recognized.
@@ -230,6 +201,18 @@ void CLI::parseCommand(string str, bool * exiting) {
         }
         else if (str == "save") {
             //saveTree(tree);
+        }
+        else if (str == "rename tree") {
+            requestToRenameTree(tree);
+        }
+        else if (str == "print tree name") {
+            cout << tree->getName() << endl;
+        }
+        else if (str == "help" || str == "-h" || str == "--help") {
+            printHelp();
+        }
+        else if (str == "clear" || str == "clr") {
+            cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
         }
         else {
             cout << "Unknown command.\n";
@@ -424,17 +407,19 @@ EstrangedChildrenResolution CLI::checkForEstrangedChildren(Ent *parent) {
  */
 void CLI::printHelp() {
     cout << "Commands with no argument:\n"
-            << "\t>f\t\tPrints out current Ent of focus.\n"
-            << "\t>p\t\tLists the focus' parents.\n"
-            << "\t>c\t\tLists the focus' children.\n"
-            << "\t>s\t\tLists the siblings of focus.\n"
-            << "\t>h\t\tPrints this help section.\n"
-            << "\t>b\t\tUsed to bring up an optional breakpoint if desired.\n"
+            << "\t>f\t\t\tPrints out current Ent of focus.\n"
+            << "\t>p\t\t\tLists the focus' parents.\n"
+            << "\t>c\t\t\tLists the focus' children.\n"
+            /*<< "\t>s\t\t\tLists the siblings of focus.\n"*/
+            << "\t>n\t\t\tCreate a new Ent.\n"
+            << "\t>help\t\t\tPrints this help section.\n"
+            << "\t>print tree name\tPrints the current tree's name.\n"
+            << "\t>rename tree\t\tAllows you to rename the tree.\n"
+            << "\t>clear\t\t\tPrints out blank lines, clearing the window.\n"
+            << "\t>exit\t\t\tExits this program.\n"
+            /*<< "\t>b\t\t\tUsed to bring up an optional breakpoint if desired.\n"*/
             << "Commands with one argument:\n"
-            << "\t>f [Ent name]\tChanges focus to the Ent with the given name.\n"
-            << "\t>n [Ent name]\tCreates a new Ent with the given name, if available,\n"
-            << "\t\t\tand sets its only parent as root.\n"
-            << "\texit\tExits command interface.\n";
+            << "\t>f [Ent name]\t\tChanges focus to the Ent with the given name.\n";
 } //end of printHelp()
 
 void CLI::printEntList(string listDescription, vector<EntInstance> list) {

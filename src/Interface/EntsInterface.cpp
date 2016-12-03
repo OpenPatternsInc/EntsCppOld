@@ -94,3 +94,28 @@ void EntsInterface::requestToCreateNewEnt(TreeInstance* tree, EntInstance** entP
     //If it gets here, then the user used up their chances.
     //The provided EntInstance pointer will be unchanged.
 }
+
+
+void EntsInterface::requestToRenameTree(TreeInstance* tree) {
+    
+    string instructions = "Enter the Tree's new name.";
+    
+    for (int num = 0; num < 3; num++) {
+        
+        string potentialName;
+        
+        queryUserForText(&potentialName, instructions);
+        
+        if (Tests::isValidTreeName(potentialName, &instructions)) {
+            //valid name
+            tree->rename(potentialName);
+            //TODO should we hard-code the message within TreeInstance::rename
+            //in order to assure that the user is always informed?
+            //Inform the user that the name was changed. Gotta respect the user!
+            displayMessageToUser("Tree name changed to \"" + potentialName + "\".");
+            //ok exit now
+            return;
+        }
+    }
+    displayMessageToUser("Tree name was not changed.");
+}

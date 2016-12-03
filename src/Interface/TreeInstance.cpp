@@ -58,3 +58,11 @@ void TreeInstance::addEnt(Ent* ent, Ent* givenParent) {
         parent = givenParent;
     tree->addEntToNameMap(ent, parent);
 }
+
+void TreeInstance::rename(string newName) {
+    tree->setName(newName);
+}
+
+string TreeInstance::getName() {
+    return tree->getName();
+}
