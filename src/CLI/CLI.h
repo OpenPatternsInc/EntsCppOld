@@ -69,6 +69,12 @@ class CLI : public EntsInterface {
     
     void printFocus();
     
+    void printEntList(string listDescription, vector<EntInstance> list);
+    
+    void printParents(EntInstance ent);
+    
+    void printChildren(EntInstance ent);
+    
     void setFocus(EntInstance ent) {
         focus = ent;
     }

@@ -23,6 +23,30 @@
 
 using namespace std;
 
+/******************************************************************************
+ * Implementations of Virtual Functions!
+ ******************************************************************************/
+
+/*
+ * Ask the user to input text, given the following message.
+ * The input is then set to the string pointer text.
+ * Does not determine if no text was entered.
+ */
+void CLI::queryUserForText(string* text, string message) {
+    
+    //Display the message/instructions, then go to a newline, tab in,
+    //and add a # to indicate non-command input is needed.
+    //TODO Generalize this so that all non-command input also uses #.
+    cout << message << endl << "\t#";
+    //Read from console. Does not determine if no text was entered.
+    getline(cin, *text);
+    
+} //end of queryUserForText
+
+/******************************************************************************
+ * Public functions, as well as constructors and destructors.
+ ******************************************************************************/
+
 /**
  * Construct a CLI interface without a Tree.
  */
@@ -36,7 +60,6 @@ CLI::CLI() : focus(*getEmptyEntInstance()) {
  */
 CLI::~CLI() {
 }
-
 
 /**
  * Starts listening for commands in the console. Commands are used to explore
@@ -73,6 +96,10 @@ void CLI::listen() {
     //Keep going till we're told to exit with "e" or "exit".
 } //end of listen()
 
+/******************************************************************************
+ * Private functions of this specific EntsInterface implementation.
+ ******************************************************************************/
+
 /**
 * Parse the given command and carry out the actions it represents.
 * @param str   Raw string of the command. Doesn't include the "<".
@@ -103,9 +130,9 @@ void CLI::parseCommand(string str, bool * exiting) {
         } else if (str == "e") {
             cout << "Command not in use yet..." << endl;
         } else if (str == "c") {
-            //listChildren(focusPtr);
+            printChildren(focus);
         } else if (str == "p") {
-            //listParents(focusPtr);
+            printParents(focus);
         } else if (str == "b") {
             //Do a break point. perhaps useful in debugging.
             //TODO implement as optional via preprocessor.
@@ -231,14 +258,12 @@ const bool CLI::isCommand(const string command, const string text, string *argum
     }
 } //end of isCommand
 
-
 void CLI::printFocus() {
     if (!focus.isEmpty())
         cout << "Focus: " << focus.getName() << endl;
     else
         cout << "No Ent is currently the focus.\n";
 }
-
 
 /**
  * Estranged children which don't reference each other indicates missing useful
@@ -394,7 +419,6 @@ EstrangedChildrenResolution CLI::checkForEstrangedChildren(Ent *parent) {
     return result;
 } //end of checkForEstrangedChildren()
 
-
 /**
  * Prints the CLI help section to console. Gives info on commands.
  */
@@ -413,22 +437,34 @@ void CLI::printHelp() {
             << "\texit\tExits command interface.\n";
 } //end of printHelp()
 
-/******************************************************************************
- * Implementations of Virtual Functions!
- ******************************************************************************/
+void CLI::printEntList(string listDescription, vector<EntInstance> list) {
+    //First print the description.
+    cout << listDescription << endl;
+    //Print out each Ent on an indented new line.
+    for (EntInstance ent : list)
+        cout << "\t" << ent.getName() << endl;
+}
 
-/*
- * Ask the user to input text, given the following message.
- * The input is then set to the string pointer text.
- * Does not determine if no text was entered.
- */
-void CLI::queryUserForText(string* text, string message) {
+void CLI::printParents(EntInstance ent) {
     
-    //Display the message/instructions, then go to a newline, tab in,
-    //and add a # to indicate non-command input is needed.
-    //TODO Generalize this so that all non-command input also uses #.
-    cout << message << endl << "\t#";
-    //Read from console. Does not determine if no text was entered.
-    getline(cin, *text);
+    if (ent.equals(focus)) {
+        cout << "The root Ent of the Tree represents \"everything\" and so it "
+                << "can not have any parents!\n";
+    } else {
+        string description = "Parents of " + ent.getName() + ":";
+        printEntList(description, ent.getParents());
+    }
     
-} //end of queryUserForText
+}
+
+void CLI::printChildren(EntInstance ent) {
+    
+    vector<EntInstance> children = ent.getChildren();
+    
+    if (children.size() == 0) {
+        cout << "The Ent \"" << ent.getName() << "\" has no children.\n";
+    } else {
+        string description = "Children of " + ent.getName() + ":";
+        printEntList(description, ent.getChildren());
+    }
+}
