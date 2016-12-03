@@ -232,6 +232,14 @@ const bool CLI::isCommand(const string command, const string text, string *argum
 } //end of isCommand
 
 
+void CLI::printFocus() {
+    if (!focus.isEmpty())
+        cout << "Focus: " << focus.getName() << endl;
+    else
+        cout << "No Ent is currently the focus.\n";
+}
+
+
 /**
  * Estranged children which don't reference each other indicates missing useful
  * information. Any two direct children of a parent must either overlap, be

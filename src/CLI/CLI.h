@@ -44,12 +44,20 @@ typedef enum {
 
 class CLI : public EntsInterface {
     
+    /**************************************************************************
+     * Data Members
+     **************************************************************************/
+    
     /**
      * The Tree wrapper holding the tree being explored currently.
      */
     TreeInstance* tree = nullptr;
     /** Points to the current Ent of focus. */
     EntInstance focus;
+    
+    /**************************************************************************
+     * Private Functions for this specific implementation of EntsInterface.
+     **************************************************************************/
     
     const bool isCommand(const string command, const string text, string *argument);
     
@@ -59,12 +67,7 @@ class CLI : public EntsInterface {
     
     void printHelp();
     
-    void printFocus() {
-        if (!focus.isEmpty())
-            cout << "Focus: " << focus.getName() << endl;
-        else
-            cout << "No Ent is currently the focus.\n";
-    }
+    void printFocus();
     
     void setFocus(EntInstance ent) {
         focus = ent;
@@ -76,15 +79,23 @@ class CLI : public EntsInterface {
     
 
 public:
+    
+    /**************************************************************************
+     * Public constructors and destructors.
+     **************************************************************************/
 
     CLI();
 
     ~CLI();
+    
+    /**************************************************************************
+     * Public functions available to the owner of the CLI instance.
+     **************************************************************************/
 
     void listen();
     
     /********************************************************************
-     * Virtual function implementations
+     * Virtual function implementations (Should these be protected?)
      ********************************************************************/
     
     void queryUserForText(string* text, string message);
