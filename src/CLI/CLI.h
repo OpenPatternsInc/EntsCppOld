@@ -22,16 +22,18 @@
 #include <string>
 #include <iostream>
 #include <unordered_set>
+#include "../Interface/EntInstance.h"
 #include "../Interface/EntsInterface.h"
-#include "../Core/Ent.h"
-#include "../Core/Root.h"
-#include "../Core/Tree.h"
+#include "../Interface/TreeInstance.h"
 #include "../TreeAnalysis/TreeAnalyzer.h"
 #include "../Util/EntsFile.h"
 #include "CLIExceptions.h"
 #include "../Interface/InterfaceExceptions.h"
 
 using namespace std;
+
+class TreeInstance;
+class EntInstance;
     
 typedef enum {
     NO_PAIRS_FOUND,
@@ -43,23 +45,11 @@ typedef enum {
 class CLI : public EntsInterface {
     
     /**
-     * The Tree being explored currently by the CLI.
+     * The Tree wrapper holding the tree being explored currently.
      */
-    Tree* tree = nullptr;
+    TreeInstance* tree = nullptr;
     /** Points to the current Ent of focus. */
-    Ent* focusPtr;
-    /** Points to the Tree Currently being explored.*/
-    //Tree* treePtr;
-    /** The EntsFile corresponding to the currently explored tree.*/
-    //EntsFile* entsFile;
-
-    void listChildren(Ent* entPtr);
-    
-    void listParents(Ent* entPtr);
-    
-    void listAncestors(Ent* entPtr);
-    
-    void listDescendents(Ent* entPtr);
+    EntInstance focus;
     
     const bool isCommand(const string command, const string text, string *argument);
     
@@ -70,21 +60,18 @@ class CLI : public EntsInterface {
     void printHelp();
     
     void printFocus() {
-        if (focusPtr)
-            cout << "Focus: " << focusPtr->getName() << endl;
+        if (!focus.isEmpty())
+            cout << "Focus: " << focus.getName() << endl;
         else
             cout << "No Ent is currently the focus.\n";
     }
     
-    string queryPlainText(string instructions = "");
-
-    CLI(Tree *tree);
-    /**
-     * Set the focus of the CLI listener to the given Ent.
-     * @param entPtr_   Points to the new focus.
-     */
-    void setFocus(Ent* entPtr_) {
-        focusPtr = entPtr_;
+    void setFocus(EntInstance ent) {
+        focus = ent;
+    }
+    
+    void setTree(TreeInstance* tr) {
+        tree = tr;
     }
     
 
@@ -96,17 +83,11 @@ public:
 
     void listen();
     
-    void setTree(Tree* tr) {
-        tree = tr;
-    }
-    
     /********************************************************************
      * Virtual function implementations
      ********************************************************************/
     
-    bool queryUserForFileName();
-    
-    Tree* createNewTree();
+    void queryUserForText(string* text, string message);
 
 };
 

@@ -39,7 +39,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Core/Ent.o \
 	${OBJECTDIR}/src/Core/Root.o \
 	${OBJECTDIR}/src/Core/Tree.o \
+	${OBJECTDIR}/src/Interface/EntInstance.o \
 	${OBJECTDIR}/src/Interface/EntsInterface.o \
+	${OBJECTDIR}/src/Interface/Tests.o \
 	${OBJECTDIR}/src/Interface/TreeInstance.o \
 	${OBJECTDIR}/src/Network/EntsClient.o \
 	${OBJECTDIR}/src/Network/EntsServer.o \
@@ -94,10 +96,20 @@ ${OBJECTDIR}/src/Core/Tree.o: src/Core/Tree.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Core/Tree.o src/Core/Tree.cpp
 
+${OBJECTDIR}/src/Interface/EntInstance.o: src/Interface/EntInstance.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/Interface
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Interface/EntInstance.o src/Interface/EntInstance.cpp
+
 ${OBJECTDIR}/src/Interface/EntsInterface.o: src/Interface/EntsInterface.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/Interface
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Interface/EntsInterface.o src/Interface/EntsInterface.cpp
+
+${OBJECTDIR}/src/Interface/Tests.o: src/Interface/Tests.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/Interface
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Interface/Tests.o src/Interface/Tests.cpp
 
 ${OBJECTDIR}/src/Interface/TreeInstance.o: src/Interface/TreeInstance.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/Interface

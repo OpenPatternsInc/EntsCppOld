@@ -17,27 +17,26 @@
  */
 
 /* 
- * File:   TreeWrapper.h
- * Author: jstockwell
- *
- * Created on December 2, 2016, 2:59 PM
+ * 
  */
 
 #ifndef TREEINSTANCE_H
 #define TREEINSTANCE_H
 
+#include "EntInstance.h"
+#include "../Core/Ent.h"
 #include "../Core/Tree.h"
 #include "EntsInterface.h"
+
+class EntInstance;
+class Tree;
+class Ent;
 
 class TreeInstance {
     
     friend class EntsInterface;
     
-    class Tree;
-    
     Tree* tree;
-    
-private:
     
     /*
      * Only let the abstract class EntsInterface access the constructor.
@@ -46,13 +45,36 @@ private:
      * EntsInterface in order to encapsulate from subclasses via sanitized
      * functions.
      */
-    TreeInstance();
+    TreeInstance(Tree*);
     
     /*
      * Also private to EntsInterface because we want EntsInterface to handle
      * destruction via calls to virtual methods of the subclass.
      */
     ~TreeInstance();
+    
+    /*
+     * Explicit inline function for getting the Tree instance.
+     * Only accessible to abstract EntsInterface class.
+     */
+    Tree* getTree() {
+        return tree;
+    }
+    
+    void addEnt(Ent* ent, Ent* parent = nullptr);
+    
+public:
+    
+    /**************************************************************************
+     * Public functions that subclasses of EntsInterface may call.
+     * Functions are sanitized so that they don't screw stuff up.
+     **************************************************************************/
+    
+    EntInstance* getRoot();
+    
+    EntInstance* getEntByName(string name);
+    
+    bool isEntNameFree(string name);
     
 };
 

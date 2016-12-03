@@ -7,6 +7,7 @@
       <itemPath>src/CLI/CLI.h</itemPath>
       <itemPath>src/CLI/CLIExceptions.h</itemPath>
       <itemPath>src/Core/Ent.h</itemPath>
+      <itemPath>src/Interface/EntInstance.h</itemPath>
       <itemPath>src/Network/EntsClient.h</itemPath>
       <itemPath>src/Util/EntsFile.h</itemPath>
       <itemPath>src/Interface/EntsInterface.h</itemPath>
@@ -18,6 +19,7 @@
       <itemPath>src/Util/Prime.h</itemPath>
       <itemPath>src/Core/Root.h</itemPath>
       <itemPath>src/Network/SocketClient.h</itemPath>
+      <itemPath>src/Interface/Tests.h</itemPath>
       <itemPath>src/Core/Tree.h</itemPath>
       <itemPath>src/TreeAnalysis/TreeAnalyzer.h</itemPath>
       <itemPath>src/Interface/TreeInstance.h</itemPath>
@@ -31,6 +33,7 @@
                    projectFiles="true">
       <itemPath>src/CLI/CLI.cpp</itemPath>
       <itemPath>src/Core/Ent.cpp</itemPath>
+      <itemPath>src/Interface/EntInstance.cpp</itemPath>
       <itemPath>src/Network/EntsClient.cpp</itemPath>
       <itemPath>src/Util/EntsFile.cpp</itemPath>
       <itemPath>src/Interface/EntsInterface.cpp</itemPath>
@@ -38,6 +41,7 @@
       <itemPath>src/Util/IO.cpp</itemPath>
       <itemPath>src/Util/Prime.cpp</itemPath>
       <itemPath>src/Core/Root.cpp</itemPath>
+      <itemPath>src/Interface/Tests.cpp</itemPath>
       <itemPath>src/Core/Tree.cpp</itemPath>
       <itemPath>src/TreeAnalysis/TreeAnalyzer.cpp</itemPath>
       <itemPath>src/Interface/TreeInstance.cpp</itemPath>
@@ -96,6 +100,10 @@
       </item>
       <item path="src/Core/Tree.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/Interface/EntInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Interface/EntInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/Interface/EntsInterface.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Interface/EntsInterface.h" ex="false" tool="3" flavor2="0">
@@ -104,6 +112,10 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="src/Interface/Tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Interface/Tests.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Interface/TreeInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -183,6 +195,10 @@
       </item>
       <item path="src/Core/Tree.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/Interface/EntInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Interface/EntInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/Interface/EntsInterface.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Interface/EntsInterface.h" ex="false" tool="3" flavor2="0">
@@ -191,6 +207,10 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="src/Interface/Tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Interface/Tests.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Interface/TreeInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>

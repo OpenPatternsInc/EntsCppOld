@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "../Interface/TreeInstance.h"
 #include "CLI.h"
 
 //TODO Implement singleton stuff. Only need one of these running at a time.
@@ -25,15 +26,7 @@ using namespace std;
 /**
  * Construct a CLI interface without a Tree.
  */
-CLI::CLI() {
-    
-}
-
-/**
- * Construct a CLI object with the given Tree. Not in use as of now.
- */
-CLI::CLI(Tree *t) {
-    setTree(t);
+CLI::CLI() : focus(*getEmptyEntInstance()) {
 }
 
 /**
@@ -44,60 +37,6 @@ CLI::CLI(Tree *t) {
 CLI::~CLI() {
 }
 
-/**
- * Queries the user for input with the given instructions.
- * @return The raw input as a string.
- */
-string CLI::queryPlainText(string instructions) {
-    
-    if (instructions == "")
-        cout << "\t>";
-    else
-        cout << instructions << "\n\t>";
-    string input;
-    getline(cin, input);
-        
-    if (input == "")
-        throw NoInputException();
-        
-    return input;
-    
-}
-
-/**
- * Ask the user for the name of a new Tree, then create and return it.
- * @return  A pointer to the new Tree, or nullptr if the creation failed.
- *          No need to inform the user about failure, they should already know.
- */
-Tree* CLI::createNewTree() {
-    
-    string instructions = "Please enter the name of the new Tree you'd like to create.";
-    
-    //The user has 3 chances to get the name right.
-    for (int n = 0; n < 3; n++) {
-        
-        try {
-            
-            string potentialName = queryPlainText(instructions);
-            
-            return generateNewTreeWithName(potentialName);
-            
-        } catch (NoInputException e) {
-            //User did not input anything. That means they don't want to make one.
-            cout << "Exiting Tree creation...\n";
-            return nullptr;
-        } catch (InvalidTreeNameException e) {
-            cout << e.getMessage() << endl;
-            //Shorter instructions.
-            instructions = "";
-            //instructions = "Please enter name.";
-        }
-    } //end for loop
-    //They didn't get it in 3 tries... poor saps....
-    cout << "No tree created.\n";
-    return nullptr;
-}
-
 
 /**
  * Starts listening for commands in the console. Commands are used to explore
@@ -106,17 +45,17 @@ Tree* CLI::createNewTree() {
 void CLI::listen() {
     //Is there a Tree set to explore? If not, make one, and if not, exit.
     if (tree == nullptr) {
-        tree = createNewTree();
+        EntsInterface::getNewEmptyTreeInstance(&tree);
         if (tree == nullptr) {
             //No Tree was created. Just exit.
             return;
         } else {
             //A Tree was created. Set the focusPtr to root.
-            setFocus(tree->getRoot());
+            setFocus(*(tree->getRoot()));
         }
     }
         
-    //Initiate the listening sequence with no intention to exit yet.
+    //Initiate the listening loop sequence with no intention to exit yet.
     bool exiting = false;
     //Declare string to hold future commands here.
     //Maybe just redeclare each time instead?
@@ -147,13 +86,26 @@ void CLI::parseCommand(string str, bool * exiting) {
     if (str.size() == 1) {
         if (str == "f") {
             //list the current ent of focus
-            cout << "Focus: " << focusPtr->getName() << endl;
+            cout << "Focus: " << focus.getName() << endl;
+        } else if (str == "n") {
+            //User wants to create a new Ent.
+            //Make a EntInstance pointer. If a new Ent is added to the tree,
+            //this will point to it.
+            EntInstance* newEnt = nullptr;
+            requestToCreateNewEnt(tree, &newEnt);
+            //Was it created?
+            if (newEnt != nullptr) {
+                //We should focus on the new Ent!
+                setFocus(*newEnt);
+                //can delete it now, as the focus only retained a copy.
+                delete newEnt;
+            }
         } else if (str == "e") {
             cout << "Command not in use yet..." << endl;
         } else if (str == "c") {
-            listChildren(focusPtr);
+            //listChildren(focusPtr);
         } else if (str == "p") {
-            listParents(focusPtr);
+            //listParents(focusPtr);
         } else if (str == "b") {
             //Do a break point. perhaps useful in debugging.
             //TODO implement as optional via preprocessor.
@@ -161,6 +113,7 @@ void CLI::parseCommand(string str, bool * exiting) {
         } else if (str == "h") {
             printHelp();
         } else if (str == "a") {
+            /*
             //Get a pointer to a vector containing any estranged pairs
             EstrangedChildrenResolution result = checkForEstrangedChildren(focusPtr);
             //If the result was NO_PAIRS or ERROR, inform the user.
@@ -169,8 +122,10 @@ void CLI::parseCommand(string str, bool * exiting) {
             } else if (result == RESOLUTION_ERROR) {
                 cout << "ERROR: Problem resolving estranged children.";
             }
+             */
         } //end "a"
         else if (str == "s") {
+            /*
             //Display siblings of focus
             //If it's root, educate the user a bit
             if (focusPtr == tree->getRoot()) {
@@ -190,6 +145,7 @@ void CLI::parseCommand(string str, bool * exiting) {
                     cout << "\t None" << endl;
                 }
             }
+             */
         } //end "s"
         else {
             //The single character command was not recognized.
@@ -208,41 +164,23 @@ void CLI::parseCommand(string str, bool * exiting) {
         } else if (isCommand("f", str, &argument)) {
             //User wants to change focus.
             //Argument should be the Ent's name to be made focus.
-            Ent * const new_focus_ptr = tree->getEntPtrByName(argument);
-            //did we find one with that name? If so, the pointer should be nonzero.
-            if (new_focus_ptr == nullptr) {
+            EntInstance* dummyPtr = tree->getEntByName(argument);
+            EntInstance newFocus(*dummyPtr);
+            delete dummyPtr;
+            //did we find one with that name? If so, the EntInstance won't be empty.
+            if (newFocus.isEmpty()) {
                 cout << "No Ent found with that name.\n";
             } else {
-                if (focusPtr == new_focus_ptr) {
+                if (focus.equals(newFocus)) {
                     cout << "That Ent is already the focus.\n";
                 } else {
-                    setFocus(new_focus_ptr);
+                    setFocus(newFocus);
                     printFocus();
                 }
             }
         } //end "f"
-        else if (isCommand("n", str, &argument)) {
-            //User wants to create a new ent. Add it under root.
-            if (tree->getEntPtrByName(argument) == nullptr) {
-                //No ent with that name yet, so make a new one.
-                //TODO Check for correct Ent name format (not too long, etc.)
-                //Create new Ent with the given name and allocate mem on the heap.
-                Ent* newEntPtr = new Ent(argument);
-                
-                tree->addEntToNameMap(newEntPtr);
-                
-                //Now we should ask the user to classify the new Ent within the
-                //existing hierarchy!
-                //Since the new Ent was added as a child of root, analyze root
-                //for any estranged children.
-                checkForEstrangedChildren(tree->getRoot());
-                
-            } else {
-                cout << "An Ent with that name already exists.\n";
-            }
-
-        } //end "n"
         else if (isCommand("p", str, &argument)) {
+            /*
             //User wants to add the given Ent as a parent to focus.
             //Retrieve a pointer to the given Ent.
             Ent* entPtr = tree->getEntPtrByName(argument);
@@ -255,15 +193,16 @@ void CLI::parseCommand(string str, bool * exiting) {
                 //if adding it as a parent to focus is a legal operation.
                 
             }
+             */
         } //end "p"
         else if (str == "desc") {
-            listDescendents(focusPtr);
+            //listDescendents(focusPtr);
         }
         else if (str == "anc") {
-            listAncestors(focusPtr);
+            //listAncestors(focusPtr);
         }
         else if (str == "save") {
-            saveTree(tree);
+            //saveTree(tree);
         }
         else {
             cout << "Unknown command.\n";
@@ -292,97 +231,6 @@ const bool CLI::isCommand(const string command, const string text, string *argum
     }
 } //end of isCommand
 
-/**
-* List the given Ent's children.
-* Do not alter the Ent!
-* @param entPtr
-*/
-void CLI::listChildren(Ent* entPtr) {
-    //Get the Ent's children.
-    vector<Ent*>* children = entPtr->getChildren();
-    //If it has no children, say so, don't just give a blank list.
-    if (children->size() == 0) {
-        cout << "\"" << entPtr->getName() << "\" has no children.\n";
-    } else {
-        //List each child on its own line, indent with a tab.
-        //TODO Would indenting with spaces help with portability?
-        cout << "Children of \"" << entPtr->getName() << "\":\n";
-        for (Ent* child_ptr : *children) {
-            cout << "\t" << child_ptr->getName() << "\n";
-        }
-    }
-} //end of listChildren
-
-/**
-* Lists the given Ent's parents.
-* Do not alter the Ent!
-* @param entPtr
-*/
-void CLI::listParents(Ent* entPtr) {
-    //Get the Ent's parents.
-    vector<Ent*>* parents = entPtr->getParents();
-    //Is the Ent a parent-less node?
-    if (parents->size() == 0) {
-        //the only Ent with no parents should be root...
-        if (entPtr == tree->getRoot()) {
-            //Use this opportunity to educate the user about the Hierarchy protocol.
-            cout << "By definition, root can not have any parents!\n";
-        } else {
-            //If the parent-less Ent isn't root, then there is a big problem.
-            //This is an invalid state and shouldn't be reachable.
-            cout << "ERROR: INVALID STATE: \"" << entPtr->getName() << "\" does not have any "
-            << "parents, this shouldn't have happened...\n";
-        }
-    } else {
-        //List each parent on its own line, indented with a tab.
-        cout << "Parents of \"" << entPtr->getName() << "\":\n";
-        for (Ent* parent_ptr : *parents) {
-            cout << "\t" << parent_ptr->getName() << "\n";
-        }
-    }
-} //end of listParents
-
-
-void CLI::listAncestors(Ent* entPtr) {
-    //
-    unordered_set<Ent*>* ancestors = entPtr->getAncestors();
-    //
-    if (ancestors->size() == 0) {
-        //Is it root?
-        if (entPtr == tree->getRoot()) {
-            cout << "By definition, root will not have any ancestors.\n";
-        } else {
-            //So, it's not root...... that's a problem...
-            cout << "FATAL ERROR: " << entPtr->getName() << " should have at least one parent...";
-            //TODO No need to throw anything for now.
-        }
-    } else {
-        //OK, we have some ancestors to list.
-        cout << "Ancestors of " << entPtr->getName() << ":\n";
-        for (const auto anc : *ancestors) {
-            cout << "\t" << anc->getName() << endl;
-        }
-    }
-    delete ancestors;
-} //end of listAncestors
-
-
-void CLI::listDescendents(Ent* entPtr) {
-    //
-    unordered_set<Ent*>* descendents = entPtr->getDescendents();
-    //
-    if (descendents->size() == 0) {
-        //No descendents.
-        cout << entPtr->getName() << " doesn't have any descendents.\n";
-    } else {
-        //OK, we have some descendents to list.
-        cout << "Descendents of " << entPtr->getName() << ":\n";
-        for (const auto desc : *descendents) {
-            cout << "\t" << desc->getName() << endl;
-        }
-    }
-    delete descendents;
-} //end of listDescendents()
 
 /**
  * Estranged children which don't reference each other indicates missing useful
@@ -540,7 +388,7 @@ EstrangedChildrenResolution CLI::checkForEstrangedChildren(Ent *parent) {
 
 
 /**
- * Prints the help section to console.
+ * Prints the CLI help section to console. Gives info on commands.
  */
 void CLI::printHelp() {
     cout << "Commands with no argument:\n"
@@ -557,23 +405,22 @@ void CLI::printHelp() {
             << "\texit\tExits command interface.\n";
 } //end of printHelp()
 
-/**
-* Ask the user to input a filename they want to use to save the tree.
-* @return 
-*/
-bool CLI::queryUserForFileName() {
-    bool success = false;
+/******************************************************************************
+ * Implementations of Virtual Functions!
+ ******************************************************************************/
 
-    cout << "What is the name of the .ents file you wish to save the tree as?\n>";
-    string response;
-    getline(cin, response);
-    if (response.size() > 2) {
-        //tree->getEntsFile()->setFileName(response);
-        success = true;
-        cout << "File will be saved as \"" << response << "." << EntsFile::getPostfix() << "\".\n";
-    } else {
-        cout << "Please use a file name with at least 2 characters.\n";
-        success = false;
-    }
-    return success;
-} //end of queryFileName()
+/*
+ * Ask the user to input text, given the following message.
+ * The input is then set to the string pointer text.
+ * Does not determine if no text was entered.
+ */
+void CLI::queryUserForText(string* text, string message) {
+    
+    //Display the message/instructions, then go to a newline, tab in,
+    //and add a # to indicate non-command input is needed.
+    //TODO Generalize this so that all non-command input also uses #.
+    cout << message << endl << "\t#";
+    //Read from console. Does not determine if no text was entered.
+    getline(cin, *text);
+    
+} //end of queryUserForText

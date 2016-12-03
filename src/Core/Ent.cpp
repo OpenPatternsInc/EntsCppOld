@@ -22,7 +22,6 @@
 using namespace std;
 
 Ent::Ent() {
-    cout << "Ent created with no-arg constructor.\n";
 }
 
 Ent::Ent(string name) : name(name) {

@@ -16,19 +16,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include "CLI/CLI.h"
+#include "EntInstance.h"
+#include <vector>
 
 using namespace std;
 
-int main() {
+class EntInstance;
+
+EntInstance::EntInstance() : ent(nullptr) {
     
-    CLI cli;
-    cli.listen();
-    
-    //May as well...
-    cout << "\nExiting program...\n";
-    
-    return 0;
 }
 
+EntInstance::EntInstance(const EntInstance& ent) : ent(ent.ent) {
+    
+}
+
+EntInstance::EntInstance(Ent* entPtr) : ent(entPtr) {
+    
+}
+
+//TODO Should we deallocate the held Ent on deletion of this object?
+EntInstance::~EntInstance() {
+    
+}
+
+
+vector<EntInstance> EntInstance::wrap(vector<Ent*>* ents) {
+    
+    vector<EntInstance> vec;
+    
+    for (Ent* ent : *ents)
+        vec.push_back(EntInstance(ent));
+    
+    return vec;
+}
+
+
+vector<EntInstance> EntInstance::wrap(unordered_set<Ent*>* ents) {
+    
+    vector<EntInstance> vec;
+    
+    for (Ent* ent : *ents)
+        vec.push_back(EntInstance(ent));
+    
+    return vec;
+    
+    
+}

@@ -56,13 +56,14 @@ class EntsInterfaceMessageException: public EntsInterfaceException {
     
     string message;
     
+protected:
+    
+    EntsInterfaceMessageException(string m): message(m) {}
+    
     //Important to have public access to certain exceptions in case they get
     //passed to derived classes.
-public:
     
-    EntsInterfaceMessageException(string m): message(m) {
-        
-    }
+public:
     
     string getMessage() {
         return message;

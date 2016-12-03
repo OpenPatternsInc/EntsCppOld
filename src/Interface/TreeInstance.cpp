@@ -18,20 +18,43 @@
 
 #include "TreeInstance.h"
 #include "../Core/Tree.h"
+#include <iostream>
 
-TreeInstance::TreeInstance() {
-    
-    
-    
-    
+using namespace std;
+
+class Tree;
+
+TreeInstance::TreeInstance(Tree* treePtr) : tree(treePtr) {
 }
 
 
 TreeInstance::~TreeInstance() {
     
+}
+
+EntInstance* TreeInstance::getRoot() {
+        
+    return new EntInstance(tree->getRoot());
+
+}
+
+    
+EntInstance* TreeInstance::getEntByName(string name) {
+
+    return new EntInstance(tree->getEntPtrByName(name));
+
+}
+
+bool TreeInstance::isEntNameFree(string name) {
+    
+    return tree->getEntPtrByName(name) == nullptr;
     
     
-    
-    
-    
+}
+
+void TreeInstance::addEnt(Ent* ent, Ent* givenParent) {
+    Ent* parent = tree->getRoot();
+    if (givenParent != nullptr)
+        parent = givenParent;
+    tree->addEntToNameMap(ent, parent);
 }

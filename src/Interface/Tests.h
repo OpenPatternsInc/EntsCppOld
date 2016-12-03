@@ -16,19 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include "CLI/CLI.h"
+/* 
+ * A collection of tests for strings in order to determine if they meet the
+ * requirements for being values in an Ents Tree.
+ */
+
+#ifndef TESTS_H
+#define TESTS_H
+
+#include <string>
 
 using namespace std;
 
-int main() {
+class Tests {
     
-    CLI cli;
-    cli.listen();
+    friend class EntsInterface;
     
-    //May as well...
-    cout << "\nExiting program...\n";
+    static bool isValidTreeName(const string name, string* failureMessage);
     
-    return 0;
-}
+    static bool isValidEntName(const string name, string* failureMessage);
+    
+    
+};
+
+
+
+#endif /* TESTS_H */
 

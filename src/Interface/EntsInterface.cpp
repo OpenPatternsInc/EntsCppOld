@@ -17,10 +17,17 @@
  */
 
 #include "EntsInterface.h"
+#include "TreeInstance.h"
+#include "Tests.h"
 
+class TreeInstance;
 
 EntsInterface::EntsInterface() {
     
+}
+
+EntInstance* EntsInterface::getEmptyEntInstance() {
+    return new EntInstance();
 }
 
 EntsInterface::~EntsInterface() {
@@ -28,66 +35,62 @@ EntsInterface::~EntsInterface() {
 }
 
 
+void EntsInterface::getNewEmptyTreeInstance(TreeInstance** treePtr) {
+    //Initiate the starting instruction message. May be changed later if
+    //the user inputs an invalid response.
+    string message = "Enter a name for the new Tree.";
+    //Give the user a few tries.
+    for (int n = 0; n < 3; n++) { 
+        //First we need a name for the tree. Get one from the subclass.
+        string potentialName;
+        //Ask the user for text input with the given message as instructions.
+        queryUserForText(&potentialName, message);
+        //Now we must test if it is a valid name. If it is, the function will
+        //return true. If invalid, it will return false and alter failureMessage
+        //to describe why the text is invalid.
+        if (Tests::isValidTreeName(potentialName, &message)) {
+            //Valid name.
+            //Make a new Tree with the given name.
+            Tree* newTree = new Tree(potentialName);
+            //Make a new TreeInstance with the new Tree.
+            TreeInstance* newInstance = new TreeInstance(newTree);
+            //Add it to the list of trees.
+            trees.push_back(newInstance);
+            //Set the parameter TreeInstance.
+            *treePtr = newInstance;
+            //All done here, return control.
+            return;
+        }
+    } //end of for loop
+    //If we get here, the user did not provide a valid name and so the pointer
+    //has not been changed. Presumably it will stay as nullptr.
+}
 
-bool EntsInterface::saveTree(Tree* tree) {
-    /*
-    //Does the EntsFile have a file name?
-    if (getEntsFile()->getFileName() != "") {
-        //We have a filename already.
-        getEntsFile()->save();
-        return true;
-    } else {
-        bool hasName = false;
-        //Give the user 3 chances to input a valid name.
-        for (int count = 0; count < 3; count++) {
-            if (queryFileName()) {
-                hasName = true;
-                break;
+void EntsInterface::requestToCreateNewEnt(TreeInstance* tree, EntInstance** entPointerFromUI) {
+    
+    string message = "Enter name of new Ent.";
+    for (int num = 0; num < 3; num++) {
+        
+        string potentialName;
+        queryUserForText(&potentialName, message);
+        if (Tests::isValidEntName(potentialName, &message)) {
+            //Valid name!
+            //Is it free?
+            if (tree->isEntNameFree(potentialName)) {
+                //Hey, it's available!
+                //Make the new Ent. On the heap and everything!
+                Ent* newEnt = new Ent(potentialName);
+                //Add it to the tree.
+                tree->addEnt(newEnt);
+                //Wrap it up!
+                *entPointerFromUI = new EntInstance(newEnt);
+                //all set here...
+                return;
+            } else {
+                message = "That name is already taken!";
             }
         }
-        if (!hasName) {
-            cout << "File was not saved.\n";
-            return false;
-        }
-        //OK, so we got a file name!
-        getEntsFile()->save();
-        return true;
     }
-    */
-    return false;
+    //If it gets here, then the user used up their chances.
+    //The provided EntInstance pointer will be unchanged.
 }
-
-/**
- * Creates and returns a new Tree instance with the given name. We want to
- * encapsulate the creation of new Tree instances. Down the line we may want
- * to limit the number of Trees which can be instantiated at once.
- */
-Tree* EntsInterface::generateNewTreeWithName(string name) {
-    try {
-        if (isValidTreeName(name))
-            return new Tree(name);
-    } catch (InvalidTreeNameException e) {
-        //Include this re-throwing here to make it easier to spot.
-        throw e;
-    }
-}
-
-
-    
-bool EntsInterface::isValidTreeName(const string name) {
-    
-    if (name.size() < 5) {
-        throw InvalidTreeNameException("Name must be 5 or more characters.");
-    } else {
-        return true;
-    }
-    
-    
-    
-}
-
-/**
-EntsFile* EntsInterface::getEntsFile() {
-    return tree->getEntsFile();
-}
- */

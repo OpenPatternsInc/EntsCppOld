@@ -19,13 +19,19 @@
 #ifndef ENTSINTERFACE_H
 #define ENTSINTERFACE_H
 
+#include "EntInstance.h"
+#include "TreeInstance.h"
 #include "InterfaceExceptions.h"
 #include "../Core/Tree.h"
 #include "../Util/EntsFile.h"
-#include "TreeInstance.h"
+#include "Tests.h"
 
 class Tree;
 class EntsFile;
+class TreeInstance;
+class EntInstance;
+
+using namespace std;
 
 /**
  * This abstract class provides a standard way for derived UIs to interface properly
@@ -35,11 +41,12 @@ class EntsFile;
  * Common actions are defined in this base class, which are passed onto CLIs
  * and GUIs which may use and display them in different ways.
  */
+    
+
+//TODO Rename to Interface, the Ents part is redundant.
 class EntsInterface {
     
     friend class Tree;
-    
-    class TreeInstance;
     
     /*********************************************************************
      * Private data members.
@@ -55,7 +62,6 @@ class EntsInterface {
      * Private methods for internal use.
      *********************************************************************/
     
-    bool isValidTreeName(string name);
     
     
     /*********************************************************************
@@ -72,33 +78,29 @@ protected:
     
     ~EntsInterface();
     
+    EntInstance* getEmptyEntInstance();
     
-    
-    bool saveTree(Tree *tree);
-    
-    Tree* generateNewTreeWithName(string name);
-    
-    void setFileName(string fileName);
+    /*
+     * Creates and returns a new TreeInstance, which will be used by subclasses
+     * to refer to Tree instances.
+     */
+    void getNewEmptyTreeInstance(TreeInstance** treePtr);
+    /*
+     * Subclasses call this when the user indicates they want to add a new Ent.
+     */
+    void requestToCreateNewEnt(TreeInstance* tree, EntInstance** entPointerFromUI);
     
     
     /*********************************************************************
      * Virtual functions the derived interface must implement.
+     * These functions will be specific to the UI implementation,
+     * and are necessary for the UI to adhere to the Interface protocol.
      *********************************************************************/
     
     /*
-     * We need to be able to 
+     * Called when text input is needed from the user.
      */
-    virtual bool queryUserForFileName() = 0;
-    
-    //virtual bool queryTreeName(string **response) = 0;
-    
-    /**
-     * Derived classes should implement this method as a way to ask the user
-     * input regarding the creation of a new Tree instance. Perhaps this isn't
-     * the best way to do things because it isn't necessary for polymerization,
-     * but it makes sense to encourage it, for now.
-     */
-    virtual Tree* createNewTree() = 0;
+    virtual void queryUserForText(string* text, string message) = 0;
     
 };
 

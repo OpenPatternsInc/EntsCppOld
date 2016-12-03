@@ -79,14 +79,14 @@ Ent* Tree::getEntPtrByName(const string name) {
         //Iterator wasn't the "end" of the map iterator, so, we found something.
         return it->second;
     } else {
-        //Nothing found, return 0 pointer.
-        return 0;
+        //Nothing found, return null pointer.
+        return nullptr;
     }
 }
 
 
 bool Tree::save() {
-    
+    /*
     //Does the EntsFile have a file name?
     if (entsFile->getFileName() != "") {
         //We have a filename already.
@@ -109,6 +109,7 @@ bool Tree::save() {
         entsFile->save();
         return true;
     }
+     * */
     return false;
     
     
