@@ -63,6 +63,8 @@ class TreeInstance {
     
     void addEnt(Ent* ent, Ent* parent = nullptr);
     
+    void rename(string newName);
+    
 public:
     
     /**************************************************************************
@@ -75,6 +77,8 @@ public:
     EntInstance* getEntByName(string name);
     
     bool isEntNameFree(string name);
+    
+    string getName();
     
 };
 

@@ -90,6 +90,8 @@ protected:
      */
     void requestToCreateNewEnt(TreeInstance* tree, EntInstance** entPointerFromUI);
     
+    void requestToRenameTree(TreeInstance* tree);
+    
     
     /*********************************************************************
      * Virtual functions the derived interface must implement.
@@ -101,6 +103,9 @@ protected:
      * Called when text input is needed from the user.
      */
     virtual void queryUserForText(string* text, string message) = 0;
+    
+    
+    virtual void displayMessageToUser(string text) = 0;
     
 };
 

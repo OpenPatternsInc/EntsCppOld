@@ -105,6 +105,8 @@ public:
      ********************************************************************/
     
     void queryUserForText(string* text, string message);
+    
+    void displayMessageToUser(string text);
 
 };
 
