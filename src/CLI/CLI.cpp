@@ -70,8 +70,9 @@ CLI::~CLI() {
  * and edit the Tree.
  */
 void CLI::listen() {
-    //Is there a Tree set to explore? If not, make one, and if not, exit.
+    //Is there a Tree set to explore?
     if (tree == nullptr) {
+        //No tree, lets just make a new blank one.
         EntsInterface::getNewEmptyTreeInstance(&tree);
         if (tree == nullptr) {
             //No Tree was created. Just exit.
@@ -81,14 +82,24 @@ void CLI::listen() {
             setFocus(*(tree->getRoot()));
         }
     }
+    else {
+        //There is a tree, lets see if there is a focus yet.
+        if (focus.isEmpty()) {
+            //guess just set it to root.
+            
+            //setFocus(tree->getRoot()); ------------------------------------------------------------------------------------------
+            
+        } else {
+            //Yup, we've already got a focus, so let the user know.
+            printFocus();
+        }
+    }
         
     //Initiate the listening loop sequence with no intention to exit yet.
     bool exiting = false;
     //Declare string to hold future commands here.
     //Maybe just redeclare each time instead?
     string command;
-    //Let the user know what Ent will start out as the focus.
-    printFocus();
     //Loop to repeatedly input commands.
     do {
         //Use the standard > to indicate we're listening for commands.
@@ -118,7 +129,8 @@ void CLI::parseCommand(string str, bool * exiting) {
         if (str == "f") {
             //list the current ent of focus
             cout << "Focus: " << focus.getName() << endl;
-        } else if (str == "n") {
+        }
+        else if (str == "n") {
             //User wants to create a new Ent.
             //Make a EntInstance pointer. If a new Ent is added to the tree,
             //this will point to it.
@@ -131,13 +143,17 @@ void CLI::parseCommand(string str, bool * exiting) {
                 //can delete it now, as the focus only retained a copy.
                 delete newEnt;
             }
-        } else if (str == "e") {
+        }
+        else if (str == "e") {
             cout << "Command not in use yet..." << endl;
-        } else if (str == "c") {
+        }
+        else if (str == "c") {
             printChildren(focus);
-        } else if (str == "p") {
+        }
+        else if (str == "p") {
             printParents(focus);
-        } else if (str == "b") {
+        }
+        else if (str == "b") {
             //Do a break point. perhaps useful in debugging.
             //TODO implement as optional via preprocessor.
             cout << "breakpoint\n";
@@ -150,16 +166,15 @@ void CLI::parseCommand(string str, bool * exiting) {
             cout << "Unknown single-character command.\n";
         }
     } else {
-        //Command has multiple characters.
         //Use isCommand to check for commands and if found set argument substring.
-        
-        //User just wants to exit. No arguments needed.
         if (str == "exit") {
             cout << "Exiting..." << endl;
             *exiting = true;
-        } else if (str == "help") {
+        }
+        else if (str == "help") {
             printHelp();
-        } else if (isCommand("f", str, &argument)) {
+        }
+        else if (isCommand("f", str, &argument)) {
             //User wants to change focus.
             //Argument should be the Ent's name to be made focus.
             EntInstance* dummyPtr = tree->getEntByName(argument);
@@ -173,7 +188,6 @@ void CLI::parseCommand(string str, bool * exiting) {
                     cout << "That Ent is already the focus.\n";
                 } else {
                     setFocus(newFocus);
-                    printFocus();
                 }
             }
         } //end "f"
