@@ -20,14 +20,14 @@
 
 using namespace std;
 
-Tree::Tree(string name): name_(name) {
+Tree::Tree(string name): name(name) {
     //entsFile = new EntsFile(this);
     //Initialize root. Allocated on heap, released in destructor with all other Ents.
-    root_ = new Root();
+    root = new Root();
     //Add root to the nameMap.
-    entNameMap_.insert({root_->getName(), root_});
+    entNameMap.insert({root->getName(), root});
     //Useful for debugging to tell the user now when construction is done.
-    cout << "New Tree created named \"" << name_ << "\".\n";
+    cout << "New Tree created named \"" << name << "\".\n";
 }
 
 Tree::~Tree() {
@@ -35,7 +35,7 @@ Tree::~Tree() {
     //in the following loop.
 
     //Deallocate each Ent in the nameMap.
-    for (pair<string, Ent*> i : entNameMap_) {
+    for (pair<string, Ent*> i : entNameMap) {
         delete i.second;
     }
     //Useful for debugging.
@@ -45,8 +45,8 @@ Tree::~Tree() {
 //TODO implement call here to UI to handle new estranged pairs.
 void Tree::addEntToNameMap(Ent* entPtr, Ent* parentPtr) {
     //If no parent is given, make its parent root to prevent orphan Ents.
-    if (parentPtr == 0) parentPtr = root_;
-    entNameMap_.insert({entPtr->getName(), entPtr});
+    if (parentPtr == 0) parentPtr = root;
+    entNameMap.insert({entPtr->getName(), entPtr});
     //Connect the new ent and its new parent. Adds references for each other.
     Ent::connectUnchecked(parentPtr, entPtr);
 }
@@ -73,9 +73,9 @@ NewEntStatus Tree::tryToCreateNewEnt(string name) {
 Ent* Tree::getEntPtrByName(const string name) {
     //Get an iterator wrapping the pair which holds the desired Ent, or the end
     //of the map if not found. Since each pair is unique, it should hold at most one pair.
-    EntNameMap::iterator it = entNameMap_.find(name);
+    EntNameMap::iterator it = entNameMap.find(name);
     
-    if (it != entNameMap_.end()) {
+    if (it != entNameMap.end()) {
         //Iterator wasn't the "end" of the map iterator, so, we found something.
         return it->second;
     } else {

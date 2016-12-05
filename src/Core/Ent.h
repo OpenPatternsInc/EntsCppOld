@@ -159,7 +159,7 @@ public:
      * @return  Returns any Ents which actually do overlap, because something
      *          must be done about them. Empty set if there are no problems.
      */
-    unordered_set<Ent*> canBeParentOf(Ent* entPtr);
+    const unordered_set<Ent*> canBeParentOf(Ent* entPtr);
     
     /**
      * Generate a set of all this Ent's ancestors recursively and return that set.
@@ -167,7 +167,7 @@ public:
      * @param depth     Make sure we don't get caught in a loop and crash the system.
      * @return 
      */
-    unordered_set<Ent*> getAncestors(unsigned short depth = 0);
+    const unordered_set<Ent*> getAncestors(const unsigned short depth = 0);
     
     /**
      * Generate a set of all this Ent's descendents recursively and return that set.
@@ -175,10 +175,10 @@ public:
      * @param depth     Make sure we don't get caught in a loop and crash the system.
      * @return 
      */
-    unordered_set<Ent*> getDescendents(unsigned short depth = 0);
+    const unordered_set<Ent*> getDescendents(const unsigned short depth = 0);
     
     
-    unordered_set<Ent*> getSiblings();
+    const unordered_set<Ent*> getSiblings();
     
 
     /**
@@ -195,7 +195,7 @@ public:
         name = newName;
     }
 
-    string getName() {
+    const string getName() {
         return name;
     }
 
@@ -203,7 +203,7 @@ public:
      * Gets the Ent's unique identifier. UIDs not implemented yet.
      * @return 
      */
-    unsigned int getUID() {
+    const unsigned int getUID() {
         return uid;
     }
     
@@ -217,7 +217,7 @@ public:
      */
     void addParentUnchecked(Ent* parentPtr);
 
-    vector<Ent*> getParents() {
+    const vector<Ent*> getParents() {
         return parents;
     }
 

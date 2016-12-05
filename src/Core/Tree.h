@@ -54,18 +54,18 @@ class Tree {
     /**
      * The name of the Tree.
      */
-    string name_;
+    string name;
     /**
      * Ents are allocated on heap memory and deallocated later as needed.
      * References to them are held for now within an unordered_map with the
      * keys being the Ent names and the values being pointers to the Ents.
      */
-    EntNameMap entNameMap_;
+    EntNameMap entNameMap;
     /**
      * Pointer to the root of the hierarchy. No need to make a setter method
      * because the root never needs to change.
      */
-    Root* root_;
+    Root* root;
     
 public:
 
@@ -93,7 +93,7 @@ public:
     Ent* getEntPtrByName(const string name);
     
     void setName(string newName) {
-        name_ = newName;
+        name = newName;
     }
 
     /**
@@ -105,11 +105,11 @@ public:
     Tree(string name);
 
     EntNameMap* getNameMap() {
-        return &entNameMap_;
+        return &entNameMap;
     }
     
     const string getName() {
-        return name_;
+        return name;
     }
     /**
      * What do do when the Tree is removed from memory. Maybe save to file?
@@ -118,7 +118,7 @@ public:
     ~Tree();
     
     Root* getRoot() {
-        return root_;
+        return root;
     }
     
     

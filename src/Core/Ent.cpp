@@ -112,7 +112,7 @@ int Ent::setExclusive(Ent* a, Ent* b) {
 }
 
 
-unordered_set<Ent*> Ent::canBeParentOf(Ent* entPtr) {
+const unordered_set<Ent*> Ent::canBeParentOf(Ent* entPtr) {
     //Create an empty unordered_set. Add any overlaps to it as we go.
     unordered_set<Ent*> overlap;
     //Make sure they aren't the same Ent. Do so by comparing unique names for now.
@@ -148,7 +148,7 @@ unordered_set<Ent*> Ent::canBeParentOf(Ent* entPtr) {
 }
 
 
-unordered_set<Ent*> Ent::getAncestors(unsigned short depth) {
+const unordered_set<Ent*> Ent::getAncestors(const unsigned short depth) {
     //List for this iteration of the recursion.
     unordered_set<Ent*> localList;
     //Have to draw the line somewhere. If we're too far down, return and empty set.
@@ -167,7 +167,7 @@ unordered_set<Ent*> Ent::getAncestors(unsigned short depth) {
 }
 
 
-unordered_set<Ent*> Ent::getDescendents(unsigned short depth) {
+const unordered_set<Ent*> Ent::getDescendents(const unsigned short depth) {
     //List for this iteration of the recursion.
     unordered_set<Ent*> localList;
     //Make sure we don't blow up the universe. If we're too far in, just stop.
@@ -185,7 +185,7 @@ unordered_set<Ent*> Ent::getDescendents(unsigned short depth) {
     return localList;
 }
 
-unordered_set<Ent*> Ent::getSiblings() {
+const unordered_set<Ent*> Ent::getSiblings() {
     //Create an empty unordered_set to fill up.
     unordered_set<Ent*> siblings;
     //Go through each parent.
