@@ -70,7 +70,8 @@ void CLI::listen() {
         //No tree, lets just make a new blank one.
         tree = requestNewTree();
         if (tree.isEmpty()) {
-            //No Tree was created. Just exit.
+            //No Tree was created.
+            listening = false;
             return;
         } else {
             //A Tree was created. Set the focusPtr to root.
@@ -89,18 +90,18 @@ void CLI::listen() {
     }
     //tree and focus should be ready to go.
     //Initiate the listening loop sequence with no intention to exit yet.
-    bool exiting = false;
+    listening = true;
     //Declare string to hold future commands here.
     //Maybe just redeclare each time instead?
     string command;
     //Loop to repeatedly input commands.
-    do {
+     while (listening) {
         //Use the standard > to indicate we're listening for commands.
         cout << ">";
         //Read from console.
         getline(cin, command);
-        parseCommand(command, &exiting);
-    } while (!exiting);
+        parseCommand(command);
+    };
     //Keep going till we're told to exit with "e" or "exit".
 } //end of listen()
 
@@ -112,7 +113,7 @@ void CLI::listen() {
 * Parse the given command and carry out the actions it represents.
 * @param str   Raw string of the command. Doesn't include the "<".
 */
-void CLI::parseCommand(string str, bool * exiting) {
+void CLI::parseCommand(string str) {
     
     //string to hold the arguments substring if necessary.
     string argument;
@@ -157,7 +158,7 @@ void CLI::parseCommand(string str, bool * exiting) {
         //Use isCommand to check for commands and if found set argument substring.
         if (str == "exit") {
             cout << "Exiting CLI..." << endl;
-            *exiting = true;
+            listening = false;
         }
         else if (str == "help") {
             printHelp();

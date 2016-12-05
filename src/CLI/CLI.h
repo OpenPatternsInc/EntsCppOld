@@ -59,10 +59,16 @@ class CLI : public EntsInterface {
     
     /**
      * The Tree wrapper holding the tree being explored currently.
+     * 
+     * Right now only supports browsing one Tree at a time.
      */
     TreeInstance tree;
     /** Wrapper for the current Ent of focus. */
     EntX focus;
+    /**
+     * Should we continue waiting for commands?
+     */
+    bool listening;
     
     /**************************************************************************
      * Private Functions for this specific implementation of EntsInterface.
@@ -72,7 +78,7 @@ class CLI : public EntsInterface {
     
     EstrangedChildrenResolution checkForEstrangedChildren(Ent *parent);
 
-    void parseCommand(string str, bool * exiting);
+    void parseCommand(string str);
     
     void printHelp();
     
@@ -103,7 +109,7 @@ public:
      **************************************************************************/
 
     /**
-    * Construct a CLI without a Tree.
+    * Construct a CLI without a Tree yet.
     */
     CLI();
 
