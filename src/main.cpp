@@ -27,7 +27,7 @@ int main() {
     cli.listen();
     
     //May as well...
-    cout << "\nExiting program...\n";
+    cout << "\nExiting main function...\n";
     
     return 0;
 }
