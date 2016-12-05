@@ -54,7 +54,7 @@ void CLI::displayMessageToUser(string text) {
 /**
  * Construct a CLI interface without a Tree.
  */
-CLI::CLI() : focus(*getEmptyEntInstance()) {
+CLI::CLI() : focus(EntX()) {
 }
 
 /**
@@ -71,30 +71,28 @@ CLI::~CLI() {
  */
 void CLI::listen() {
     //Is there a Tree set to explore?
-    if (tree == nullptr) {
+    if (tree.isEmpty()) {
         //No tree, lets just make a new blank one.
-        EntsInterface::getNewEmptyTreeInstance(&tree);
-        if (tree == nullptr) {
+        tree = requestNewTree();
+        if (tree.isEmpty()) {
             //No Tree was created. Just exit.
             return;
         } else {
             //A Tree was created. Set the focusPtr to root.
-            setFocus(*(tree->getRoot()));
+            setFocus(tree.getRoot());
         }
     }
     else {
         //There is a tree, lets see if there is a focus yet.
         if (focus.isEmpty()) {
             //guess just set it to root.
-            
-            //setFocus(tree->getRoot()); ------------------------------------------------------------------------------------------
-            
+            setFocus(tree.getRoot());
         } else {
             //Yup, we've already got a focus, so let the user know.
             printFocus();
         }
     }
-        
+    //tree and focus should be ready to go.
     //Initiate the listening loop sequence with no intention to exit yet.
     bool exiting = false;
     //Declare string to hold future commands here.
@@ -132,16 +130,11 @@ void CLI::parseCommand(string str, bool * exiting) {
         }
         else if (str == "n") {
             //User wants to create a new Ent.
-            //Make a EntInstance pointer. If a new Ent is added to the tree,
-            //this will point to it.
-            EntInstance* newEnt = nullptr;
-            requestToCreateNewEnt(tree, &newEnt);
+            EntX newEnt = requestToCreateNewEnt(tree);
             //Was it created?
-            if (newEnt != nullptr) {
-                //We should focus on the new Ent!
-                setFocus(*newEnt);
-                //can delete it now, as the focus only retained a copy.
-                delete newEnt;
+            if (!newEnt.isEmpty()) {
+                //Focus on the new Ent!
+                setFocus(newEnt);
             }
         }
         else if (str == "e") {
@@ -177,9 +170,7 @@ void CLI::parseCommand(string str, bool * exiting) {
         else if (isCommand("f", str, &argument)) {
             //User wants to change focus.
             //Argument should be the Ent's name to be made focus.
-            EntInstance* dummyPtr = tree->getEntByName(argument);
-            EntInstance newFocus(*dummyPtr);
-            delete dummyPtr;
+            EntX newFocus = tree.getEntByName(argument);
             //did we find one with that name? If so, the EntInstance won't be empty.
             if (newFocus.isEmpty()) {
                 cout << "No Ent found with that name.\n";
@@ -220,7 +211,7 @@ void CLI::parseCommand(string str, bool * exiting) {
             requestToRenameTree(tree);
         }
         else if (str == "print tree name") {
-            cout << tree->getName() << endl;
+            cout << tree.getName() << endl;
         }
         else if (str == "help" || str == "-h" || str == "--help") {
             printHelp();
@@ -281,6 +272,7 @@ void CLI::printFocus() {
  * @param parent
  */
 EstrangedChildrenResolution CLI::checkForEstrangedChildren(Ent *parent) {
+    /*
     //Records the result of this algorithm. Default is ERROR.
     EstrangedChildrenResolution result = RESOLUTION_ERROR;
     //Generate a vector containing any pairs of children that don't reference each other.
@@ -414,6 +406,7 @@ EstrangedChildrenResolution CLI::checkForEstrangedChildren(Ent *parent) {
     delete pair;
     //Return the result.
     return result;
+     */
 } //end of checkForEstrangedChildren()
 
 /**
@@ -436,15 +429,15 @@ void CLI::printHelp() {
             << "\t>f [Ent name]\t\tChanges focus to the Ent with the given name.\n";
 } //end of printHelp()
 
-void CLI::printEntList(string listDescription, vector<EntInstance> list) {
+void CLI::printEntList(string listDescription, vector<EntX> list) {
     //First print the description.
     cout << listDescription << endl;
     //Print out each Ent on an indented new line.
-    for (EntInstance ent : list)
+    for (EntX ent : list)
         cout << "\t" << ent.getName() << endl;
 }
 
-void CLI::printParents(EntInstance ent) {
+void CLI::printParents(EntX ent) {
     
     if (ent.equals(focus)) {
         cout << "The root Ent of the Tree represents \"everything\" and so it "
@@ -456,9 +449,9 @@ void CLI::printParents(EntInstance ent) {
     
 }
 
-void CLI::printChildren(EntInstance ent) {
+void CLI::printChildren(EntX ent) {
     
-    vector<EntInstance> children = ent.getChildren();
+    vector<EntX> children = ent.getChildren();
     
     if (children.size() == 0) {
         cout << "The Ent \"" << ent.getName() << "\" has no children.\n";

@@ -22,19 +22,16 @@
 #include <string>
 #include <iostream>
 #include <unordered_set>
-#include "../Interface/EntInstance.h"
+#include "../Interface/EntX.h"
 #include "../Interface/EntsInterface.h"
 #include "../Interface/TreeInstance.h"
-#include "../TreeAnalysis/TreeAnalyzer.h"
 #include "../Util/EntsFile.h"
 #include "CLIExceptions.h"
 #include "../Interface/InterfaceExceptions.h"
 
 using namespace std;
-
-class TreeInstance;
-class EntInstance;
     
+//TODO Get rid of this thing...
 typedef enum {
     NO_PAIRS_FOUND,
     PAIR_RESOLVED,
@@ -51,9 +48,9 @@ class CLI : public EntsInterface {
     /**
      * The Tree wrapper holding the tree being explored currently.
      */
-    TreeInstance* tree = nullptr;
+    TreeInstance tree;
     /** Points to the current Ent of focus. */
-    EntInstance focus;
+    EntX focus;
     
     /**************************************************************************
      * Private Functions for this specific implementation of EntsInterface.
@@ -69,17 +66,18 @@ class CLI : public EntsInterface {
     
     void printFocus();
     
-    void printEntList(string listDescription, vector<EntInstance> list);
+    void printEntList(string listDescription, vector<EntX> list);
     
-    void printParents(EntInstance ent);
+    void printParents(EntX ent);
     
-    void printChildren(EntInstance ent);
+    void printChildren(EntX ent);
     
-    void setFocus(EntInstance ent) {
+    void setFocus(EntX ent) {
         focus = ent;
+        printFocus();
     }
     
-    void setTree(TreeInstance* tr) {
+    void setTree(TreeInstance tr) {
         tree = tr;
     }
     

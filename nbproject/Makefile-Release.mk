@@ -35,17 +35,17 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/src/Algorithms/EntsAlgorithms.o \
 	${OBJECTDIR}/src/CLI/CLI.o \
 	${OBJECTDIR}/src/Core/Ent.o \
 	${OBJECTDIR}/src/Core/Root.o \
 	${OBJECTDIR}/src/Core/Tree.o \
-	${OBJECTDIR}/src/Interface/EntInstance.o \
+	${OBJECTDIR}/src/Interface/EntX.o \
 	${OBJECTDIR}/src/Interface/EntsInterface.o \
 	${OBJECTDIR}/src/Interface/Tests.o \
 	${OBJECTDIR}/src/Interface/TreeInstance.o \
 	${OBJECTDIR}/src/Network/EntsClient.o \
 	${OBJECTDIR}/src/Network/EntsServer.o \
-	${OBJECTDIR}/src/TreeAnalysis/TreeAnalyzer.o \
 	${OBJECTDIR}/src/Util/EntsFile.o \
 	${OBJECTDIR}/src/Util/IO.o \
 	${OBJECTDIR}/src/Util/Prime.o \
@@ -76,6 +76,11 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ents: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ents ${OBJECTFILES} ${LDLIBSOPTIONS}
 
+${OBJECTDIR}/src/Algorithms/EntsAlgorithms.o: src/Algorithms/EntsAlgorithms.cpp
+	${MKDIR} -p ${OBJECTDIR}/src/Algorithms
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Algorithms/EntsAlgorithms.o src/Algorithms/EntsAlgorithms.cpp
+
 ${OBJECTDIR}/src/CLI/CLI.o: src/CLI/CLI.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/CLI
 	${RM} "$@.d"
@@ -96,10 +101,10 @@ ${OBJECTDIR}/src/Core/Tree.o: src/Core/Tree.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Core/Tree.o src/Core/Tree.cpp
 
-${OBJECTDIR}/src/Interface/EntInstance.o: src/Interface/EntInstance.cpp
+${OBJECTDIR}/src/Interface/EntX.o: src/Interface/EntX.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/Interface
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Interface/EntInstance.o src/Interface/EntInstance.cpp
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Interface/EntX.o src/Interface/EntX.cpp
 
 ${OBJECTDIR}/src/Interface/EntsInterface.o: src/Interface/EntsInterface.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/Interface
@@ -125,11 +130,6 @@ ${OBJECTDIR}/src/Network/EntsServer.o: src/Network/EntsServer.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/Network
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Network/EntsServer.o src/Network/EntsServer.cpp
-
-${OBJECTDIR}/src/TreeAnalysis/TreeAnalyzer.o: src/TreeAnalysis/TreeAnalyzer.cpp
-	${MKDIR} -p ${OBJECTDIR}/src/TreeAnalysis
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TreeAnalysis/TreeAnalyzer.o src/TreeAnalysis/TreeAnalyzer.cpp
 
 ${OBJECTDIR}/src/Util/EntsFile.o: src/Util/EntsFile.cpp
 	${MKDIR} -p ${OBJECTDIR}/src/Util

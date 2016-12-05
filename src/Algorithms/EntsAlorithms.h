@@ -16,24 +16,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TREEANALYZER_H
-#define TREEANALYZER_H
+/* 
+ * File:   EntsAlorithms.h
+ * Author: jstockwell
+ *
+ * Created on December 3, 2016, 9:45 PM
+ */
 
-#include "../Core/Ent.h"
-#include "EstrangedPair.h"
+#ifndef ENTSALORITHMS_H
+#define ENTSALORITHMS_H
+
+
+#include "../Core/Tree.h"
+#include <vector>
 
 
 
-class TreeAnalyzer {
+class EntsAlgorithms {
     
-public:
     
-    static EstrangedPair* analyzeForEstrangedChildren(Ent *parent);
+    
+    
+    static bool isValidParentChildPair(Ent* parent, Ent* child);
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
 };
 
 
 
-#endif /* TREEANALYZER_H */
+#endif /* ENTSALORITHMS_H */
 

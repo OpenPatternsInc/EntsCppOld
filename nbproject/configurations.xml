@@ -7,13 +7,13 @@
       <itemPath>src/CLI/CLI.h</itemPath>
       <itemPath>src/CLI/CLIExceptions.h</itemPath>
       <itemPath>src/Core/Ent.h</itemPath>
-      <itemPath>src/Interface/EntInstance.h</itemPath>
+      <itemPath>src/Interface/EntX.h</itemPath>
+      <itemPath>src/Algorithms/EntsAlorithms.h</itemPath>
       <itemPath>src/Network/EntsClient.h</itemPath>
       <itemPath>src/Util/EntsFile.h</itemPath>
       <itemPath>src/Interface/EntsInterface.h</itemPath>
       <itemPath>src/Network/EntsServer.h</itemPath>
       <itemPath>src/Network/EntsWebSocket.h</itemPath>
-      <itemPath>src/TreeAnalysis/EstrangedPair.h</itemPath>
       <itemPath>src/Util/IO.h</itemPath>
       <itemPath>src/Interface/InterfaceExceptions.h</itemPath>
       <itemPath>src/Util/Prime.h</itemPath>
@@ -21,7 +21,6 @@
       <itemPath>src/Network/SocketClient.h</itemPath>
       <itemPath>src/Interface/Tests.h</itemPath>
       <itemPath>src/Core/Tree.h</itemPath>
-      <itemPath>src/TreeAnalysis/TreeAnalyzer.h</itemPath>
       <itemPath>src/Interface/TreeInstance.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -33,7 +32,8 @@
                    projectFiles="true">
       <itemPath>src/CLI/CLI.cpp</itemPath>
       <itemPath>src/Core/Ent.cpp</itemPath>
-      <itemPath>src/Interface/EntInstance.cpp</itemPath>
+      <itemPath>src/Interface/EntX.cpp</itemPath>
+      <itemPath>src/Algorithms/EntsAlgorithms.cpp</itemPath>
       <itemPath>src/Network/EntsClient.cpp</itemPath>
       <itemPath>src/Util/EntsFile.cpp</itemPath>
       <itemPath>src/Interface/EntsInterface.cpp</itemPath>
@@ -43,7 +43,6 @@
       <itemPath>src/Core/Root.cpp</itemPath>
       <itemPath>src/Interface/Tests.cpp</itemPath>
       <itemPath>src/Core/Tree.cpp</itemPath>
-      <itemPath>src/TreeAnalysis/TreeAnalyzer.cpp</itemPath>
       <itemPath>src/Interface/TreeInstance.cpp</itemPath>
       <itemPath>src/main.cpp</itemPath>
     </logicalFolder>
@@ -82,6 +81,10 @@
       </compileType>
       <item path="LICENSE" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/Algorithms/EntsAlgorithms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Algorithms/EntsAlorithms.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/CLI/CLI.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/CLI/CLI.h" ex="false" tool="3" flavor2="0">
@@ -100,9 +103,9 @@
       </item>
       <item path="src/Core/Tree.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/Interface/EntInstance.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/Interface/EntX.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/Interface/EntInstance.h" ex="false" tool="3" flavor2="0">
+      <item path="src/Interface/EntX.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Interface/EntsInterface.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -132,12 +135,6 @@
       <item path="src/Network/EntsWebSocket.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Network/SocketClient.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/TreeAnalysis/EstrangedPair.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/TreeAnalysis/TreeAnalyzer.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/TreeAnalysis/TreeAnalyzer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Util/EntsFile.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -177,6 +174,10 @@
       </compileType>
       <item path="LICENSE" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/Algorithms/EntsAlgorithms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Algorithms/EntsAlorithms.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/CLI/CLI.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/CLI/CLI.h" ex="false" tool="3" flavor2="0">
@@ -195,9 +196,9 @@
       </item>
       <item path="src/Core/Tree.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/Interface/EntInstance.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/Interface/EntX.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/Interface/EntInstance.h" ex="false" tool="3" flavor2="0">
+      <item path="src/Interface/EntX.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Interface/EntsInterface.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -227,12 +228,6 @@
       <item path="src/Network/EntsWebSocket.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Network/SocketClient.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/TreeAnalysis/EstrangedPair.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/TreeAnalysis/TreeAnalyzer.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/TreeAnalysis/TreeAnalyzer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Util/EntsFile.cpp" ex="false" tool="1" flavor2="0">
       </item>

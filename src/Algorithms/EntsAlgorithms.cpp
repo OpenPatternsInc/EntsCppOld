@@ -16,23 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ESTRANGEDPAIR_H
-#define ESTRANGEDPAIR_H
+#include "EntsAlorithms.h"
 
-#include "../Core/Ent.h"
 
-class EstrangedPair {
+bool EntsAlgorithms::isValidParentChildPair(Ent* parent, Ent* child) {
     
-protected:
-    Ent *entA, *entB;
-public:
-    EstrangedPair(Ent* entX, Ent* entY) : entA(entX), entB(entY) {}
     
-    Ent* getA() { return entA; }
-    Ent* getB() { return entB; }
     
-};
-
-
-#endif /* ESTRANGEDPAIR_H */
-
+    
+    
+    
+    
+}
