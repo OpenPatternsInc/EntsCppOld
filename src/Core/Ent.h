@@ -51,18 +51,12 @@ using namespace std;
  */
 
 
-
-
 /**
  *
  * Ent is the most basic class. It does not require any code from any other file
- * within the library.
+ * within the library. It does not call any functions of Tree.
  * 
- * This means other classes can  
- * 
- * 
- * 
- * 
+ * This means other classes don't need to use forward declaration.
  * 
  */
 class Ent {

@@ -152,7 +152,7 @@ void CLI::parseCommand(string str, bool * exiting) {
             cout << "breakpoint\n";
         }
         else if (str == "s") {
-            
+            printSiblings(focus);
         } //end "s"
         else {
             //The single character command was not recognized.
@@ -438,8 +438,8 @@ void CLI::printEntList(string listDescription, vector<EntX> list) {
 }
 
 void CLI::printParents(EntX ent) {
-    
-    if (ent.equals(focus)) {
+    //Each Ent must have at least one parent. Except for root of course!
+    if (ent.equals(tree.getRoot())) {
         cout << "The root Ent of the Tree represents \"everything\" and so it "
                 << "can not have any parents!\n";
     } else {
@@ -454,9 +454,26 @@ void CLI::printChildren(EntX ent) {
     vector<EntX> children = ent.getChildren();
     
     if (children.size() == 0) {
-        cout << "The Ent \"" << ent.getName() << "\" has no children.\n";
+        displayMessageToUser("\"" + ent.getName() + "\" has no children.\n");
     } else {
         string description = "Children of " + ent.getName() + ":";
         printEntList(description, ent.getChildren());
     }
+}
+
+void CLI::printSiblings(EntX ent) {
+    if (ent.equals(tree.getRoot())) {
+        cout << "root can't have any sibling!\n";
+    } else {
+        //Get those siblings.
+        vector<EntX> siblings = ent.getSiblings();
+        if (siblings.size() == 0) {
+            displayMessageToUser("\"" + ent.getName() + "\" has no siblings.");
+        } else {
+            string description = "Siblings of " + ent.getName() + ":";
+            printEntList(description, ent.getSiblings());
+        }
+    }
+    
+    
 }

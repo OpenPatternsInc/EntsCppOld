@@ -194,7 +194,9 @@ unordered_set<Ent*> Ent::getSiblings() {
             siblings.insert(sibling);
         }
     }
-    //ok, we've filled the list. now send a pointer of it back.
+    //ok, we've filled the list. But we need to remove this Ent.
+    siblings.erase(this);
+    //now send a pointer of it back.
     return siblings;
 }
 

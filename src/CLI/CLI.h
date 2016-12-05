@@ -84,6 +84,8 @@ class CLI : public EntsInterface {
     
     void printChildren(EntX ent);
     
+    void printSiblings(EntX ent);
+    
     void setFocus(EntX ent) {
         focus = ent;
         printFocus();
