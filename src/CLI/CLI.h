@@ -39,6 +39,21 @@ typedef enum {
     RESOLUTION_ERROR
 } EstrangedChildrenResolution;
 
+/**
+ * CLI is an implementation subclass of the abstract class EntsInterface.
+ * It provides a Command Line Interface to explore and edit Tree objects.
+ * 
+ * CLI has access to handle classes TreeInstance and EntX. These objects can
+ * be passed by value and hold only pointers to the objects they represent.
+ * They provide a number of public functions available to subclasses of 
+ * EntsInterface, like CLI, which request for changes to be made to the Tree
+ * and Ents within it. These requests for changes make sure that no illegal
+ * actions are performed which would put the Tree in a bad state.
+ * 
+ * CLI must implement certain virtual functions in order to be able to provide
+ * adequate interface to the user for the specific protocols specified in
+ * EntsInterface.
+ */
 class CLI : public EntsInterface {
     
     /**************************************************************************
@@ -49,7 +64,7 @@ class CLI : public EntsInterface {
      * The Tree wrapper holding the tree being explored currently.
      */
     TreeInstance tree;
-    /** Points to the current Ent of focus. */
+    /** Wrapper for the current Ent of focus. */
     EntX focus;
     
     /**************************************************************************
