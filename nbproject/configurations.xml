@@ -15,6 +15,7 @@
       <itemPath>src/Network/EntsServer.h</itemPath>
       <itemPath>src/Network/EntsWebSocket.h</itemPath>
       <itemPath>src/Util/IO.h</itemPath>
+      <itemPath>src/Interface/Includes.h</itemPath>
       <itemPath>src/Interface/InterfaceExceptions.h</itemPath>
       <itemPath>src/Util/Prime.h</itemPath>
       <itemPath>src/Core/Root.h</itemPath>
@@ -111,6 +112,8 @@
       </item>
       <item path="src/Interface/EntsInterface.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/Interface/Includes.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/Interface/InterfaceExceptions.h"
             ex="false"
             tool="3"
@@ -203,6 +206,8 @@
       <item path="src/Interface/EntsInterface.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Interface/EntsInterface.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Interface/Includes.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Interface/InterfaceExceptions.h"
             ex="false"

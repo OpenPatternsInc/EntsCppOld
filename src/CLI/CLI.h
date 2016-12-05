@@ -22,12 +22,9 @@
 #include <string>
 #include <iostream>
 #include <unordered_set>
-#include "../Interface/EntX.h"
-#include "../Interface/EntsInterface.h"
-#include "../Interface/TreeInstance.h"
-#include "../Util/EntsFile.h"
 #include "CLIExceptions.h"
-#include "../Interface/InterfaceExceptions.h"
+#include "../Interface/Includes.h"
+#include "../Util/EntsFile.h"
 
 using namespace std;
     
