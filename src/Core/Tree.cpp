@@ -21,19 +21,15 @@
 using namespace std;
 
 Tree::Tree(string name): name(name) {
-    //entsFile = new EntsFile(this);
-    //Initialize root. Allocated on heap, released in destructor with all other Ents.
-    root = new Root();
     //Add root to the nameMap.
-    entNameMap.insert({root->getName(), root});
+    entNameMap.insert({root.getName(), &root});
     //Useful for debugging to tell the user now when construction is done.
     cout << "New Tree created named \"" << name << "\".\n";
 }
 
 Tree::~Tree() {
-    //We don't need to delete root_ separately because it will be handled
-    //in the following loop.
-
+    //Remove root's pointer from the nameMap, so we don't delete it twice.
+    entNameMap.erase(root.getName());
     //Deallocate each Ent in the nameMap.
     for (pair<string, Ent*> i : entNameMap) {
         delete i.second;
@@ -45,7 +41,7 @@ Tree::~Tree() {
 //TODO implement call here to UI to handle new estranged pairs.
 void Tree::addEntToNameMap(Ent* entPtr, Ent* parentPtr) {
     //If no parent is given, make its parent root to prevent orphan Ents.
-    if (parentPtr == 0) parentPtr = root;
+    if (parentPtr == 0) parentPtr = &root;
     entNameMap.insert({entPtr->getName(), entPtr});
     //Connect the new ent and its new parent. Adds references for each other.
     Ent::connectUnchecked(parentPtr, entPtr);

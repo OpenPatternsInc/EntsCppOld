@@ -65,7 +65,7 @@ class Tree {
      * Pointer to the root of the hierarchy. No need to make a setter method
      * because the root never needs to change.
      */
-    Root* root;
+    Root root;
     
 public:
 
@@ -118,7 +118,7 @@ public:
     ~Tree();
     
     Root* getRoot() {
-        return root;
+        return &root;
     }
     
     

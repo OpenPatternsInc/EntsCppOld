@@ -23,10 +23,17 @@
 class TreeInstance;
 
 EntsInterface::EntsInterface() {
-    
 }
 
 EntsInterface::~EntsInterface() {
+    
+    //Because this class holds a vector of Tree pointers, we need to release
+    //those trees manually. Down the road, we may wish to do something
+    //different, allowing the user to pass a tree from one program to another,
+    //but not yet.
+    for (Tree* tree : trees) {
+        delete tree;
+    }
     
 }
 
@@ -51,12 +58,10 @@ const TreeInstance EntsInterface::requestNewTree() {
             //Valid name.
             //Make a new Tree with the given name.
             Tree* newTree = new Tree(potentialName);
-            //Make a new TreeInstance with the new Tree.
-            TreeInstance newInstance(newTree);
             //Add it to the list of trees.
-            trees.push_back(newInstance);
+            trees.push_back(newTree);
             //Return a copy of the TreeInstance. It just contains a pointer.
-            return newInstance;
+            return TreeInstance(newTree);
         }
     } //end of for loop
     //If we get here, the user did not provide a valid name.

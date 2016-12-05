@@ -42,8 +42,6 @@ using namespace std;
 //TODO Rename to Interface, the Ents part is redundant.
 class EntsInterface {
     
-    friend class Tree;
-    
     /*********************************************************************
      * Private data members.
      *********************************************************************/
@@ -51,7 +49,7 @@ class EntsInterface {
     /**
      * The trees available to explore and edit.
      */
-    vector<TreeInstance> trees;
+    vector<Tree*> trees;
     
     
     /*********************************************************************
