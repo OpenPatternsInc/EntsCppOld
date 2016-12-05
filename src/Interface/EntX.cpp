@@ -16,50 +16,62 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "EntInstance.h"
-#include <vector>
+#include "EntX.h"
 
 using namespace std;
 
-class EntInstance;
+class EntX;
 
-EntInstance::EntInstance() : ent(nullptr) {
+EntX::EntX() : ent(nullptr) {
     
 }
 
-EntInstance::EntInstance(const EntInstance& ent) : ent(ent.ent) {
+EntX::EntX(const EntX& entX) : ent(entX.ent) {
     
 }
 
-EntInstance::EntInstance(Ent* entPtr) : ent(entPtr) {
+EntX::EntX(Ent* entPtr) : ent(entPtr) {
     
 }
 
 //TODO Should we deallocate the held Ent on deletion of this object?
-EntInstance::~EntInstance() {
+//Probably not. EntXs are simply used as a temporary way for subclasses to
+//treat an Ent like an object, without the ability to edit it. Therefore,
+//the destructor will be called each time an EntX leaves scope.
+EntX::~EntX() {
     
 }
 
 
-vector<EntInstance> EntInstance::wrap(vector<Ent*>* ents) {
+vector<EntX> EntX::wrap(vector<Ent*>* ents) {
     
-    vector<EntInstance> vec;
+    vector<EntX> vec;
     
     for (Ent* ent : *ents)
-        vec.push_back(EntInstance(ent));
+        vec.push_back(EntX(ent));
     
     return vec;
 }
 
 
-vector<EntInstance> EntInstance::wrap(unordered_set<Ent*>* ents) {
+vector<EntX> EntX::wrap(unordered_set<Ent*>* ents) {
     
-    vector<EntInstance> vec;
+    vector<EntX> vec;
     
     for (Ent* ent : *ents)
-        vec.push_back(EntInstance(ent));
+        vec.push_back(EntX(ent));
     
     return vec;
     
     
 }
+
+const bool EntX::equals(EntX otherEntX) {
+
+    return ent == otherEntX.ent;
+    
+}
+
+const bool EntX::isEmpty() {
+        return ent == nullptr;
+    }

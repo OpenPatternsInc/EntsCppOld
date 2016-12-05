@@ -21,7 +21,7 @@
 using namespace std;
 
 Tree::Tree(string name): name_(name) {
-    entsFile = new EntsFile(this);
+    //entsFile = new EntsFile(this);
     //Initialize root. Allocated on heap, released in destructor with all other Ents.
     root_ = new Root();
     //Add root to the nameMap.
@@ -83,35 +83,3 @@ Ent* Tree::getEntPtrByName(const string name) {
         return nullptr;
     }
 }
-
-
-bool Tree::save() {
-    /*
-    //Does the EntsFile have a file name?
-    if (entsFile->getFileName() != "") {
-        //We have a filename already.
-        entsFile->save();
-        return true;
-    } else {
-        bool hasName = false;
-        //Give the user 3 chances to input a valid name.
-        for (int count = 0; count < 3; count++) {
-            if (getInterface()->queryUserForFileName()) {
-                hasName = true;
-                break;
-            }
-        }
-        if (!hasName) {
-            cout << "File was not saved.\n";
-            return false;
-        }
-        //OK, so we got a file name!
-        entsFile->save();
-        return true;
-    }
-     * */
-    return false;
-    
-    
-}
-

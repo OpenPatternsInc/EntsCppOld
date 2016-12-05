@@ -26,18 +26,17 @@ EntsInterface::EntsInterface() {
     
 }
 
-EntInstance* EntsInterface::getEmptyEntInstance() {
-    return new EntInstance();
-}
-
 EntsInterface::~EntsInterface() {
     
 }
 
+inline EntX EntsInterface::getEmptyEntInstance() {
+    return EntX();
+}
 
-void EntsInterface::getNewEmptyTreeInstance(TreeInstance** treePtr) {
-    //Initiate the starting instruction message. May be changed later if
-    //the user inputs an invalid response.
+
+const TreeInstance EntsInterface::requestNewTree() {
+    //The user must first name the new Tree.
     string message = "Enter a name for the new Tree.";
     //Give the user a few tries.
     for (int n = 0; n < 3; n++) { 
@@ -53,20 +52,19 @@ void EntsInterface::getNewEmptyTreeInstance(TreeInstance** treePtr) {
             //Make a new Tree with the given name.
             Tree* newTree = new Tree(potentialName);
             //Make a new TreeInstance with the new Tree.
-            TreeInstance* newInstance = new TreeInstance(newTree);
+            TreeInstance newInstance(newTree);
             //Add it to the list of trees.
             trees.push_back(newInstance);
-            //Set the parameter TreeInstance.
-            *treePtr = newInstance;
-            //All done here, return control.
-            return;
+            //Return a copy of the TreeInstance. It just contains a pointer.
+            return newInstance;
         }
     } //end of for loop
-    //If we get here, the user did not provide a valid name and so the pointer
-    //has not been changed. Presumably it will stay as nullptr.
+    //If we get here, the user did not provide a valid name.
+    //Return an empty TreeInstance.
+    return TreeInstance();
 }
 
-void EntsInterface::requestToCreateNewEnt(TreeInstance* tree, EntInstance** entPointerFromUI) {
+const EntX EntsInterface::requestToCreateNewEnt(TreeInstance tree) {
     
     string message = "Enter name of new Ent.";
     for (int num = 0; num < 3; num++) {
@@ -76,27 +74,25 @@ void EntsInterface::requestToCreateNewEnt(TreeInstance* tree, EntInstance** entP
         if (Tests::isValidEntName(potentialName, &message)) {
             //Valid name!
             //Is it free?
-            if (tree->isEntNameFree(potentialName)) {
+            if (tree.isEntNameFree(potentialName)) {
                 //Hey, it's available!
                 //Make the new Ent. On the heap and everything!
                 Ent* newEnt = new Ent(potentialName);
                 //Add it to the tree.
-                tree->addEnt(newEnt);
-                //Wrap it up!
-                *entPointerFromUI = new EntInstance(newEnt);
-                //all set here...
-                return;
+                tree.addEnt(newEnt);
+                //Return a copy of an EntX containing a pointer to the Ent.
+                return EntX(newEnt);;
             } else {
                 message = "That name is already taken!";
             }
         }
     }
     //If it gets here, then the user used up their chances.
-    //The provided EntInstance pointer will be unchanged.
+    return EntX();
 }
 
 
-void EntsInterface::requestToRenameTree(TreeInstance* tree) {
+void EntsInterface::requestToRenameTree(TreeInstance tree) {
     
     string instructions = "Enter the Tree's new name.";
     
@@ -108,7 +104,7 @@ void EntsInterface::requestToRenameTree(TreeInstance* tree) {
         
         if (Tests::isValidTreeName(potentialName, &instructions)) {
             //valid name
-            tree->rename(potentialName);
+            tree.rename(potentialName);
             //TODO should we hard-code the message within TreeInstance::rename
             //in order to assure that the user is always informed?
             //Inform the user that the name was changed. Gotta respect the user!

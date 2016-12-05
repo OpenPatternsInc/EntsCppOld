@@ -24,7 +24,7 @@ using namespace std;
 
 class Tree;
 
-TreeInstance::TreeInstance(Tree* treePtr) : tree(treePtr) {
+TreeInstance::TreeInstance(Tree* givenTree) : tree(givenTree) {
 }
 
 
@@ -32,20 +32,25 @@ TreeInstance::~TreeInstance() {
     
 }
 
-EntInstance* TreeInstance::getRoot() {
+TreeInstance::TreeInstance(const TreeInstance& treeInstance)
+    : tree(treeInstance.tree) {
+    
+}
+
+const EntX TreeInstance::getRoot() {
         
-    return new EntInstance(tree->getRoot());
+    return EntX(tree->getRoot());
 
 }
 
     
-EntInstance* TreeInstance::getEntByName(string name) {
+const EntX TreeInstance::getEntByName(const string name) {
 
-    return new EntInstance(tree->getEntPtrByName(name));
+    return EntX(tree->getEntPtrByName(name));
 
 }
 
-bool TreeInstance::isEntNameFree(string name) {
+const bool TreeInstance::isEntNameFree(const string name) {
     
     return tree->getEntPtrByName(name) == nullptr;
     
@@ -59,10 +64,22 @@ void TreeInstance::addEnt(Ent* ent, Ent* givenParent) {
     tree->addEntToNameMap(ent, parent);
 }
 
+void TreeInstance::addEnt(EntX ent, EntX parent) {
+    
+    throw EntsInterfaceException();
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
+}
+
 void TreeInstance::rename(string newName) {
     tree->setName(newName);
 }
 
-string TreeInstance::getName() {
+const string TreeInstance::getName() {
     return tree->getName();
+}
+
+const bool TreeInstance::isEmpty() {
+    return tree == nullptr;
 }

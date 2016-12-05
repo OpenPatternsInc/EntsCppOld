@@ -25,9 +25,6 @@
 #include <string>
 #include "Ent.h"
 #include "Root.h"
-#include "../Util/Prime.h"
-#include "../Util/EntsFile.h"
-#include "../Interface/EntsInterface.h"
 
 using namespace std;
 /**
@@ -45,12 +42,6 @@ typedef enum {
 } NewEntStatus;
 
 /**
- * Must declare EntsInterface class so the pointers know that it's a tye.
- */
-class EntsInterface;
-class EntsFile;
-
-/**
  * Class holding a hierarchy of Ent objects. Uses an unorganized hashmap to organize
  * all the Ents via their names for easy lookup. Each Ent holds vector lists pointing
  * to their parents or children.
@@ -60,17 +51,6 @@ class EntsFile;
  */
 class Tree {
     
-    friend class EntsInterface;
-    friend class TreeInstance;
-    
-    /**
-     * The EntsFile which is used to save the Tree to a file.
-     */
-    EntsFile *entsFile;
-    /**
-     * The EntsInterface which is being used to explore this tree.
-     */
-    EntsInterface *interface;
     /**
      * The name of the Tree.
      */
@@ -86,22 +66,8 @@ class Tree {
      * because the root never needs to change.
      */
     Root* root_;
-    /**
-     * Handles the generation and distribution of prime numbers used with UIDs.
-     */
-    Prime prime_;
-
-    /**
-     * Create a new Tree and add a root Ent to it. Also initialize the NameMap.
-     * Because of this explicit 1 arg constructor, there is not a no-arg
-     * constructor to use, so we can't make arrays of Trees. May need to change
-     * later.
-     */
-    Tree(string name);
     
-    EntsFile* getEntsFile() {
-        return entsFile;
-    }
+public:
 
     /**
     * Adds an Ent to entNameMap_ and sets its only parent as parentPtr.
@@ -129,18 +95,14 @@ class Tree {
     void setName(string newName) {
         name_ = newName;
     }
-    
-    bool save();
-    
-    void setInterface(EntsInterface *ui) {
-        interface = ui;
-    }
-    
-    EntsInterface* getInterface() {
-        return interface;
-    }
-    
-public:
+
+    /**
+     * Create a new Tree and add a root Ent to it. Also initialize the NameMap.
+     * Because of this explicit 1 arg constructor, there is not a no-arg
+     * constructor to use, so we can't make arrays of Trees. May need to change
+     * later.
+     */
+    Tree(string name);
 
     EntNameMap* getNameMap() {
         return &entNameMap_;

@@ -19,17 +19,11 @@
 #ifndef ENTSINTERFACE_H
 #define ENTSINTERFACE_H
 
-#include "EntInstance.h"
+#include "EntX.h"
 #include "TreeInstance.h"
 #include "InterfaceExceptions.h"
 #include "../Core/Tree.h"
-#include "../Util/EntsFile.h"
 #include "Tests.h"
-
-class Tree;
-class EntsFile;
-class TreeInstance;
-class EntInstance;
 
 using namespace std;
 
@@ -40,6 +34,8 @@ using namespace std;
  * 
  * Common actions are defined in this base class, which are passed onto CLIs
  * and GUIs which may use and display them in different ways.
+ * 
+ * ALL user interaction should be handled here?
  */
     
 
@@ -55,7 +51,7 @@ class EntsInterface {
     /**
      * The trees available to explore and edit.
      */
-    vector<TreeInstance*> trees;
+    vector<TreeInstance> trees;
     
     
     /*********************************************************************
@@ -65,32 +61,35 @@ class EntsInterface {
     
     
     /*********************************************************************
-     * Protected methods available to derivatives.
+     * Protected methods available to subclasses.
      *********************************************************************/
     
 protected:
     
     /**
-     * We never want to actually create an instance of EntsInterface, so only
-     * make the constructor available to derivatives.
+     * We never want to actually create an instance of the abstract class
+     * EntsInterface, so only make the constructors available to derivatives.
      */
     EntsInterface();
-    
+    /**
+     * Subclasses should close themselves, and thus need access to the
+     * superclass destructor.
+     */
     ~EntsInterface();
     
-    EntInstance* getEmptyEntInstance();
+    EntX getEmptyEntInstance();
     
     /*
      * Creates and returns a new TreeInstance, which will be used by subclasses
      * to refer to Tree instances.
      */
-    void getNewEmptyTreeInstance(TreeInstance** treePtr);
+    const TreeInstance requestNewTree();
     /*
      * Subclasses call this when the user indicates they want to add a new Ent.
      */
-    void requestToCreateNewEnt(TreeInstance* tree, EntInstance** entPointerFromUI);
+    const EntX requestToCreateNewEnt(TreeInstance tree);
     
-    void requestToRenameTree(TreeInstance* tree);
+    void requestToRenameTree(TreeInstance tree);
     
     
     /*********************************************************************

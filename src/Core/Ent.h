@@ -25,13 +25,19 @@
 #include <vector>
 #include <assert.h>
 #include <unordered_set>
+//Not dependent on the class Tree. Ents are 
 
 using namespace std;
 
 /**
  * An Ent object instance represents and Ent node within a Tree.
- * Each Ent has a unique name within its hierarchy-Tree, and containers which
- * hold pointers to Ents directly related to it in some way.
+ * Ent nodes represent things which satisfy a condition.
+ * They could be "all animals", "dogs", "small dogs", "my favorite colors", etc.
+ * For two groups to be a parent and child pair, the parent must contain all the
+ * things contained in the child category, and also additional things.
+ * Each Ent has a unique name within its hierarchy-Tree.
+ * Ents hold pointers to the Ent objects it is directly related to.
+ * These containers are Parents, Children, Exclusives, and Overlaps.
  * An Ent represents, in an abstract sense, a group of things, or a single thing.
  * Parents are more general groups, and children are more specific groups which
  * are subsets of their parents.
@@ -43,7 +49,26 @@ using namespace std;
  * unambiguously. UIDs will also allow the Ents within two separate Trees to
  * represent the same abstract concept and allow for the merging of trees.
  */
+
+
+
+
+/**
+ *
+ * Ent is the most basic class. It does not require any code from any other file
+ * within the library.
+ * 
+ * This means other classes can  
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
 class Ent {
+    
+    
+    friend class Tree;
     /**
      * The name of the given Ent. Should ideally be unique.
      */
