@@ -29,8 +29,8 @@ EntsInterface::~EntsInterface() {
     
     //Because this class holds a vector of Tree pointers, we need to release
     //those trees manually. Down the road, we may wish to do something
-    //different, allowing the user to pass a tree from one program to another,
-    //but not yet.
+    //different, allowing the user to pass a tree from one program to another
+    //pointers rather than copying the whole thing, but not yet.
     for (Tree* tree : trees) {
         delete tree;
     }

@@ -102,6 +102,9 @@ public:
      * 
      * Notedly can't be called by subclasses directly, they need to go through
      * protected methods to request it.
+     * 
+     * We do not count references to a Tree. Or deallocate the tree on
+     * destruction of the TreeInstance.
      */
     ~TreeInstance();
     

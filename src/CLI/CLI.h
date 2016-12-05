@@ -102,8 +102,15 @@ public:
      * Public constructors and destructors.
      **************************************************************************/
 
+    /**
+    * Construct a CLI without a Tree.
+    */
     CLI();
 
+    /**
+     * All data members allocated on the stack
+     * and will be deallocated automatically.
+     */
     ~CLI();
     
     /**************************************************************************

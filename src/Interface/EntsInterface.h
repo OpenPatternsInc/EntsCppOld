@@ -48,6 +48,9 @@ class EntsInterface {
     
     /**
      * The trees available to explore and edit.
+     * 
+     * We hold pointers to the trees, which are dynamically allocated variables
+     * on the heap because 
      */
     vector<Tree*> trees;
     

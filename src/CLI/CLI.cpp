@@ -51,17 +51,11 @@ void CLI::displayMessageToUser(string text) {
  * Public functions, as well as constructors and destructors.
  ******************************************************************************/
 
-/**
- * Construct a CLI interface without a Tree.
- */
-CLI::CLI() : focus(EntX()) {
+
+CLI::CLI() {
 }
 
-/**
- * Do not deallocate the Tree or the Ent of focus.
- * The user may want to instead open up a GUI or something else.
- * There is no other way to browse Hierarchies yet though.
- */
+
 CLI::~CLI() {
     
 }
@@ -162,7 +156,7 @@ void CLI::parseCommand(string str, bool * exiting) {
     } else {
         //Use isCommand to check for commands and if found set argument substring.
         if (str == "exit") {
-            cout << "Exiting..." << endl;
+            cout << "Exiting CLI..." << endl;
             *exiting = true;
         }
         else if (str == "help") {
