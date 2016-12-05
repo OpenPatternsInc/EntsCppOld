@@ -1,0 +1,9 @@
+The Core folder contains the classes that are fundamental to the Ents Database
+implementation.
+
+None of the files in Core require files in other folders and so it acts as
+an independent base to add to.
+
+For example, the Interface folder for creating user interfaces is not required
+by Core, and so Core can be declared first, allowing Interface to fully use all
+classes in Core, without using forward declarations.
