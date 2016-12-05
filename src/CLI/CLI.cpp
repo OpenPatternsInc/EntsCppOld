@@ -63,6 +63,7 @@ CLI::CLI() : focus(EntX()) {
  * There is no other way to browse Hierarchies yet though.
  */
 CLI::~CLI() {
+    
 }
 
 /**
@@ -454,7 +455,7 @@ void CLI::printChildren(EntX ent) {
     vector<EntX> children = ent.getChildren();
     
     if (children.size() == 0) {
-        displayMessageToUser("\"" + ent.getName() + "\" has no children.\n");
+        displayMessageToUser("\"" + ent.getName() + "\" has no children.");
     } else {
         string description = "Children of " + ent.getName() + ":";
         printEntList(description, ent.getChildren());
