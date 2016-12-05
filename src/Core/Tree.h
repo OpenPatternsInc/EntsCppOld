@@ -77,14 +77,14 @@ public:
     * @param entPtr    Pointer to the Ent being added.
     * @param parentPtr Pointer to the parent of the Ent being added.
     */
-    void addEntToNameMap(Ent* entPtr, Ent* parentPtr = 0);
+    void addEntToNameMap(Ent* entPtr, Ent* parentPtr = nullptr);
     /**
      * If the name is not already taken, create a new one and add it to the map.
      * Set the new Ent as root's child for now.
      * @param name  Desired name.
      * @return      Returns and enum value: UNDEFINED_ERROR, SUCCESS, NAME_TAKEN
      */
-    NewEntStatus tryToCreateNewEnt(string name);
+    NewEntStatus tryToCreateNewEnt(const string name);
     /**
      * Retrieves a pointer to an Ent of the given name, if one exists.
      * @param name  Name being searched for.

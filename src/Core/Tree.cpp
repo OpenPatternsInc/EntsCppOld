@@ -51,7 +51,7 @@ void Tree::addEntToNameMap(Ent* entPtr, Ent* parentPtr) {
     Ent::connectUnchecked(parentPtr, entPtr);
 }
 
-NewEntStatus Tree::tryToCreateNewEnt(string name) {
+NewEntStatus Tree::tryToCreateNewEnt(const string name) {
     
     Ent* existingEntPtr;
     

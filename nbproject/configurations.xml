@@ -59,6 +59,7 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
     <itemPath>LICENSE</itemPath>
+    <itemPath>src/Core/info</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -103,6 +104,8 @@
       <item path="src/Core/Tree.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Core/Tree.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Core/info" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Interface/EntX.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -198,6 +201,8 @@
       <item path="src/Core/Tree.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Core/Tree.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Core/info" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Interface/EntX.cpp" ex="false" tool="1" flavor2="0">
       </item>
