@@ -45,9 +45,9 @@ class EntX {
     /*
      * Creates a vector of EntInstances from a vector of Ents.
      */
-    vector<EntX> wrap(vector<Ent*>*);
+    vector<EntX> wrap(vector<Ent*>);
     
-    vector<EntX> wrap(unordered_set<Ent*>*);
+    vector<EntX> wrap(unordered_set<Ent*>);
     
 public:
     
@@ -107,6 +107,10 @@ public:
     
     const vector<EntX> getDescendants() {
         return wrap(ent->getDescendents());
+    }
+    
+    const vector<EntX> getSiblings() {
+        return wrap(ent->getSiblings());
     }
     
     /**

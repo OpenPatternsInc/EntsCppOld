@@ -43,22 +43,22 @@ EntX::~EntX() {
 }
 
 
-vector<EntX> EntX::wrap(vector<Ent*>* ents) {
+vector<EntX> EntX::wrap(vector<Ent*> ents) {
     
     vector<EntX> vec;
     
-    for (Ent* ent : *ents)
+    for (Ent* ent : ents)
         vec.push_back(EntX(ent));
     
     return vec;
 }
 
 
-vector<EntX> EntX::wrap(unordered_set<Ent*>* ents) {
+vector<EntX> EntX::wrap(unordered_set<Ent*> ents) {
     
     vector<EntX> vec;
     
-    for (Ent* ent : *ents)
+    for (Ent* ent : ents)
         vec.push_back(EntX(ent));
     
     return vec;

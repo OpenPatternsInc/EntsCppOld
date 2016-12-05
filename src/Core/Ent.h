@@ -127,16 +127,7 @@ public:
      * @param child     Pointer to child.
      * @return          Soon the return variable will indicate success or failure.
      */
-    static int connectUnchecked(Ent* parent, Ent* child) {
-        //Add references to the vectors holding the lists.
-        parent->addChildUnchecked(child);
-        child->addParentUnchecked(parent);
-        
-        cout << parent->getName() << " is now a parent of " << child->getName()
-                << ".\n";
-
-        return 0;
-    }
+    static int connectUnchecked(Ent* parent, Ent* child);
     
     /**
      * Connects the two given Ents as parent and child, but doesn't check that it
@@ -150,59 +141,13 @@ public:
      * @param child
      * @return 
      */
-    static int connectUncheckedAndPrune(Ent* parent, Ent* child) {
-        
-        //Get the new parent's ancestors.
-        unordered_set<Ent*>* pAncestors = parent->getAncestors();
-        //Get a pointer to the child's parents.
-        vector<Ent*>* existingParents = child->getParents();
-        //Check if any of child's direct parents are in this set already.
-        for (Ent* existingParent : *existingParents) {
-            //Insert it into the set. second indicates if it was added or not.
-            if (!pAncestors->insert(existingParent).second) {
-                //It wasn't added, so it must have already been there.
-                disconnectUnchecked(existingParent, child);
-                //TODO Should we break here?
-            }
-        }
-        //Free the set!
-        delete pAncestors;
-        
-        //Now actually connect them up!
-        connectUnchecked(parent, child);
-        
-        //TODO Implement an analogous pruning algorithm for the child's descendents?
-        
-        return 0;
-    }
+    static int connectUncheckedAndPrune(Ent* parent, Ent* child);
     
     /**
      * Disconnects a parent and child from each other, but doesn't do anything
      * else like check for if that's a good idea...
      */
-    static int disconnectUnchecked(Ent* parent, Ent* child) {
-        //Get the parent's children.
-        vector<Ent*>* children = parent->getChildren();
-        //Find child in the vector and remove it.
-        for (vector<Ent*>::iterator it = children->begin(); it != children->end(); it++) {
-            if (*it == child) {
-                children->erase(it);
-                //There should be only one, so break early.
-                break;
-            }
-        }
-        //Now get the child's parents.
-        vector<Ent*>* parents = child->getParents();
-        //Find parent in the vector and remove it.
-        for (vector<Ent*>::iterator it = parents->begin(); it != parents->end(); it++) {
-            if (*it == parent) {
-                parents->erase(it);
-                //There should be only one, so break early.
-                break;
-            }
-        }
-        //No need to free the vectors, they are owned by the Ents themselves.
-    }
+    static int disconnectUnchecked(Ent* parent, Ent* child);
     
     /**
      * TODO Test for consistency somewhere.
@@ -210,19 +155,9 @@ public:
      * @param b
      * @return 
      */
-    static int setOverlap(Ent* a, Ent* b) {
-        a->addOverlaps(b);
-        b->addOverlaps(a);
-        
-        return 0;
-    }
+    static int setOverlap(Ent* a, Ent* b);
     
-    static int setExclusive(Ent* a, Ent* b) {
-        a->addExclusive(b);
-        b->addExclusive(a);
-        
-        return 0;
-    }
+    static int setExclusive(Ent* a, Ent* b);
     
     /**
      * The set of this Ent's ancestors can't overlap at all with the set of the
@@ -230,41 +165,7 @@ public:
      * @return  Returns any Ents which actually do overlap, because something
      *          must be done about them. Empty set if there are no problems.
      */
-    unordered_set<Ent*>* canBeParentOf(Ent* entPtr) {
-        //Create an empty unordered_set. Add any overlaps to it as we go.
-        unordered_set<Ent*>* overlap = new unordered_set<Ent*>;
-        //Make sure they aren't the same Ent. Do so by comparing unique names for now.
-        if (name == entPtr->getName()) {
-            //This shouldn't happen... well... return a set with just this Ent...
-            overlap->insert(this);
-            return overlap;
-        }
-        //Get this Ent's ancestors.
-        unordered_set<Ent*>* setA = getAncestors();
-        //Add this Ent to the list, it counts.
-        setA->insert(this);
-        //Get the given Ent's descendents.
-        unordered_set<Ent*>* setB = entPtr->getDescendents();
-        //Add the supplied Ent to the list as well.
-        setB->insert(entPtr);
-        //Find the smaller of the two sets. Ancestors should be smaller on average?
-        if (setA->size() > setB->size()) {
-            //temp will free itself automatically at the end of the if statement.
-            unordered_set<Ent*>* temp = setA;
-            setA = setB;
-            setB = temp;
-        }
-        //Now setA is smaller, or they are equal, so, insert it into setB.
-        //If the size of setB doesn't change after an Ent pointer is added,
-        //then that Ent pointer was already there, and so is a overlap.
-        for (Ent* ent : *setA) {
-            //Try to insert this ent into setB. If it doesn't work, we found overlap.
-            if (!setB->insert(ent).second)
-                overlap->insert(ent);
-        }
-        //Return what we've found. If the set is empty, then it can be the parent. 
-        return overlap;
-    }
+    unordered_set<Ent*> canBeParentOf(Ent* entPtr);
     
     /**
      * Generate a set of all this Ent's ancestors recursively and return that set.
@@ -272,25 +173,7 @@ public:
      * @param depth     Make sure we don't get caught in a loop and crash the system.
      * @return 
      */
-    unordered_set<Ent*>* getAncestors(unsigned short depth = 0) {
-        //List for this iteration of the recursion.
-        unordered_set<Ent*>* localList = new unordered_set<Ent*>;
-        //Have to draw the line somewhere. If we're too far down, return and empty set.
-        if (depth > 50) return localList;
-        //If there are no parents, the recursion will just stop.
-        for (Ent* parent : parents) {
-            localList->insert(parent);
-            //get the parents of the parent
-            unordered_set<Ent*> *grandparents = parent->getAncestors(depth + 1);
-            //add them to this list
-            for (auto g : *grandparents)
-                localList->insert(g);
-            //Now release the memory.
-            delete grandparents;
-        }
-        //now return the localList for this iteration of the recursion.
-        return localList;
-    }
+    unordered_set<Ent*> getAncestors(unsigned short depth = 0);
     
     /**
      * Generate a set of all this Ent's descendents recursively and return that set.
@@ -298,25 +181,11 @@ public:
      * @param depth     Make sure we don't get caught in a loop and crash the system.
      * @return 
      */
-    unordered_set<Ent*>* getDescendents(unsigned short depth = 0) {
-        //List for this iteration of the recursion.
-        unordered_set<Ent*>* localList = new unordered_set<Ent*>;
-        //Make sure we don't blow up the universe. If we're too far in, just stop.
-        if (depth > 50) return localList;
-        //If there are no parents, the recursion will just stop.
-        for (Ent* child : children) {
-            localList->insert(child);
-            //get the parents of the parent
-            unordered_set<Ent*> *grandparents = child->getDescendents(depth + 1);
-            //add them to this list
-            for (auto g : *grandparents)
-                localList->insert(g);
-            //Now release the memory.
-            delete grandparents;
-        }
-        //now return the localList for this iteration of the recursion.
-        return localList;
-    }
+    unordered_set<Ent*> getDescendents(unsigned short depth = 0);
+    
+    
+    unordered_set<Ent*> getSiblings();
+    
 
     /**
      * Prints the name of the Ent to the stdout.
@@ -352,13 +221,10 @@ public:
      * Adds an Ent as a parent of this one, but doesn't check anything.
      * @param parentPtr
      */
-    void addParentUnchecked(Ent* parentPtr) {
-        assert(parentPtr != 0);
-        parents.push_back(parentPtr);
-    }
+    void addParentUnchecked(Ent* parentPtr);
 
-    vector<Ent*>* getParents() {
-        return &parents;
+    vector<Ent*> getParents() {
+        return parents;
     }
 
     /**
@@ -369,8 +235,8 @@ public:
         children.push_back(childPtr);
     }
 
-    vector<Ent*>* getChildren() {
-        return &children;
+    vector<Ent*> getChildren() {
+        return children;
     }
     
     /**
