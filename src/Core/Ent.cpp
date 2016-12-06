@@ -18,6 +18,7 @@
 
 #include "Ent.h"
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -42,59 +43,58 @@ int Ent::connectUnchecked(Ent* parent, Ent* child) {
     //Add references to the vectors holding the lists.
     parent->addChildUnchecked(child);
     child->addParentUnchecked(parent);
-
-    cout << parent->getName() << " is now a parent of " << child->getName()
-            << ".\n";
-
     return 0;
 }
 
 
 int Ent::connectUncheckedAndPrune(Ent* parent, Ent* child) {
-    //Get the new parent's ancestors.
+    //Get a copy of the new parent's ancestors.
     unordered_set<Ent*> pAncestors = parent->getAncestors();
-    //Get a pointer to the child's parents.
+    //Get the new child's direct parents.
     vector<Ent*> existingParents = child->getParents();
     //Check if any of child's direct parents are in this set already.
     for (Ent* existingParent : existingParents) {
         //Insert it into the set. second indicates if it was added or not.
+        //TODO This assumes that existingParents has 1 of each...
+        //Change the lists like parents, children, overlaps, etc. to unordered_set.
         if (!pAncestors.insert(existingParent).second) {
             //It wasn't added, so it must have already been there.
+            //That means it's redundant.
             disconnectUnchecked(existingParent, child);
-            //TODO Should we break here?
+        }
+    }
+    //Now we do the same thing to see if one of parent's children is a descendent
+    //of child already. That info is redundant and implied.
+    //Get parent's children
+    vector<Ent*> existingChildren = parent->getChildren();
+    //And child's descendents.
+    unordered_set<Ent*> cDescendents = child->getDescendents();
+    //Go through each existing child and see if it's redundant.
+    for (Ent* existingChild : existingChildren) {
+        //Insert it into the set and see if it actually goes in.
+        if (!cDescendents.insert(existingChild).second) {
+            //It wasn't added, and so is redundant.
+            disconnectUnchecked(parent, existingChild);
         }
     }
 
     //Now actually connect them up!
     connectUnchecked(parent, child);
 
-    //TODO Implement an analogous pruning algorithm for the child's descendents?
-
     return 0;
 }
 
+//TODO add an exception for when this is called and they aren't even related.
 int Ent::disconnectUnchecked(Ent* parent, Ent* child) {
-    //Get the parent's children.
-    vector<Ent*> children = parent->getChildren();
-    //Find child in the vector and remove it.
-    for (vector<Ent*>::iterator it = children.begin(); it != children.end(); it++) {
-        if (*it == child) {
-            children.erase(it);
-            //There should be only one, so break early.
-            break;
-        }
-    }
-    //Now get the child's parents.
-    vector<Ent*> parents = child->getParents();
-    //Find parent in the vector and remove it.
-    for (vector<Ent*>::iterator it = parents.begin(); it != parents.end(); it++) {
-        if (*it == parent) {
-            parents.erase(it);
-            //There should be only one, so break early.
-            break;
-        }
-    }
-    //No need to free the vectors, they are owned by the Ents themselves.
+    
+    auto itP = std::find(parent->children.begin(), parent->children.end(), child);
+    if(itP != parent->children.end())
+        parent->children.erase(itP);
+    
+    auto itC = std::find(child->parents.begin(), child->parents.end(), parent);
+    if (itC != child->parents.end())
+        child->parents.erase(itC);
+    
 }
 
 int Ent::setOverlap(Ent* a, Ent* b) {
@@ -112,7 +112,7 @@ int Ent::setExclusive(Ent* a, Ent* b) {
 }
 
 
-const unordered_set<Ent*> Ent::canBeParentOf(Ent* entPtr) {
+const unordered_set<Ent*> Ent::getParentalConflicts(Ent* entPtr) {
     //Create an empty unordered_set. Add any overlaps to it as we go.
     unordered_set<Ent*> overlap;
     //Make sure they aren't the same Ent. Do so by comparing unique names for now.
@@ -121,7 +121,7 @@ const unordered_set<Ent*> Ent::canBeParentOf(Ent* entPtr) {
         overlap.insert(this);
         return overlap;
     }
-    //Get this Ent's ancestors.
+    //Get this Ent's ancestors. First make a list to pass.
     unordered_set<Ent*> setA = getAncestors();
     //Add this Ent to the list, it counts.
     setA.insert(this);
@@ -148,41 +148,60 @@ const unordered_set<Ent*> Ent::canBeParentOf(Ent* entPtr) {
 }
 
 
-const unordered_set<Ent*> Ent::getAncestors(const unsigned short depth) {
-    //List for this iteration of the recursion.
-    unordered_set<Ent*> localList;
-    //Have to draw the line somewhere. If we're too far down, return and empty set.
-    if (depth > 50) return localList;
-    //If there are no parents, the recursion will just stop.
-    for (Ent* parent : parents) {
-        localList.insert(parent);
-        //get the parents of the parent
-        unordered_set<Ent*> grandparents = parent->getAncestors(depth + 1);
-        //add them to this list
-        for (auto g : grandparents)
-            localList.insert(g);
-    }
-    //now return the localList for this iteration of the recursion.
-    return localList;
+unordered_set<Ent*> Ent::getAncestors() {
+    //Create the new list to pass along and collect Ancestors.
+    unordered_set<Ent*> list;
+    //Now call the recursive function to populate the list.
+    getAncestors(&list);
+    //Should now be populated.
+    return list;
 }
 
 
-const unordered_set<Ent*> Ent::getDescendents(const unsigned short depth) {
-    //List for this iteration of the recursion.
-    unordered_set<Ent*> localList;
-    //Make sure we don't blow up the universe. If we're too far in, just stop.
-    if (depth > 50) return localList;
-    //If there are no parents, the recursion will just stop.
-    for (Ent* child : children) {
-        localList.insert(child);
-        //get the parents of the parent
-        unordered_set<Ent*> grandchildren = child->getDescendents(depth + 1);
-        //add them to this list
-        for (auto g : grandchildren)
-            localList.insert(g);
+void Ent::getAncestors(unordered_set<Ent*>* list, int depth)
+{
+    //Have to draw the line somewhere. If we're too far down, return and empty set.
+    //TODO Call an exception here? Could be useful.
+    if (depth > 10) {
+        cout << "Warning: Recursion overflow in Ent::getAncestors. Increase limit.\n";
+        return;
     }
-    //now return the localList for this iteration of the recursion.
-    return localList;
+    //We need to get each parent, add it to the list, and call in recursion.
+    for (Ent* parent : parents) {
+        list->insert(parent);
+        //We need to go deeper...
+        parent->getAncestors(list, depth+1);
+    }
+    //All set.
+    return;
+}
+
+unordered_set<Ent*> Ent::getDescendents() {
+    //Create the list to pass along and populate.
+    unordered_set<Ent*> list;
+    //Call the recursive function.
+    getDescendents(&list);
+    //All set.
+    return list;
+}
+
+
+void Ent::getDescendents(unordered_set<Ent*>* list, int depth)
+{
+    //Have to draw the line somewhere. If we're too far down, return and empty set.
+    //TODO Call an exception here? Could be useful.
+    if (depth > 10) {
+        cout << "Warning: Recursion overflow in Ent::getDescendents. Increase limit.\n";
+        return;
+    }
+    //We need to get each parent, add it to the list, and call in recursion.
+    for (Ent* child : children) {
+        list->insert(child);
+        //We need to go deeper...
+        child->getDescendents(list, depth+1);
+    }
+    //All set.
+    return;
 }
 
 const unordered_set<Ent*> Ent::getSiblings() {
@@ -202,6 +221,12 @@ const unordered_set<Ent*> Ent::getSiblings() {
 
 
 void Ent::addParentUnchecked(Ent* parentPtr) {
-    assert(parentPtr != 0);
+    assert(parentPtr != nullptr);
     parents.push_back(parentPtr);
+}
+
+
+void Ent::addChildUnchecked(Ent* childPtr) {
+    assert(childPtr != nullptr);
+    children.push_back(childPtr);
 }

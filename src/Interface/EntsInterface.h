@@ -19,6 +19,7 @@
 #ifndef ENTSINTERFACE_H
 #define ENTSINTERFACE_H
 
+#include "../Core/Ent.h"
 #include "EntX.h"
 #include "TreeInstance.h"
 #include "InterfaceExceptions.h"
@@ -91,6 +92,8 @@ protected:
     const EntX requestToCreateNewEnt(TreeInstance tree);
     
     void requestToRenameTree(TreeInstance tree);
+    
+    void requestParentChildConnection(EntX parent, EntX child);
     
     
     /*********************************************************************

@@ -120,3 +120,27 @@ void EntsInterface::requestToRenameTree(TreeInstance tree) {
     }
     displayMessageToUser("Tree name was not changed.");
 }
+
+
+void EntsInterface::requestParentChildConnection(EntX parent, EntX child) {
+    
+    //Check to make sure they both aren't the same.
+    if (parent.equals(child)) {
+        displayMessageToUser("Can't connect parent and child because they are the same Ent.");
+        return;
+    } else {
+        unordered_set<Ent*> problemEnts = parent.ent->getParentalConflicts(child.ent);
+        
+        if (problemEnts.empty()) {
+            //Yup, they are compatible.
+            Ent::connectUncheckedAndPrune(parent.ent, child.ent);
+            displayMessageToUser("\"" + parent.getName() + "\" is now the parent of \"" + child.getName() + "\".");
+        } else {
+            
+            throw Ent();
+            
+            
+        }
+    }
+    
+}

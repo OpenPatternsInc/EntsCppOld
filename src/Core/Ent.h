@@ -92,6 +92,32 @@ class Ent {
      * Vector of pointers to the Ents which overlap with this one.
      */
     vector<Ent*> overlaps;
+
+    /**
+     * Adds an Ent as a parent of this one, but doesn't check anything.
+     * @param parentPtr
+     */
+    void addParentUnchecked(Ent* parentPtr);
+
+    /**
+     * Adds an Ent as a child of this one, but doesn't check anything.
+     * @param childPtr
+     */
+    void addChildUnchecked(Ent* childPtr);
+    
+    /**
+     * Internal function called by no-arg getAncestors().
+     * @param list      unordered_set is passed along collecting ancestors.
+     * @param depth     Incremented each recursion. Limits overflows.
+     */
+    void getAncestors(unordered_set<Ent*>* list, int depth = 0);
+    
+    /**
+     * Internal function called by no-arg getDescendents().
+     * @param list      unordered_set is passed along collecting ancestors.
+     * @param depth     Incremented each recursion. Limits overflows.
+     */
+    void getDescendents(unordered_set<Ent*>* list, int depth = 0);
     
 
 public:
@@ -159,23 +185,20 @@ public:
      * @return  Returns any Ents which actually do overlap, because something
      *          must be done about them. Empty set if there are no problems.
      */
-    const unordered_set<Ent*> canBeParentOf(Ent* entPtr);
+    const unordered_set<Ent*> getParentalConflicts(Ent* entPtr);
+    
     
     /**
-     * Generate a set of all this Ent's ancestors recursively and return that set.
-     * TODO Optimize this so it's not so bad lol.
-     * @param depth     Make sure we don't get caught in a loop and crash the system.
-     * @return 
+     * Gets the Ancestors of this Ent, by using the static function of the same
+     * name.
      */
-    const unordered_set<Ent*> getAncestors(const unsigned short depth = 0);
+    unordered_set<Ent*> getAncestors();
     
     /**
-     * Generate a set of all this Ent's descendents recursively and return that set.
-     * TODO Optimize this so it's not so crude lol.
-     * @param depth     Make sure we don't get caught in a loop and crash the system.
-     * @return 
+     * Gets the Descendents of this Ent, by using the static function of the
+     * same name.
      */
-    const unordered_set<Ent*> getDescendents(const unsigned short depth = 0);
+    unordered_set<Ent*> getDescendents();
     
     
     const unordered_set<Ent*> getSiblings();
@@ -211,22 +234,8 @@ public:
         uid = n;
     }
 
-    /**
-     * Adds an Ent as a parent of this one, but doesn't check anything.
-     * @param parentPtr
-     */
-    void addParentUnchecked(Ent* parentPtr);
-
     const vector<Ent*> getParents() {
         return parents;
-    }
-
-    /**
-     * Adds an Ent as a child of this one, but doesn't check anything.
-     * @param childPtr
-     */
-    void addChildUnchecked(Ent* childPtr) {
-        children.push_back(childPtr);
     }
 
     vector<Ent*> getChildren() {
@@ -241,8 +250,8 @@ public:
         exclusives.push_back(exPtr);
     }
     
-    vector<Ent*>* getExclusives() {
-        return &exclusives;
+    const vector<Ent*> getExclusives() {
+        return exclusives;
     }
     
     /**
@@ -253,8 +262,8 @@ public:
         overlaps.push_back(ovPtr);
     }
     
-    vector<Ent*>* getOverlaps() {
-        return &overlaps;
+    const vector<Ent*> getOverlaps() {
+        return overlaps;
     }
 
 

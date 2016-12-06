@@ -73,5 +73,16 @@ const bool EntX::equals(EntX otherEntX) {
 }
 
 const bool EntX::isEmpty() {
-        return ent == nullptr;
-    }
+    return ent == nullptr;
+}
+
+
+const bool EntX::canBeParentOf(EntX potentialChild) {
+    
+    unordered_set<Ent*> problemEnts = ent->getParentalConflicts(potentialChild.ent);
+    
+    return problemEnts.size() == 0;
+    
+    
+    
+}

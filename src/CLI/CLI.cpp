@@ -179,20 +179,19 @@ void CLI::parseCommand(string str) {
             }
         } //end "f"
         else if (isCommand("p", str, &argument)) {
-            /*
+            
             //User wants to add the given Ent as a parent to focus.
             //Retrieve a pointer to the given Ent.
-            Ent* entPtr = tree->getEntPtrByName(argument);
-            if (entPtr == nullptr) {
-                cout << "No Ent found with that name.";
-            } else if (entPtr == focusPtr) {
-                cout << "Can't add the focus Ent as its own parent.";
+            EntX potentialChild = tree.getEntByName(argument);
+            if (potentialChild.isEmpty()) {
+                cout << "No Ent found with that name.\n";
+            } else if (potentialChild.equals(focus)) {
+                cout << "Can't add the focus Ent as its own parent.\n";
             } else {
-                //OK, so the Ent exists and it isn't the focus. We need to test
-                //if adding it as a parent to focus is a legal operation.
-                
+                //OK, request the superclass to handle it.
+                EntsInterface::requestParentChildConnection(focus, potentialChild);
             }
-             */
+            
         } //end "p"
         else if (str == "desc") {
             //listDescendents(focusPtr);

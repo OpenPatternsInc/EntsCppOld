@@ -114,6 +114,14 @@ public:
     }
     
     /**
+     * Just responds with true or false to if a parent is compatable with a
+     * child. Does not expose anything to the implementation, so it's safe.
+     * @param potentialChild
+     * @return 
+     */
+    const bool canBeParentOf(EntX potentialChild);
+    
+    /**
      * This tests to see if the Ent held within this EntX is the same as that
      * held in another.
      * Because a function within EntX has access to the private data members
